@@ -8,33 +8,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
     <style>
-        /* --- ESTILOS GENERALES --- */
-        body {font-family: 'VT323', monospace; font-size: 22px; color: #e6f2ff; text-align: center; padding: 20px; margin: 0; min-height: 100vh; /* Asegura que ocupe toda la altura */
-            /* --- AQUI ESTÁ LA MAGIA DEL FONDO --- */
-            /* Usamos una imagen de laboratorio y le ponemos una capa azul semitransparente encima */
-            /* PUEDES CAMBIAR LA URL DE LA IMAGEN POR LA QUE TÚ QUIERAS */
-            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://i.imgur.com/LetM14p.jpg');
-            background-size: cover; /* Que cubra toda la pantalla */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Que el fondo no se mueva al hacer scroll */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        body {
+            font-family: 'VT323', monospace; font-size: 22px; color: #e6f2ff; text-align: center; padding: 20px; margin: 0; min-height: 100vh;
+            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; display: flex; align-items: center; justify-content: center;
         }
-
         .panel {
-            background-color: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); 
-            max-width: 400px; width: 100%; border: 3px solid #00ffff; backdrop-filter: blur(5px); /* Efecto de cristal borroso */
+            background-color: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); max-width: 400px; width: 100%;
+            border: 3px solid #00ffff; backdrop-filter: blur(5px);
         }
 
         h2 { color: #00ffff; text-transform: uppercase; letter-spacing: 2px; margin-top: 0;}
         
         input {
-            font-family: 'VT323', monospace; font-size: 24px; padding: 10px; width: 80%; margin: 15px 0;
+            font-family: 'VT323', monospace; font-size: 28px; padding: 10px; width: 80%; margin: 15px 0;
             background-color: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center;
         }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input:focus { outline: none; box-shadow: 0 0 15px #00ffff; } /* Brillo al hacer clic */
         
         button {
             font-family: 'VT323', monospace; font-size: 26px; background-color: #00ffff; color: #001f3f;
@@ -43,38 +34,41 @@
         }
         button:hover { background-color: #ffffff; box-shadow: 0px 0px 20px #ffffff; }
 
-        /* --- ESTILOS DEL TRIÁNGULO DE WARNING --- */
         #warningIcon {
-            width: 80px; margin-top: 25px; display: none; animation: parpadeo 1s infinite;
+            width: 80px; height: 80px; margin-top: 20px; display: none; animation: parpadeo 1s infinite; filter: drop-shadow(0px 0px 10px #ff073a); /* Brillo rojo */
         }
 
-        /* Clase para hacer temblar el panel si fallan */
         .shake { animation: shake 0.5s; }
         
-        @keyframes parpadeo { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
+        @keyframes parpadeo { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
 
-        #mensaje { margin-top: 15px; font-size: 28px; }
+        #mensaje { margin-top: 15px; font-size: 28px; height: 60px; /* Altura fija para no empujar botones */ }
         .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="panel" id="mainPanel">
-        <h2>Sistema de Control Hidráulico</h2>
-        <p>>>> Introduce presión objetivo (Pa) <<<</p>
+        <h2>Control Hidráulico</h2>
+        <p>>>> Presión objetivo (Pa) <<<</p>
         
-        <input type="number" id="respuestaAlumno" placeholder="---">
+        <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off">
         <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
         
-        <img id="warningIcon" src="https://i.imgur.com/PZ8qT9L.png" alt="Warning">
+        <br>
         
-        <p id="mensaje"></p>
+        <svg id="warningIcon" viewBox="0 0 24 24" fill="none" stroke="#ff073a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        
+        <div id="mensaje"></div>
         <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN MQTT ---
         var broker = "broker.hivemq.com";
         var port = 8000;
         var topic = "mecfluid/escuela/valvulaA1"; 
@@ -82,45 +76,51 @@
         var client = new Paho.MQTT.Client(broker, port, "cliente_genially_" + parseInt(Math.random() * 100, 10));
 
         function onConnect() { document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo."; document.getElementById("statusMQTT").style.color = "#00ffff"; }
-        function onFailure(message) { document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace. Recargar terminal."; document.getElementById("statusMQTT").style.color = "red"; }
+        function onFailure(message) { document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; document.getElementById("statusMQTT").style.color = "red"; }
         client.connect({onSuccess:onConnect, onFailure:onFailure});
 
-        // --- LÓGICA DEL JUEGO ---
+        // Permitir usar la tecla "Enter" para accionar el botón
+        document.getElementById("respuestaAlumno").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                comprobarRespuesta();
+            }
+        });
+
         function comprobarRespuesta() {
-            let valorEscrito = document.getElementById("respuestaAlumno").value;
+            let inputAlumno = document.getElementById("respuestaAlumno");
+            let valorEscrito = inputAlumno.value;
             let mensajePantalla = document.getElementById("mensaje");
-            let warningImg = document.getElementById("warningIcon"); // Referencia a la imagen
-            let panelDiv = document.getElementById("mainPanel"); // Referencia al panel entero
+            let warningImg = document.getElementById("warningIcon"); 
+            let panelDiv = document.getElementById("mainPanel"); 
             
             let respuestaCorrecta = 2500; 
 
-            // Reseteamos estados previos (quitamos temblor y ocultamos imagen por si acaso)
             panelDiv.classList.remove("shake");
             warningImg.style.display = "none";
 
             if (valorEscrito == respuestaCorrecta) {
-                // --- ACIERTO ---
+                // Acierto
                 mensajePantalla.style.color = "#39ff14";
                 mensajePantalla.style.textShadow = "0px 0px 10px #39ff14";
-                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Accionando secuencia de cierre...";
+                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Secuencia de cierre...";
                 
                 message = new Paho.MQTT.Message("CERRAR");
                 message.destinationName = topic;
                 client.send(message);
                 
             } else {
-                // --- ERROR ---
-                // 1. Mostramos el triángulo
+                // Error
                 warningImg.style.display = "inline-block";
-                
-                // 2. Cambiamos el mensaje a rojo
                 mensajePantalla.style.color = "#ff073a";
                 mensajePantalla.style.textShadow = "0px 0px 10px #ff073a";
                 mensajePantalla.innerHTML = "ERROR CRÍTICO<br>Parámetros incorrectos.";
                 
-                // 3. Extra: Hacemos que el panel tiemble un poco
-                void panelDiv.offsetWidth; // Truco para reiniciar la animación
+                void panelDiv.offsetWidth; 
                 panelDiv.classList.add("shake");
+
+                inputAlumno.value = ""; // Borra el número
+                inputAlumno.focus();    // Vuelve a poner el cursor ahí
             }
         }
     </script>
