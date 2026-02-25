@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panel de Válvula IoT</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    
+    <style>
+        body {
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            color: #e6f2ff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel {
+            background-color: rgba(0, 51, 102, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); 
+            max-width: 400px;
+            width: 100%;
+            border: 3px solid #00ffff;
+            backdrop-filter: blur(5px);
+        }
+
+        h2 { color: #00ffff; text-transform: uppercase; letter-spacing: 2px; margin-top: 0;}
+        
+        input {
+            font-family: 'VT323', monospace; font-size: 28px; padding: 10px; width: 80%; margin: 15px 0;
+            background-color: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center;
+        }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input:focus { outline: none; box-shadow: 0 0 15px #00ffff; } 
+        
+        button {
+            font-family: 'VT323', monospace; font-size: 26px; background-color: #00ffff; color: #001f3f;
+            border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 85%;
+            font-weight: bold; text-transform: uppercase; transition: 0.3s;
+        }
+        button:hover { background-color: #ffffff; box-shadow: 0px 0px 20px #ffffff; }
+
+        #warningIcon {
+            width: 80px;
+            height: 80px;
+            margin-top: 20px;
+            display: none;
+            animation: parpadeo 1s infinite;
+            filter: drop-shadow(0px 0px 10px #ff073a); 
+        }
+
+        .shake { animation: shake 0.5s; }
+        
+        @keyframes parpadeo { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+
+        #mensaje { margin-top: 15px; font-size: 28px; height: 60px; }
+        .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="panel" id="mainPanel">
+        <h2>Control Hidráulico</h2>
+        <p>>>> Presión objetivo (Pa) <<<</p>
+        
+        <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off" oninput="controlarTeclado(this)">
+        
+        <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
+        
+        <br>
+        
+        <svg id="warningIcon" viewBox="0 0 24 24" fill="none" stroke="#ff073a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        
+        <div id="mensaje"></div>
+        <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
+    </div>
+
+    <script>
+        var broker = "broker.hivemq.com";
+        var port = 8000;
+        var topic = "mecfluid/escuela/valvulaA1"; 
+        
+        var client = new Paho.MQTT.Client(broker, port, "cliente_genially_" + parseInt(Math.random() * 100, 10));
+
+        function onConnect() { document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo."; document.getElementById("statusMQTT").style.color = "#00ffff"; }
+        function onFailure(message) { document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; document.getElementById("statusMQTT").style.color = "red"; }
+        client.connect({onSuccess:onConnect, onFailure:onFailure});
+
+        // Permitir usar la tecla "Enter" o "Ir" del teclado del móvil
+        document.getElementById("respuestaAlumno").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                this.blur(); // Oculta el teclado si le dan a "Enter" en el móvil
+                comprobarRespuesta();
+            }
+        });
+
+        // --- NUEVA FUNCIÓN PARA OCULTAR EL TECLADO AUTOMÁTICAMENTE ---
+        function controlarTeclado(elementoInput) {
+            // Si la longitud de lo que han escrito es 5 o más, ocultamos el teclado.
+            // (Si tu respuesta siempre tiene 4 dígitos, cambia el 5 por un 4 aquí abajo)
+            if (elementoInput.value.length >= 5) {
+                elementoInput.blur(); 
+            }
+        }
+
+        function comprobarRespuesta() {
+            let inputAlumno = document.getElementById("respuestaAlumno");
+            let valorEscrito = inputAlumno.value;
+            let mensajePantalla = document.getElementById("mensaje");
+            let warningImg = document.getElementById("warningIcon"); 
+            let panelDiv = document.getElementById("mainPanel"); 
+            
+            let respuestaCorrecta = 2500; 
+
+            // Al pulsar el botón, nos aseguramos de que el teclado baje (por si acaso)
+            inputAlumno.blur();
+
+            panelDiv.classList.remove("shake");
+            warningImg.style.display = "none";
+
+            // Si le dan al botón sin escribir nada, no hacemos nada
+            if (valorEscrito === "") return;
+
+            if (valorEscrito == respuestaCorrecta) {
+                // Acierto
+                mensajePantalla.style.color = "#39ff14";
+                mensajePantalla.style.textShadow = "0px 0px 10px #39ff14";
+                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Secuencia de cierre...";
+                
+                message = new Paho.MQTT.Message("CERRAR");
+                message.destinationName = topic;
+                client.send(message);
+                
+            } else {
+                // Error
+                warningImg.style.display = "inline-block";
+                mensajePantalla.style.color = "#ff073a";
+                mensajePantalla.style.textShadow = "0px 0px 10px #ff073a";
+                mensajePantalla.innerHTML = "ERROR CRÍTICO<br>Parámetros incorrectos.";
+                
+                void panelDiv.offsetWidth; 
+                panelDiv.classList.add("shake");
+
+                inputAlumno.value = ""; 
+                
+                // Quitamos el focus automático al fallar para que el teclado no vuelva a saltar 
+                // molestando en la pantalla del móvil. El alumno tendrá que tocar la caja de nuevo.
+            }
+        }
+    </script>
+</body>
+</html>
