@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Válvula</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            padding: 20px;
+        }
+        .panel {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            border-top: 5px solid #0056b3;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 85%;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+        #mensaje {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel">
+        <h2>Panel de Control Hidráulico</h2>
+        <p>Introduce el valor de presión calculado (en Pascales) para accionar la válvula de seguridad:</p>
+        
+        <input type="number" id="respuestaAlumno" placeholder="Ej: 1500">
+        
+        <button onclick="comprobarRespuesta()">CERRAR VÁLVULA</button>
+        
+        <p id="mensaje"></p>
+    </div>
+
+    <script>
+        // --- AQUÍ EMPIEZA EL CEREBRO (JAVASCRIPT) ---
+        function comprobarRespuesta() {
+            // 1. Leemos lo que escribió el alumno
+            let valorEscrito = document.getElementById("respuestaAlumno").value;
+            let mensajePantalla = document.getElementById("mensaje");
+            
+            // 2. Definimos cuál es la respuesta correcta (ejemplo: 2500)
+            let respuestaCorrecta = 2500;
+
+            // 3. Comprobamos si acertó
+            if (valorEscrito == respuestaCorrecta) {
+                mensajePantalla.style.color = "green";
+                mensajePantalla.innerText = "¡CÁLCULO CORRECTO! Mandando señal a la válvula...";
+                
+                // ¡AQUÍ ES DONDE MÁS ADELANTE PONDREMOS EL CÓDIGO DEL ESP32!
+                
+            } else {
+                mensajePantalla.style.color = "red";
+                mensajePantalla.innerText = "ERROR DE CÁLCULO. La válvula sigue abierta. ¡Revisa tus números!";
+            }
+        }
+    </script>
+
+</body>
+</html>
