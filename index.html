@@ -9,33 +9,14 @@
     
     <style>
         body {
-            font-family: 'VT323', monospace;
-            font-size: 22px;
-            color: #e6f2ff;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-            min-height: 100vh;
-            /* Fondo de laboratorio (este sí suele cargar siempre, pero el SVG no dependerá de él) */
+            font-family: 'VT323', monospace; font-size: 22px; color: #e6f2ff; text-align: center; padding: 20px; margin: 0; min-height: 100vh;
             background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; display: flex; align-items: center; justify-content: center;
         }
 
         .panel {
-            background-color: rgba(0, 51, 102, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); 
-            max-width: 400px;
-            width: 100%;
-            border: 3px solid #00ffff;
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); max-width: 400px;
+            width: 100%; border: 3px solid #00ffff; backdrop-filter: blur(5px);
         }
 
         h2 { color: #00ffff; text-transform: uppercase; letter-spacing: 2px; margin-top: 0;}
@@ -60,7 +41,7 @@
             height: 80px;
             margin-top: 20px;
             display: none;
-            animation: parpadeo 1s infinite;
+            animation: parpadeo 2s infinite;
             filter: drop-shadow(0px 0px 10px #ff073a); /* Brillo rojo */
         }
 
@@ -76,7 +57,7 @@
 <body>
 
     <div class="panel" id="mainPanel">
-        <h2> Sistema Acceso Control Hidráulico</h2>
+        <h2> Sistema Acceso Control Válvula 1 </h2>
         <p>>>> Presión objetivo (Pa) <<<</p>
         
         <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off">
@@ -145,7 +126,6 @@
                 void panelDiv.offsetWidth; 
                 panelDiv.classList.add("shake");
 
-                // --- LAS DOS LÍNEAS NUEVAS QUE PEDISTE ---
                 inputAlumno.value = ""; // Borra el número
                 inputAlumno.focus();    // Vuelve a poner el cursor ahí
             }
