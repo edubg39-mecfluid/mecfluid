@@ -3,87 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Válvula</title>
+    <title>Panel de Válvula IoT</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    
     <style>
+        /* --- ESTILOS TEMA AZUL MARINO TECH --- */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            text-align: center;
-            padding: 20px;
+            font-family: 'VT323', monospace; font-size: 22px; background-color: #001f3f; color: #e6f2ff; text-align: center; padding: 20px;
         }
         .panel {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-            max-width: 400px;
-            margin: 0 auto;
-            border-top: 5px solid #0056b3;
+            background-color: #003366; padding: 30px; border-radius: 10px; box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.2); max-width: 400px; 
+        margin: 0 auto; border: 3px solid #00ffff;
+        }
+        h2 {
+            color: #00ffff; text-transform: uppercase; letter-spacing: 2px;
         }
         input {
-            padding: 10px;
-            font-size: 16px;
-            width: 80%;
-            margin: 15px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            font-family: 'VT323', monospace; font-size: 24px; padding: 10px; width: 80%; margin: 15px 0; background-color: #001f3f; color: #00ffff; 
+        border: 2px solid #00ffff;text-align: center;
         }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        
         button {
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 85%;
+            font-family: 'VT323', monospace; font-size: 26px; background-color: #00ffff; color: #001f3f; border: none; padding: 12px 20px; border-radius: 5px;
+            cursor: pointer; width: 85%; font-weight: bold; text-transform: uppercase;
         }
         button:hover {
-            background-color: #004494;
+            background-color: #ffffff; box-shadow: 0px 0px 15px #ffffff;
         }
         #mensaje {
-            margin-top: 20px;
-            font-weight: bold;
-            font-size: 18px;
+            margin-top: 25px; font-size: 28px;
         }
+        .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="panel">
-        <h2>Panel de Control Hidráulico</h2>
-        <p>Introduce el valor de presión calculado (en Pascales) para accionar la válvula de seguridad:</p>
+        <h2>Sistema de Control Hidráulico</h2>
+        <p>>>> Introduce presión objetivo (Pa) <<<</p>
         
-        <input type="number" id="respuestaAlumno" placeholder="Ej: 1500">
+        <input type="number" id="respuestaAlumno" placeholder="---">
         
-        <button onclick="comprobarRespuesta()">CERRAR VÁLVULA</button>
+        <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
         
         <p id="mensaje"></p>
+        
+        <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
     </div>
 
     <script>
-        // --- AQUÍ EMPIEZA EL CEREBRO (JAVASCRIPT) ---
+        // --- CONFIGURACIÓN MQTT ---
+        var broker = "broker.hivemq.com";
+        var port = 8000;
+        // ¡IMPORTANTE! CAMBIA ESTO POR TU PROPIO TEMA ÚNICO
+        var topic = "mecfluid/escuela/valvulaA1"; 
+        
+        var client = new Paho.MQTT.Client(broker, port, "cliente_genially_" + parseInt(Math.random() * 100, 10));
+
+        function onConnect() {
+            document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo.";
+            document.getElementById("statusMQTT").style.color = "#00ffff";
+            console.log("Conectado a MQTT");
+        }
+        function onFailure(message) {
+            document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace. Recargar terminal.";
+            document.getElementById("statusMQTT").style.color = "red";
+        }
+        client.connect({onSuccess:onConnect, onFailure:onFailure});
+
+        // --- LÓGICA DEL JUEGO ---
         function comprobarRespuesta() {
-            // 1. Leemos lo que escribió el alumno
             let valorEscrito = document.getElementById("respuestaAlumno").value;
             let mensajePantalla = document.getElementById("mensaje");
             
-            // 2. Definimos cuál es la respuesta correcta (ejemplo: 2500)
-            let respuestaCorrecta = 2500;
+            // --- AQUÍ DEFINES TU RESPUESTA CORRECTA ---
+            let respuestaCorrecta = 2500; 
 
-            // 3. Comprobamos si acertó
             if (valorEscrito == respuestaCorrecta) {
-                mensajePantalla.style.color = "green";
-                mensajePantalla.innerText = "¡CÁLCULO CORRECTO! Mandando señal a la válvula...";
+                // Estilos para mensaje de éxito (verde neón)
+                mensajePantalla.style.color = "#39ff14";
+                mensajePantalla.style.textShadow = "0px 0px 10px #39ff14";
+                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Accionando secuencia de cierre...";
                 
-                // ¡AQUÍ ES DONDE MÁS ADELANTE PONDREMOS EL CÓDIGO DEL ESP32!
+                // ENVIAR MENSAJE AL ESP32
+                message = new Paho.MQTT.Message("CERRAR");
+                message.destinationName = topic;
+                client.send(message);
                 
             } else {
-                mensajePantalla.style.color = "red";
-                mensajePantalla.innerText = "ERROR DE CÁLCULO. La válvula sigue abierta. ¡Revisa tus números!";
+                // Estilos para mensaje de error (rojo alerta)
+                mensajePantalla.style.color = "#ff073a";
+                mensajePantalla.style.textShadow = "0px 0px 10px #ff073a";
+                mensajePantalla.innerHTML = "ERROR CRÍTICO<br>Parámetros incorrectos. Válvula abierta.";
             }
         }
     </script>
-
 </body>
 </html>
