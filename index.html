@@ -79,22 +79,22 @@
         function onConnect() { document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo."; document.getElementById("statusMQTT").style.color = "#00ffff"; }
         function onFailure(message) { document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; document.getElementById("statusMQTT").style.color = "red"; }
         client.connect({onSuccess:onConnect, onFailure:onFailure});
-
-
-        // --- FUNCIÓN BLINDADA PARA DETECTAR EL ENTER ---
+        
+        // --- FUNCIÓN BLINDADA PARA DETECTAR EL ENTER --- 
         function verificarEnter(event) {
-            // Comprobamos la tecla por su nombre moderno ("Enter") o por su código antiguo (13)
+            // Comprobamos la tecla por su nombre moderno ("Enter") o por su código antiguo 
             if (event.key === "Enter" || event.keyCode === 13) {
-                event.preventDefault(); // Evitamos que el formulario intente enviarse solo
-                document.getElementById("respuestaAlumno").blur(); // Bajamos el teclado del móvil
+                event.preventDefault(); 
+                document.getElementById("respuestaAlumno").blur(); 
                 comprobarRespuesta(); // Ejecutamos la comprobación
             }
         }
-
-        // --- FUNCIÓN PARA OCULTAR TECLADO AL LLEGAR A 5 DÍGITOS ---
+        
+        // --- FUNCIÓN PARA OCULTAR TECLADO AL LLEGAR A 5 DÍGITOS --- 
         function controlarTeclado(el) {
-            if (el.value.length = 5) {
-                el.blur();
+            if (el.value.length >= 5) {
+                el.blur(); // Baja el teclado
+                comprobarRespuesta(); 
             }
         }
 
