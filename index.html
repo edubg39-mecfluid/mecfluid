@@ -83,17 +83,16 @@
 
         // --- FUNCIÓN BLINDADA PARA DETECTAR EL ENTER ---
         function verificarEnter(event) {
-            // Comprobamos la tecla por su nombre moderno ("Enter") o por su código antiguo (13)
             if (event.key === "Enter" || event.keyCode === 13) {
-                event.preventDefault(); // Evitamos que el formulario intente enviarse solo
-                document.getElementById("respuestaAlumno").blur(); // Bajamos el teclado del móvil
-                comprobarRespuesta(); // Ejecutamos la comprobación
+                event.preventDefault(); 
+                document.getElementById("respuestaAlumno").blur(); 
+                comprobarRespuesta(); 
             }
         }
 
         // --- FUNCIÓN PARA OCULTAR TECLADO AL LLEGAR A 5 DÍGITOS ---
         function controlarTeclado(el) {
-            if (el.value.length >= 4) { 
+            if (el.value.length >= 5) {
                 el.blur();
             }
         }
@@ -106,15 +105,14 @@
             let warningImg = document.getElementById("warningIcon"); 
             let panelDiv = document.getElementById("mainPanel"); 
             
+            // --- ¡AQUÍ ESTÁ LA RESPUESTA CORRECTA ACTUALIZADA! ---
             let respuestaCorrecta = 250; 
 
-            // Aseguramos que el teclado baje si hicieron clic en el botón
             inputAlumno.blur();
 
             panelDiv.classList.remove("shake");
             warningImg.style.display = "none";
 
-            // Si le dan a Enter o al botón estando vacío, no hacemos nada
             if (valorEscrito === "") return;
 
             if (valorEscrito == respuestaCorrecta) {
