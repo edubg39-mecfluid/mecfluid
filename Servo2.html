@@ -42,8 +42,8 @@
 <body>
 
     <div class="panel" id="mainPanel">
-        <h2>Control Válvula 1</h2>
-        <p>>>> Presión objetivo (Pa) <<<</p>
+        <h2>Control Válvula 2</h2>
+        <p>>>> Fuerza Necesaria (N) <<<</p>
         
         <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off" oninput="controlarTeclado(this)" onkeydown="verificarEnter(event)">
         
@@ -94,9 +94,7 @@
             let mensajePantalla = document.getElementById("mensaje");
             let warningImg = document.getElementById("warningIcon"); 
             let panelDiv = document.getElementById("mainPanel"); 
-            
-            // --- CAMBIO 3 (¡OBLIGATORIO!): Aquí pones la respuesta correcta de esta válvula ---
-            let respuestaCorrecta = 250; 
+            let respuestaCorrecta = 50; 
 
             inputAlumno.blur();
             panelDiv.classList.remove("shake");
@@ -108,11 +106,7 @@
                 mensajePantalla.style.color = "#39ff14";
                 mensajePantalla.style.textShadow = "0px 0px 10px #39ff14";
                 mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Secuencia de cierre...";
-                
-                // --- CAMBIO 4 (¡OBLIGATORIO!): Qué motor debe moverse ---
-                // Para la válvula 2 pon "CERRAR_V2", para la 3 "CERRAR_V3", etc.
-                message = new Paho.MQTT.Message("CERRAR_V1");
-                
+                message = new Paho.MQTT.Message("CERRAR_V2");
                 message.destinationName = topic;
                 client.send(message);
                 
