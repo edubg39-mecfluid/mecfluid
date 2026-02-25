@@ -58,7 +58,7 @@
         
         <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off" oninput="controlarTeclado(this)">
         
-        <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
+        <button onclick="comprobarRespuesta()">[EJECUTAR CIERRE]</button>
         
         <br>
         
@@ -92,7 +92,6 @@
             }
         });
 
-        // --- NUEVA FUNCIÓN PARA OCULTAR EL TECLADO AUTOMÁTICAMENTE ---
         function controlarTeclado(elementoInput) {
             // Si la longitud de lo que han escrito es 5 o más, ocultamos el teclado.
             // (Si tu respuesta siempre tiene 4 dígitos, cambia el 5 por un 4 aquí abajo)
@@ -116,7 +115,6 @@
             panelDiv.classList.remove("shake");
             warningImg.style.display = "none";
 
-            // Si le dan al botón sin escribir nada, no hacemos nada
             if (valorEscrito === "") return;
 
             if (valorEscrito == respuestaCorrecta) {
