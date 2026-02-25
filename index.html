@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Panel de Válvula IoT</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
@@ -15,7 +15,7 @@
         }
 
         .panel {
-            background-color: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); max-width: 400px;
+            background-color: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3);  max-width: 400px;
             width: 100%; border: 3px solid #00ffff; backdrop-filter: blur(5px);
         }
 
@@ -26,7 +26,7 @@
             background-color: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center;
         }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input:focus { outline: none; box-shadow: 0 0 15px #00ffff; } /* Brillo al hacer clic */
+        input:focus { outline: none; box-shadow: 0 0 15px #00ffff; } 
         
         button {
             font-family: 'VT323', monospace; font-size: 26px; background-color: #00ffff; color: #001f3f;
@@ -35,14 +35,13 @@
         }
         button:hover { background-color: #ffffff; box-shadow: 0px 0px 20px #ffffff; }
 
-        /* --- TRIÁNGULO DIBUJADO EN CÓDIGO (NUNCA FALLA) --- */
         #warningIcon {
             width: 80px;
             height: 80px;
             margin-top: 20px;
             display: none;
-            animation: parpadeo 2s infinite;
-            filter: drop-shadow(0px 0px 10px #ff073a); /* Brillo rojo */
+            animation: parpadeo 1s infinite;
+            filter: drop-shadow(0px 0px 10px #ff073a); 
         }
 
         .shake { animation: shake 0.5s; }
@@ -50,17 +49,18 @@
         @keyframes parpadeo { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
 
-        #mensaje { margin-top: 15px; font-size: 28px; height: 60px; /* Altura fija para no empujar botones */ }
+        #mensaje { margin-top: 15px; font-size: 28px; height: 60px; }
         .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="panel" id="mainPanel">
-        <h2> Sistema Acceso Control Válvula 1 </h2>
+        <h2>Sistema Acceso Control Válvula 1</h2>
         <p>>>> Presión objetivo (Pa) <<<</p>
         
-        <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off">
+        <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off" oninput="controlarTeclado(this)">
+        
         <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
         
         <br>
@@ -78,6 +78,7 @@
     <script>
         var broker = "broker.hivemq.com";
         var port = 8000;
+        // RECUERDA: CAMBIA ESTO POR TU TOPIC ÚNICO
         var topic = "mecfluid/escuela/valvulaA1"; 
         
         var client = new Paho.MQTT.Client(broker, port, "cliente_genially_" + parseInt(Math.random() * 100, 10));
@@ -86,13 +87,25 @@
         function onFailure(message) { document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; document.getElementById("statusMQTT").style.color = "red"; }
         client.connect({onSuccess:onConnect, onFailure:onFailure});
 
-        // Permitir usar la tecla "Enter" para accionar el botón
-        document.getElementById("respuestaAlumno").addEventListener("keypress", function(event) {
+        // --- ARREGLO PARA LA TECLA ENTER (PC) ---
+        // Usamos 'keydown' que es más moderno y fiable que 'keypress'
+        var inputElement = document.getElementById("respuestaAlumno");
+        
+        inputElement.addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
-                event.preventDefault();
+                event.preventDefault(); // Evita saltos de linea raros
+                this.blur(); // Oculta el teclado en móvil si le dan a "Ir/Enter"
                 comprobarRespuesta();
             }
         });
+
+        // --- ARREGLO PARA OCULTAR TECLADO AUTOMÁTICO (MÓVIL) ---
+        function controlarTeclado(el) {
+            // Si escribe 5 números (ej: 12345), el teclado se baja solo
+            if (el.value.length >= 5) {
+                el.blur();
+            }
+        }
 
         function comprobarRespuesta() {
             let inputAlumno = document.getElementById("respuestaAlumno");
@@ -103,8 +116,14 @@
             
             let respuestaCorrecta = 2500; 
 
+            // Aseguramos que el teclado se cierre al pulsar el botón
+            inputAlumno.blur();
+
             panelDiv.classList.remove("shake");
             warningImg.style.display = "none";
+
+            // Si está vacío no hacemos nada
+            if (valorEscrito === "") return;
 
             if (valorEscrito == respuestaCorrecta) {
                 // Acierto
@@ -126,8 +145,8 @@
                 void panelDiv.offsetWidth; 
                 panelDiv.classList.add("shake");
 
-                inputAlumno.value = ""; // Borra el número
-                inputAlumno.focus();    // Vuelve a poner el cursor ahí
+                inputAlumno.value = ""; 
+                // NO ponemos focus() aquí para que el teclado no salte otra vez en el móvil
             }
         }
     </script>
