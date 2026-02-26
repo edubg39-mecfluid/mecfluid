@@ -15,11 +15,12 @@
         .pantalla.activa { display: block; }
 
         /* =========================================
-           PANTALLA 1: INICIO (Tu imagen de fondo)
+           PANTALLA 1: INICIO 
            ========================================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         .boton-invisible {
-            position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);
+            /* Modificado al 58% para bajarlo un poco */
+            position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%);
             width: 350px; height: 80px; cursor: pointer; background-color: transparent; border-radius: 10px;
         }
         .boton-invisible:hover { background-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 30px #00ffff; }
@@ -35,11 +36,14 @@
         
         #caja-narrador {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 800px; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff; border-radius: 8px; 
-            padding: 30px; z-index: 3; box-shadow: 0 0 30px #00ffff; display: flex; gap: 30px; align-items: center;
+            /* Anchura ampliada a 1100px para que quepa bien el texto a lo ancho */
+            width: 1100px; max-width: 95%; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff; border-radius: 8px; 
+            padding: 40px; z-index: 3; box-shadow: 0 0 30px #00ffff; display: flex; gap: 40px; align-items: center;
         }
-        #foto-narrador { <img id="foto-narrador" src="cientifico.jpg" alt="Director AQUAFLUID"> }
-        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; text-shadow: 0 0 5px #00ffff; }
+        
+        /* CSS de la foto corregido */
+        #foto-narrador { width: 220px; height: 220px; object-fit: contain; }
+        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; text-shadow: 0 0 5px #00ffff; width: 100%; }
 
         #notificacion-emergencia {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -67,10 +71,10 @@
            PANTALLA 4: PANEL DE LA VÁLVULA 1
            ========================================= */
         #pantalla-valvula { 
-            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop') center/cover;
-            display: none; align-items: center; justify-content: center; /* Flexbox para centrar */
+            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('fondo.jpg') center/cover;
+            display: none; align-items: center; justify-content: center;
         }
-        #pantalla-valvula.activa { display: flex; } /* Anula el block para usar flex */
+        #pantalla-valvula.activa { display: flex; }
         .panel-azul { background: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); width: 400px; text-align: center; border: 3px solid #00ffff; backdrop-filter: blur(5px); color: #e6f2ff; }
         .panel-azul h2 { color: #00ffff; letter-spacing: 2px; margin-top: 0; }
         .panel-azul input { font-family: 'VT323'; font-size: 35px; padding: 10px; width: 80%; margin: 15px 0; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; }
@@ -91,7 +95,7 @@
         <div id="capa-alarma"></div>
 
         <div id="caja-narrador">
-            <img id="foto-narrador" src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=500&auto=format&fit=crop" alt="Director">
+            <img id="foto-narrador" src="cientifico.jpg" alt="Director">
             <div id="texto-narrador"></div>
         </div>
 
@@ -125,19 +129,19 @@
         function irANarrador() {
             document.getElementById('pantalla-inicio').classList.remove('activa');
             document.getElementById('pantalla-narrador').classList.add('activa');
-            setTimeout(escribirDialogo, 1000); // Empieza a hablar tras 1 segundo
+            setTimeout(escribirDialogo, 1000); 
         }
 
         function irAAlerta() {
             document.getElementById('pantalla-narrador').classList.remove('activa');
             document.getElementById('pantalla-alerta').classList.add('activa');
-            setTimeout(escribirHistoriaHacker, 500); // Empieza a teclear
+            setTimeout(escribirHistoriaHacker, 500); 
         }
 
         function irAValvula() {
             document.getElementById('pantalla-alerta').classList.remove('activa');
             document.getElementById('pantalla-valvula').classList.add('activa');
-            conectarMQTT(); // Conecta al ESP32 al llegar a esta sala
+            conectarMQTT(); 
         }
 
         /* --- LÓGICA DEL NARRADOR (PANTALLA 2) --- */
@@ -148,7 +152,7 @@
             if (i_dialogo < dialogo.length) {
                 document.getElementById("texto-narrador").innerHTML += dialogo.charAt(i_dialogo);
                 i_dialogo++;
-                setTimeout(escribirDialogo, 40); // Velocidad
+                setTimeout(escribirDialogo, 40); 
             } else {
                 setTimeout(activarSusto, 500);
             }
@@ -170,7 +174,7 @@
                 if (char === '\n') document.getElementById("texto-historia").innerHTML += "<br>";
                 else document.getElementById("texto-historia").innerHTML += char;
                 i_hacker++;
-                setTimeout(escribirHistoriaHacker, 25); // Velocidad rápida
+                setTimeout(escribirHistoriaHacker, 25); 
             } else {
                 document.getElementById("btn-start-hacker").style.display = "inline-block";
             }
@@ -202,7 +206,6 @@
                 mensajePantalla.style.color = "#39ff14";
                 mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Secuencia de cierre...";
                 
-                // Manda la orden al ESP32
                 let message = new Paho.MQTT.Message("CERRAR_V1");
                 message.destinationName = "mecfluid/escuela/valvulas";
                 client.send(message);
