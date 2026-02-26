@@ -3,25 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Inicio</title>
+    <title>AQUALAB - Escape Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    
     <style>
-        body {
-            margin: 0; padding: 0; height: 100vh; overflow: hidden;
-            background-image: url('fondo (2).png'); background-size: cover; background-position: center; background-color: #050505;
-        }
+        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; }
         
-        /* EL BOTÓN INVISIBLE */
-        .boton-invisible {
-            position: absolute; top: 57%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 80px; cursor: pointer;
-            background-color: transparent; border-radius: 10px; transition: 0.3s;
-        }
+        /* CLASE MAESTRA PARA LAS PANTALLAS */
+        .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; }
+        .pantalla.activa { display: block; }
 
-        .boton-invisible:hover {
-            background-color: rgba(0, 255, 255, 0.4); box-shadow: 0 0 30px #00ffff;
+        /* =========================================
+           PANTALLA 1: INICIO (Tu imagen de fondo)
+           ========================================= */
+        #pantalla-inicio { background: url('fondo.jpg') center/cover; }
+        .boton-invisible {
+            position: absolute; top: 57%; left: 50%; transform: translate(-50%, -50%);
+            width: 350px; height: 80px; cursor: pointer; background-color: transparent; border-radius: 10px;
         }
+        .boton-invisible:hover { background-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 30px #00ffff; }
+
+        /* =========================================
+           PANTALLA 2: CINEMÁTICA DEL NARRADOR
+           ========================================= */
+        #pantalla-narrador { background: url('fondo.jpg') center/cover; }
+        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1; }
+        #capa-alarma { position: absolute; width: 100%; height: 100%; background: transparent; z-index: 2; pointer-events: none; }
+        .alarma-activada { animation: parpadeo-rojo 1s infinite !important; }
+        @keyframes parpadeo-rojo { 0% { background: rgba(255, 0, 0, 0.1); } 50% { background: rgba(255, 0, 0, 0.85); } 100% { background: rgba(255, 0, 0, 0.1); } }
+        
+        #caja-narrador {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 800px; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff; border-radius: 8px; 
+            padding: 30px; z-index: 3; box-shadow: 0 0 30px #00ffff; display: flex; gap: 30px; align-items: center;
+        }
+        #foto-narrador { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 3px solid #00ffff; }
+        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; text-shadow: 0 0 5px #00ffff; }
+
+        #notificacion-emergencia {
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a; padding: 50px; text-align: center; 
+            z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; min-width: 600px;
+        }
+        #notificacion-emergencia h1 { color: #ff073a; font-size: 60px; margin-top:0; text-shadow: 0 0 20px #ff073a; animation: texto-parpadea 0.5s infinite; }
+        @keyframes texto-parpadea { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
+        #notificacion-emergencia p { font-size: 30px; color: #e6f2ff; margin-bottom: 40px; }
+        .btn-rojo { background: #ff073a; color: white; font-family: 'VT323'; font-size: 38px; padding: 15px 60px; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; transition: 0.3s; box-shadow: 0 0 20px #ff073a;}
+        .btn-rojo:hover { background: white; color: #ff073a; box-shadow: 0 0 50px white; }
+
+        /* =========================================
+           PANTALLA 3: TERMINAL HACKER (Alerta)
+           ========================================= */
+        #pantalla-alerta { background: #050505; color: #39ff14; text-align: center; padding-top: 50px; }
+        .scanlines { position: absolute; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; pointer-events: none; }
+        .titulo-hacker { color: #ff073a; font-size: 50px; text-shadow: 0 0 10px #ff073a; text-transform: uppercase; }
+        #texto-historia { font-size: 28px; max-width: 700px; margin: 30px auto; text-align: left; line-height: 1.5; min-height: 200px; }
+        #btn-start-hacker { display: none; background: transparent; color: #00ffff; border: 2px solid #00ffff; padding: 15px 40px; font-size: 30px; font-family: 'VT323'; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); animation: parpadeo-lento 1.5s infinite; }
+        #btn-start-hacker:hover { background: #00ffff; color: #000; }
+        @keyframes parpadeo-lento { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* =========================================
+           PANTALLA 4: PANEL DE LA VÁLVULA 1
+           ========================================= */
+        #pantalla-valvula { 
+            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop') center/cover;
+            display: none; align-items: center; justify-content: center; /* Flexbox para centrar */
+        }
+        #pantalla-valvula.activa { display: flex; } /* Anula el block para usar flex */
+        .panel-azul { background: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); width: 400px; text-align: center; border: 3px solid #00ffff; backdrop-filter: blur(5px); color: #e6f2ff; }
+        .panel-azul h2 { color: #00ffff; letter-spacing: 2px; margin-top: 0; }
+        .panel-azul input { font-family: 'VT323'; font-size: 35px; padding: 10px; width: 80%; margin: 15px 0; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; }
+        .panel-azul button { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #001f3f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 85%; font-weight: bold; transition: 0.3s; }
+        .panel-azul button:hover { background: #ffffff; box-shadow: 0 0 20px #ffffff; }
+        #mensaje-valvula { margin-top: 15px; font-size: 28px; height: 60px; }
+        .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="boton-invisible" onclick="window.location.href='narrador.html'" title="Haz clic para Iniciar Sistema"></div>
+
+    <div id="pantalla-inicio" class="pantalla activa">
+        <div class="boton-invisible" onclick="irANarrador()" title="Iniciar Sistema"></div>
+    </div>
+
+    <div id="pantalla-narrador" class="pantalla">
+        <div id="filtro-oscuro"></div>
+        <div id="capa-alarma"></div>
+
+        <div id="caja-narrador">
+            <img id="foto-narrador" src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=500&auto=format&fit=crop" alt="Director">
+            <div id="texto-narrador"></div>
+        </div>
+
+        <div id="notificacion-emergencia">
+            <h1>¡FALLO CRÍTICO DE PRESIÓN!</h1>
+            <p>Los depósitos principales están a punto de colapsar.</p>
+            <button class="btn-rojo" onclick="irAAlerta()">[ ABRIR PROTOCOLO ]</button>
+        </div>
+    </div>
+
+    <div id="pantalla-alerta" class="pantalla">
+        <div class="scanlines"></div>
+        <h1 class="titulo-hacker">ALERTA CRÍTICA</h1>
+        <div id="texto-historia"></div>
+        <button id="btn-start-hacker" onclick="irAValvula()">[ INICIAR PROTOCOLO DE SALVAMENTO ]</button>
+    </div>
+
+    <div id="pantalla-valvula" class="pantalla">
+        <div class="panel-azul">
+            <h2>Control Válvula 1</h2>
+            <p>> Presión objetivo (Pa) <</p>
+            <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off">
+            <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
+            <div id="mensaje-valvula"></div>
+            <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
+        </div>
+    </div>
+
+    <script>
+        /* --- NAVEGACIÓN ENTRE PANTALLAS --- */
+        function irANarrador() {
+            document.getElementById('pantalla-inicio').classList.remove('activa');
+            document.getElementById('pantalla-narrador').classList.add('activa');
+            setTimeout(escribirDialogo, 1000); // Empieza a hablar tras 1 segundo
+        }
+
+        function irAAlerta() {
+            document.getElementById('pantalla-narrador').classList.remove('activa');
+            document.getElementById('pantalla-alerta').classList.add('activa');
+            setTimeout(escribirHistoriaHacker, 500); // Empieza a teclear
+        }
+
+        function irAValvula() {
+            document.getElementById('pantalla-alerta').classList.remove('activa');
+            document.getElementById('pantalla-valvula').classList.add('activa');
+            conectarMQTT(); // Conecta al ESP32 al llegar a esta sala
+        }
+
+        /* --- LÓGICA DEL NARRADOR (PANTALLA 2) --- */
+        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 4? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
+        let i_dialogo = 0;
+        
+        function escribirDialogo() {
+            if (i_dialogo < dialogo.length) {
+                document.getElementById("texto-narrador").innerHTML += dialogo.charAt(i_dialogo);
+                i_dialogo++;
+                setTimeout(escribirDialogo, 40); // Velocidad
+            } else {
+                setTimeout(activarSusto, 500);
+            }
+        }
+
+        function activarSusto() {
+            document.getElementById('caja-narrador').style.display = 'none';
+            document.getElementById('capa-alarma').classList.add('alarma-activada');
+            document.getElementById('notificacion-emergencia').style.display = 'block';
+        }
+
+        /* --- LÓGICA DEL HACKER (PANTALLA 3) --- */
+        const mensajeHacker = "SISTEMA COMPROMETIDO.\n\nFallo detectado en las válvulas de refrigeración del laboratorio.\n\nEl nivel de fluidos está aumentando críticamente. Si no estabilizamos la presión, las instalaciones colapsarán.\n\nNecesitamos sus conocimientos en mecánica de fluidos, ingeniero. El destino del equipo está en sus manos.";
+        let i_hacker = 0;
+
+        function escribirHistoriaHacker() {
+            if (i_hacker < mensajeHacker.length) {
+                let char = mensajeHacker.charAt(i_hacker);
+                if (char === '\n') document.getElementById("texto-historia").innerHTML += "<br>";
+                else document.getElementById("texto-historia").innerHTML += char;
+                i_hacker++;
+                setTimeout(escribirHistoriaHacker, 25); // Velocidad rápida
+            } else {
+                document.getElementById("btn-start-hacker").style.display = "inline-block";
+            }
+        }
+
+        /* --- LÓGICA DE LA VÁLVULA Y MQTT (PANTALLA 4) --- */
+        var client;
+        function conectarMQTT() {
+            client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cliente_genially_" + parseInt(Math.random() * 10000, 10));
+            client.connect({
+                onSuccess: function() {
+                    document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo."; 
+                    document.getElementById("statusMQTT").style.color = "#00ffff"; 
+                },
+                onFailure: function() {
+                    document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; 
+                    document.getElementById("statusMQTT").style.color = "red"; 
+                }
+            });
+        }
+
+        function comprobarRespuesta() {
+            let inputAlumno = document.getElementById("respuestaAlumno");
+            let valorEscrito = inputAlumno.value;
+            let mensajePantalla = document.getElementById("mensaje-valvula");
+            let respuestaCorrecta = 250; 
+
+            if (valorEscrito == respuestaCorrecta) {
+                mensajePantalla.style.color = "#39ff14";
+                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Secuencia de cierre...";
+                
+                // Manda la orden al ESP32
+                let message = new Paho.MQTT.Message("CERRAR_V1");
+                message.destinationName = "mecfluid/escuela/valvulas";
+                client.send(message);
+            } else {
+                mensajePantalla.style.color = "#ff073a";
+                mensajePantalla.innerHTML = "ERROR CRÍTICO<br>Parámetros incorrectos.";
+                inputAlumno.value = ""; 
+            }
+        }
+    </script>
 </body>
 </html>
