@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQUALAB - Transmisión</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-image: url('fondo.jpg'); /* Mismo fondo */
+            background-size: cover; background-position: center;
+        }
+        
+        #filtro-oscuro {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7); z-index: 1;
+        }
+
+        #capa-alarma {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: transparent; z-index: 2; pointer-events: none;
+        }
+        .alarma-activada { animation: parpadeo-rojo 1s infinite !important; }
+        @keyframes parpadeo-rojo { 
+            0% { background-color: rgba(255, 0, 0, 0.1); } 
+            50% { background-color: rgba(255, 0, 0, 0.85); } 
+            100% { background-color: rgba(255, 0, 0, 0.1); } 
+        }
+
+        #caja-narrador {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; background-color: rgba(0, 15, 30, 0.95);
+            border: 2px solid #00ffff; border-radius: 8px; padding: 30px; z-index: 3; box-shadow: 0 0 30px #00ffff; display: flex; gap: 30px;
+            align-items: center; transition: 0.2s;
+        }
+        #foto-narrador { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 3px solid #00ffff; }
+        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; text-align: left; text-shadow: 0 0 5px #00ffff; }
+
+        #notificacion-emergencia {
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a;
+            padding: 50px; text-align: center; z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; color: #fff; min-width: 600px;
+        }
+        #notificacion-emergencia h1 { color: #ff073a; margin-top: 0; font-size: 60px; text-shadow: 0 0 20px #ff073a; animation: texto-parpadea 0.5s infinite; }
+        @keyframes texto-parpadea { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
+        #notificacion-emergencia p { font-size: 30px; color: #e6f2ff; margin-bottom: 40px; }
+        
+        .btn-abrir {
+            background-color: #ff073a; color: white; font-family: 'VT323', monospace; font-size: 38px; padding: 15px 60px; border: none; border-radius: 5px; cursor: pointer;
+            text-transform: uppercase; font-weight: bold; transition: 0.3s; box-shadow: 0 0 20px #ff073a;
+        }
+        .btn-abrir:hover { background-color: white; color: #ff073a; box-shadow: 0 0 50px white; }
+    </style>
+</head>
+<body>
+    <div id="filtro-oscuro"></div>
+    <div id="capa-alarma"></div>
+
+    <div id="caja-narrador">
+        <img id="foto-narrador" src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=500&auto=format&fit=crop" alt="Director AQUAFLUID">
+        <div id="texto-narrador"></div>
+    </div>
+
+    <div id="notificacion-emergencia">
+        <h1>¡FALLO CRÍTICO DE PRESIÓN!</h1>
+        <p>Los depósitos principales están a punto de colapsar.</p>
+        <button class="btn-abrir" onclick="window.location.href='alerta.html'">[ ABRIR PROTOCOLO ]</button>
+    </div>
+
+    <script>
+        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 4? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
+        
+        let i = 0;
+        const velocidad = 40; // Milisegundos por letra. Bájalo a 20 si lo quieres más rápido.
+
+        function escribirDialogo() {
+            if (i < dialogo.length) {
+                document.getElementById("texto-narrador").innerHTML += dialogo.charAt(i);
+                i++;
+                setTimeout(escribirDialogo, velocidad);
+            } else {
+                // Cuando termina de escribir la última letra, esperamos medio segundo y... ¡SUSTO!
+                setTimeout(activarSusto, 500);
+            }
+        }
+
+        function activarSusto() {
+            document.getElementById('caja-narrador').style.display = 'none';
+            document.getElementById('capa-alarma').classList.add('alarma-activada');
+            document.getElementById('notificacion-emergencia').style.display = 'block';
+        }
+
+        // Empieza a hablar 1 segundo después de abrir la página
+        window.onload = function() {
+            setTimeout(escribirDialogo, 1000);
+        };
+    </script>
+</body>
+</html>
