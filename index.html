@@ -15,21 +15,40 @@
 
         /* ================= PANTALLA 1: INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        .boton-invisible { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 80px; cursor: pointer; background-color: transparent; border-radius: 10px; }
+        .boton-invisible { 
+            position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); 
+            width: 350px; height: 80px; cursor: pointer; background-color: transparent; border-radius: 10px; 
+        }
         .boton-invisible:hover { background-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 30px #00ffff; }
 
         /* ================= PANTALLA 2: NARRADOR ================= */
         #pantalla-narrador { background: url('techlab.jpg') center/cover; }
         #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 1; }
+        
         #capa-alarma { position: absolute; width: 100%; height: 100%; background: transparent; z-index: 2; pointer-events: none; }
         .alarma-activada { animation: parpadeo-rojo 1s infinite !important; }
         @keyframes parpadeo-rojo { 0% { background: rgba(255, 0, 0, 0.1); } 50% { background: rgba(255, 0, 0, 0.85); } 100% { background: rgba(255, 0, 0, 0.1); } }
         
-       #caja-narrador { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 1100px; max-width: 95%; background: rgba(0, 15, 30, 0.2); border: 2px solid #00ffff; border-radius: 8px; padding: 40px; z-index: 3; box-shadow: 0 0 30px #00ffff; display: flex; gap: 40px; align-items: center; }
-        #foto-narrador { width: 300px; height: 300px; object-fit: contain; }
-        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; text-shadow: 0 0 5px #00ffff; width: 100%; }
+        /* CIENTÍFICO FUERA DEL CUADRO */
+        #foto-narrador { 
+            position: absolute; bottom: 0; left: 5%; width: 450px; height: auto; 
+            z-index: 4; object-fit: contain; filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4)); 
+        }
 
-        #notificacion-emergencia { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a; padding: 50px; text-align: center; z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; min-width: 600px; }
+        /* CUADRO DE TEXTO HOLOGRAMA */
+        #caja-narrador { 
+            position: absolute; bottom: 15%; left: 40%; width: 700px; 
+            background: rgba(0, 15, 30, 0.3); backdrop-filter: blur(8px); 
+            border: 2px solid #00ffff; border-radius: 15px; padding: 40px; 
+            z-index: 5; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); 
+        }
+        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.3; text-shadow: 0 0 10px #00ffff; }
+
+        #notificacion-emergencia { 
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            background: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a; padding: 50px; text-align: center; 
+            z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; min-width: 600px; 
+        }
         #notificacion-emergencia h1 { color: #ff073a; font-size: 60px; margin-top:0; text-shadow: 0 0 20px #ff073a; animation: texto-parpadea 0.5s infinite; }
         @keyframes texto-parpadea { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
         #notificacion-emergencia p { font-size: 30px; color: #e6f2ff; margin-bottom: 40px; }
@@ -39,46 +58,29 @@
         /* ================= PANTALLA 3: TERMINAL HACKER ================= */
         #pantalla-alerta { background: #050505; color: #39ff14; text-align: center; padding-top: 50px; }
         .scanlines { position: absolute; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; pointer-events: none; }
-        .titulo-hacker { color: #ff073a; font-size: 50px; text-shadow: 0 0 10px #ff073a; text-transform: uppercase; margin-bottom: 10px; }
+        .titulo-hacker { color: #ff073a; font-size: 50px; text-shadow: 0 0 10px #ff073a; text-transform: uppercase; }
         #texto-historia { font-size: 26px; max-width: 800px; margin: 10px auto; text-align: left; line-height: 1.15; min-height: 150px; }
-        #btn-start-hacker { display: none; background: transparent; color: #00ffff; border: 2px solid #00ffff; padding: 15px 40px; font-size: 30px; font-family: 'VT323'; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); animation: parpadeo-lento 1.5s infinite; z-index: 10; position: relative;}
+        #btn-start-hacker { display: none; background: transparent; color: #00ffff; border: 2px solid #00ffff; padding: 15px 40px; font-size: 30px; font-family: 'VT323'; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); animation: parpadeo-lento 1.5s infinite; position: relative; z-index: 10;}
         #btn-start-hacker:hover { background: #00ffff; color: #000; }
-        @keyframes parpadeo-lento { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* ================= PANTALLA 4: MAPA DEL SECTOR 4 ================= */
+        /* ================= PANTALLA 4: MAPA TÁCTICO ================= */
         #pantalla-mapa { background: #050505; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        #pantalla-mapa.activa { display: flex; } /* Flex para centrar el mapa */
-        .titulo-mapa { color: #00ffff; font-size: 45px; margin-bottom: 20px; text-shadow: 0 0 15px #00ffff; text-transform: uppercase; z-index: 5; position: relative; }
-        
-        .contenedor-mapa { 
-            position: relative; width: 900px; height: 550px; 
-            /* AQUÍ ESTÁ EL FONDO DEL MAPA. He puesto uno de planos técnicos provisional. */
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop') center/cover; 
-            border: 3px solid #00ffff; border-radius: 10px; box-shadow: 0 0 40px rgba(0,255,255,0.2); 
-        }
-        
-        /* Estilos de los puntos de luz en el mapa */
+        #pantalla-mapa.activa { display: flex; }
+        .titulo-mapa { color: #00ffff; font-size: 45px; margin-bottom: 20px; text-shadow: 0 0 15px #00ffff; text-transform: uppercase; }
+        .contenedor-mapa { position: relative; width: 900px; height: 550px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop') center/cover; border: 2px solid #00ffff; }
         .nodo { position: absolute; width: 45px; height: 45px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; color: white; border: 2px solid white; transition: 0.3s; z-index: 10;}
         .nodo-rojo { background: #ff073a; box-shadow: 0 0 20px #ff073a; animation: pulso-rojo 1s infinite; }
-        .nodo-verde { background: #39ff14; box-shadow: 0 0 20px #39ff14; pointer-events: none; border-color: #000; color: #000; }
+        .nodo-verde { background: #39ff14; box-shadow: 0 0 20px #39ff14; pointer-events: none; color: black; }
         @keyframes pulso-rojo { 0% { box-shadow: 0 0 10px #ff073a; } 50% { box-shadow: 0 0 30px #ff073a; } 100% { box-shadow: 0 0 10px #ff073a; } }
 
         /* ================= PANTALLA 5: VÁLVULA 1 ================= */
         #pantalla-valvula { background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('fondo.jpg') center/cover; display: none; align-items: center; justify-content: center; }
         #pantalla-valvula.activa { display: flex; }
         .panel-azul { background: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); width: 400px; text-align: center; border: 3px solid #00ffff; backdrop-filter: blur(5px); color: #e6f2ff; }
-        .panel-azul h2 { color: #00ffff; letter-spacing: 2px; margin-top: 0; }
         .panel-azul input { font-family: 'VT323'; font-size: 35px; padding: 10px; width: 80%; margin: 15px 0; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; }
-        
         .btn-accion { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #001f3f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 85%; font-weight: bold; transition: 0.3s; }
-        .btn-accion:hover { background: #ffffff; box-shadow: 0 0 20px #ffffff; }
-        
-        /* Botón verde para volver al mapa (Oculto al principio) */
-        .btn-volver-mapa { display: none; background: #39ff14; color: #000; margin-top: 15px; box-shadow: 0 0 15px #39ff14; }
-        .btn-volver-mapa:hover { background: white; box-shadow: 0 0 25px white; }
-
+        .btn-volver-mapa { display: none; background: #39ff14; color: #000; margin-top: 15px; }
         #mensaje-valvula { margin-top: 15px; font-size: 28px; height: 60px; }
-        .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -90,8 +92,9 @@
     <div id="pantalla-narrador" class="pantalla">
         <div id="filtro-oscuro"></div>
         <div id="capa-alarma"></div>
+        <img id="foto-narrador" src="cient.png" alt="Director">
         <div id="caja-narrador">
-            <img id="foto-narrador" src="cient.png" alt="Director"> <div id="texto-narrador"></div>
+            <div id="texto-narrador"></div>
         </div>
         <div id="notificacion-emergencia">
             <h1>¡FALLO CRÍTICO DE PRESIÓN!</h1>
@@ -104,20 +107,16 @@
         <div class="scanlines"></div>
         <h1 class="titulo-hacker">ALERTA CRÍTICA</h1>
         <div id="texto-historia"></div>
-        <button id="btn-start-hacker" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
+        <button id="btn-start-hacker" onclick="irAMapa()">[ ACCEDER AL MAPA TÁCTICO ]</button>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
-        <div class="scanlines"></div>
-        <h1 class="titulo-mapa">MAPA TÁCTICO: SECTOR 11</h1>
+        <h1 class="titulo-mapa">SECTOR 4: ESTADO CRÍTICO</h1>
         <div class="contenedor-mapa">
             <div class="nodo nodo-rojo" id="nodo-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 20%;">1</div>
-            <div class="nodo nodo-rojo" id="nodo-2" onclick="abrirHabitacion(2)" style="top: 60%; left: 35%;">2</div>
-            <div class="nodo nodo-rojo" id="nodo-3" onclick="abrirHabitacion(3)" style="top: 30%; left: 50%;">3</div>
-            <div class="nodo nodo-rojo" id="nodo-4" onclick="abrirHabitacion(4)" style="top: 75%; left: 65%;">4</div>
-            <div class="nodo nodo-rojo" id="nodo-5" onclick="abrirHabitacion(5)" style="top: 40%; left: 85%;">5</div>
+            <div class="nodo nodo-rojo" id="nodo-2" onclick="alert('Sistema bloqueado')" style="top: 60%; left: 35%;">2</div>
+            <div class="nodo nodo-rojo" id="nodo-3" onclick="alert('Sistema bloqueado')" style="top: 30%; left: 50%;">3</div>
         </div>
-        <p style="color: #39ff14; font-size: 26px; margin-top: 20px; font-weight: bold; animation: parpadeo-lento 2s infinite;">> SELECCIONE UN ÁREA COMPROMETIDA <</p>
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
@@ -126,16 +125,12 @@
             <p>> Presión objetivo (Pa) <</p>
             <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off">
             <button id="btn-ejecutar-1" class="btn-accion" onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
-            
             <button id="btn-volver-1" class="btn-accion btn-volver-mapa" onclick="volverAlMapaDesdeValvula(1)">[ VOLVER AL MAPA ]</button>
-            
             <div id="mensaje-valvula"></div>
-            <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
         </div>
     </div>
 
     <script>
-        /* --- NAVEGACIÓN ENTRE PANTALLAS --- */
         function irANarrador() {
             document.getElementById('pantalla-inicio').classList.remove('activa');
             document.getElementById('pantalla-narrador').classList.add('activa');
@@ -148,83 +143,49 @@
             setTimeout(escribirHistoriaHacker, 500); 
         }
 
-        // Función nueva para ir de la historia hacker al mapa
         function irAMapa() {
             document.getElementById('pantalla-alerta').classList.remove('activa');
             document.getElementById('pantalla-mapa').classList.add('activa');
         }
 
-        /* --- LÓGICA DEL MAPA --- */
-        let valvulasResueltas = { 1: false, 2: false, 3: false, 4: false, 5: false };
-
-        function abrirHabitacion(numHabitacion) {
-            // Si ya está resuelta, no hace falta entrar
-            if(valvulasResueltas[numHabitacion] === true) {
-                return; 
-            }
-
-            if (numHabitacion === 1) {
+        function abrirHabitacion(n) {
+            if(n === 1) {
                 document.getElementById('pantalla-mapa').classList.remove('activa');
                 document.getElementById('pantalla-valvula').classList.add('activa');
-                conectarMQTT(); 
-            } else {
-                alert("Válvula " + numHabitacion + " no disponible. Sistema en construcción. Por favor, estabilice la Válvula 1 primero.");
+                conectarMQTT();
             }
         }
 
-        function volverAlMapaDesdeValvula(numHabitacion) {
-            // 1. Marcar como resuelta en la memoria
-            valvulasResueltas[numHabitacion] = true;
-
-            // 2. Cambiar la luz roja a verde en el mapa
-            let luz = document.getElementById('nodo-' + numHabitacion);
-            luz.classList.remove('nodo-rojo');
-            luz.classList.add('nodo-verde');
-
-            // 3. Volver a la pantalla del mapa
+        function volverAlMapaDesdeValvula(n) {
+            document.getElementById('nodo-' + n).classList.remove('nodo-rojo');
+            document.getElementById('nodo-' + n).classList.add('nodo-verde');
             document.getElementById('pantalla-valvula').classList.remove('activa');
             document.getElementById('pantalla-mapa').classList.add('activa');
-
-            // 4. Comprobar si han ganado el juego final
-            comprobarVictoriaGlobal();
         }
 
-        function comprobarVictoriaGlobal() {
-            if (valvulasResueltas[1] && valvulasResueltas[2] && valvulasResueltas[3] && valvulasResueltas[4] && valvulasResueltas[5]) {
-                // Aquí en el futuro pondremos la prueba final
-                alert("¡TODAS LAS VÁLVULAS ESTABILIZADAS! Iniciando protocolo final...");
-            }
-        }
-
-        /* --- LÓGICA DEL NARRADOR --- */
-        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
+        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 4? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
         let i_dialogo = 0;
-        
         function escribirDialogo() {
             if (i_dialogo < dialogo.length) {
                 document.getElementById("texto-narrador").innerHTML += dialogo.charAt(i_dialogo);
                 i_dialogo++;
                 setTimeout(escribirDialogo, 40); 
             } else {
-                setTimeout(activarSusto, 2500); // Tensión de 2.5 segundos
+                setTimeout(() => {
+                    document.getElementById('caja-narrador').style.display = 'none';
+                    document.getElementById('foto-narrador').style.display = 'none';
+                    document.getElementById('capa-alarma').classList.add('alarma-activada');
+                    document.getElementById('notificacion-emergencia').style.display = 'block';
+                }, 2500);
             }
         }
 
-        function activarSusto() {
-            document.getElementById('caja-narrador').style.display = 'none';
-            document.getElementById('capa-alarma').classList.add('alarma-activada');
-            document.getElementById('notificacion-emergencia').style.display = 'block';
-        }
-
-        /* --- LÓGICA DEL HACKER --- */
-        const mensajeHacker = "SISTEMA COMPROMETIDO.\n\nFallo detectado en las válvulas de refrigeración del laboratorio.\n\nEl nivel de fluidos está aumentando críticamente. Si no estabilizamos la presión, las instalaciones colapsarán.\n\nNecesitamos sus conocimientos en mecánica de fluidos, ingeniero. El destino del equipo está en sus manos.";
+        const mensajeHacker = "SISTEMA COMPROMETIDO.\n\nFallo detectado en el Sector 4.\n\nEl nivel de fluidos está aumentando críticamente.\n\nNecesitamos sus conocimientos, ingeniero. El destino del equipo está en sus manos.";
         let i_hacker = 0;
-
         function escribirHistoriaHacker() {
             if (i_hacker < mensajeHacker.length) {
                 let char = mensajeHacker.charAt(i_hacker);
-                if (char === '\n') document.getElementById("texto-historia").innerHTML += "<br>";
-                else document.getElementById("texto-historia").innerHTML += char;
+                document.getElementById("texto-historia").innerHTML += char === '\n' ? "<br>" : char;
                 i_hacker++;
                 setTimeout(escribirHistoriaHacker, 25); 
             } else {
@@ -232,46 +193,22 @@
             }
         }
 
-        /* --- LÓGICA DE LA VÁLVULA 1 Y MQTT --- */
         var client;
         function conectarMQTT() {
-            client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cliente_genially_" + parseInt(Math.random() * 10000, 10));
-            client.connect({
-                onSuccess: function() {
-                    document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo."; 
-                    document.getElementById("statusMQTT").style.color = "#00ffff"; 
-                },
-                onFailure: function() {
-                    document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; 
-                    document.getElementById("statusMQTT").style.color = "red"; 
-                }
-            });
+            client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cl_" + parseInt(Math.random()*100));
+            client.connect({onSuccess: () => console.log("MQTT OK")});
         }
 
         function comprobarRespuesta() {
-            let inputAlumno = document.getElementById("respuestaAlumno");
-            let valorEscrito = inputAlumno.value;
-            let mensajePantalla = document.getElementById("mensaje-valvula");
-            let respuestaCorrecta = 250; 
-
-            if (valorEscrito == respuestaCorrecta) {
-                mensajePantalla.style.color = "#39ff14";
-                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Válvula 1 cerrada.";
-                
-                // Manda la orden al ESP32
-                let message = new Paho.MQTT.Message("CERRAR_V1");
-                message.destinationName = "mecfluid/escuela/valvulas";
-                client.send(message);
-
-                // Oculta el botón de enviar y muestra el botón verde para volver al mapa
+            if (document.getElementById("respuestaAlumno").value == 250) {
+                document.getElementById("mensaje-valvula").style.color = "#39ff14";
+                document.getElementById("mensaje-valvula").innerHTML = "Válvula 1 Cerrada.";
+                client.send(new Paho.MQTT.Message("CERRAR_V1") {{ message.destinationName = "mecfluid/escuela/valvulas"; }});
                 document.getElementById("btn-ejecutar-1").style.display = "none";
                 document.getElementById("btn-volver-1").style.display = "inline-block";
-                inputAlumno.disabled = true; // Bloquea la casilla para que no escriban más
-                
             } else {
-                mensajePantalla.style.color = "#ff073a";
-                mensajePantalla.innerHTML = "ERROR CRÍTICO<br>Parámetros incorrectos.";
-                inputAlumno.value = ""; 
+                document.getElementById("mensaje-valvula").style.color = "#ff073a";
+                document.getElementById("mensaje-valvula").innerHTML = "Error de Presión.";
             }
         }
     </script>
