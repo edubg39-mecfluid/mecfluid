@@ -104,12 +104,12 @@
         <div class="scanlines"></div>
         <h1 class="titulo-hacker">ALERTA CRÍTICA</h1>
         <div id="texto-historia"></div>
-        <button id="btn-start-hacker" onclick="irAMapa()">[ ACCEDER AL MAPA TÁCTICO ]</button>
+        <button id="btn-start-hacker" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
         <div class="scanlines"></div>
-        <h1 class="titulo-mapa">MAPA TÁCTICO: SECTOR 4</h1>
+        <h1 class="titulo-mapa">MAPA TÁCTICO: SECTOR 11</h1>
         <div class="contenedor-mapa">
             <div class="nodo nodo-rojo" id="nodo-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 20%;">1</div>
             <div class="nodo nodo-rojo" id="nodo-2" onclick="abrirHabitacion(2)" style="top: 60%; left: 35%;">2</div>
@@ -197,7 +197,7 @@
         }
 
         /* --- LÓGICA DEL NARRADOR --- */
-        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 4? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
+        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
         let i_dialogo = 0;
         
         function escribirDialogo() {
