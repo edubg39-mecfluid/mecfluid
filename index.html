@@ -3,103 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Protocolo de Emergencia</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <title>AQUALAB - Inicio</title>
     <style>
         body {
             margin: 0; padding: 0; height: 100vh; overflow: hidden;
-            font-family: 'VT323', monospace; background-image: url('fondo (2).png');  background-size: cover; background-position: center; background-color: #050505; 
+            background-image: url('fondo.jpg'); /* Tu imagen */
+            background-size: cover;
+            background-position: center;
+            background-color: #050505;
+        }
+        
+        /* EL BOTÓN INVISIBLE */
+        .boton-invisible {
+            position: absolute;
+            top: 57%; /* Ajusta este número si queda muy arriba o muy abajo */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px; /* Ancho del botón */
+            height: 80px; /* Alto del botón */
+            cursor: pointer;
+            
+            /* NOTA: Lo he puesto un poco azul brillante para que veas dónde cae. 
+               Cuando veas que cuadra con tu dibujo, cambia este rgba por la palabra: transparent */
+            background-color: rgba(0, 255, 255, 0.2); 
+            border-radius: 10px;
+            transition: 0.3s;
         }
 
-        /* Capa invisible que luego parpadeará en rojo */
-        #capa-alarma {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: transparent; z-index: 2; pointer-events: none;
-        }
-
-        /* Animación del parpadeo rojo */
-        .alarma-activada {
-            animation: parpadeo-rojo 1s infinite !important;
-        }
-        @keyframes parpadeo-rojo { 
-            0% { background-color: rgba(255, 0, 0, 0.1); } 
-            50% { background-color: rgba(255, 0, 0, 0.8); } 
-            100% { background-color: rgba(255, 0, 0, 0.1); } 
-        }
-
-        /* Contenedor del Narrador (Videollamada) */
-        #caja-narrador {
-            position: absolute; bottom: 30px; left: 30px; width: 250px; background-color: rgba(0, 15, 30, 0.9); border: 2px solid #00ffff;
-            border-radius: 8px; padding: 10px; text-align: center; z-index: 3; box-shadow: 0 0 15px #00ffff; color: #00ffff; transition: 0.3s;
-        }
-
-        /* IMAGEN DEL NARRADOR (Puedes cambiar el enlace por la cara de un profesor) */
-        #foto-narrador {
-            width: 100%; height: 180px; object-fit: cover; border-radius: 4px; border: 1px solid #00ffff;
-        }
-
-        #nombre-narrador {
-            margin-top: 8px; font-size: 22px; letter-spacing: 1px;
-        }
-
-        /* Notificación de Emergencia (Oculta al principio) */
-        #notificacion-emergencia {
-            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(10, 0, 0, 0.95);
-            border: 4px solid #ff073a; padding: 50px; text-align: center; z-index: 10; border-radius: 10px; box-shadow: 0 0 80px #ff073a; color: #fff; min-width: 500px;
-        }
-
-        #notificacion-emergencia h1 {
-            color: #ff073a; margin-top: 0; font-size: 55px; text-shadow: 0 0 15px #ff073a; animation: texto-parpadea 0.5s infinite;
-        }
-
-        @keyframes texto-parpadea { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
-
-        #notificacion-emergencia p {
-            font-size: 28px; color: #e6f2ff; margin-bottom: 40px;
-        }
-
-        /* Botón ABRIR */
-        .btn-abrir { 
-            background-color: #ff073a; color: white; font-family: 'VT323', monospace; font-size: 38px; padding: 15px 60px; border: none;
-            border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; transition: 0.3s; box-shadow: 0 0 20px #ff073a;
-        }
-        .btn-abrir:hover {
-            background-color: white;
-            color: #ff073a;
-            box-shadow: 0 0 40px white;
+        .boton-invisible:hover {
+            background-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 30px #00ffff;
         }
     </style>
 </head>
 <body>
-
-    <div id="capa-alarma"></div>
-
-    <div id="caja-narrador">
-        <img id="foto-narrador" src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=500&auto=format&fit=crop" alt="Científico">
-        <div id="nombre-narrador">TRANSMISIÓN ESTABLE</div>
-    </div>
-
-    <div id="notificacion-emergencia">
-        <h1>¡FALLO CRÍTICO DE PRESIÓN!</h1>
-        <p>Integridad del sistema AQUALAB comprometida.</p>
-        <button class="btn-abrir" onclick="window.location.href='alerta.html'">[ ABRIR PROTOCOLO ]</button>
-    </div>
-
-    <script>
-        window.onload = function() {
-            setTimeout(function() {
-                
-                document.getElementById('nombre-narrador').innerText = "¡CONEXIÓN PERDIDA!";
-                document.getElementById('caja-narrador').style.borderColor = "#ff073a";
-                document.getElementById('caja-narrador').style.color = "#ff073a";
-                document.getElementById('caja-narrador').style.boxShadow = "0 0 20px #ff073a";
-                
-                document.getElementById('capa-alarma').classList.add('alarma-activada');
-                
-                document.getElementById('notificacion-emergencia').style.display = 'block';
-
-            }, 4000); 
-        };
-    </script>
-
+    <div class="boton-invisible" onclick="window.location.href='narrador.html'" title="Haz clic para Iniciar Sistema"></div>
 </body>
 </html>
