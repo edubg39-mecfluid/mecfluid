@@ -7,32 +7,17 @@
     <style>
         body {
             margin: 0; padding: 0; height: 100vh; overflow: hidden;
-            background-image: url('fondo.jpg'); /* Tu imagen */
-            background-size: cover;
-            background-position: center;
-            background-color: #050505;
+            background-image: url('fondo (2).png'); background-size: cover; background-position: center; background-color: #050505;
         }
         
         /* EL BOTÓN INVISIBLE */
         .boton-invisible {
-            position: absolute;
-            top: 57%; /* Ajusta este número si queda muy arriba o muy abajo */
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 350px; /* Ancho del botón */
-            height: 80px; /* Alto del botón */
-            cursor: pointer;
-            
-            /* NOTA: Lo he puesto un poco azul brillante para que veas dónde cae. 
-               Cuando veas que cuadra con tu dibujo, cambia este rgba por la palabra: transparent */
-            background-color: rgba(0, 255, 255, 0.2); 
-            border-radius: 10px;
-            transition: 0.3s;
+            position: absolute; top: 57%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 80px; cursor: pointer;
+            background-color: transparent; border-radius: 10px; transition: 0.3s;
         }
 
         .boton-invisible:hover {
-            background-color: rgba(0, 255, 255, 0.4);
-            box-shadow: 0 0 30px #00ffff;
+            background-color: rgba(0, 255, 255, 0.4); box-shadow: 0 0 30px #00ffff;
         }
     </style>
 </head>
