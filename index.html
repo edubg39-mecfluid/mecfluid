@@ -3,72 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Control de Unidades</title>
+    <title>AQUALAB - Sector 11 Master</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
     <style>
-        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; }
-        .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .pantalla.activa { display: flex; }
-
-        /* --- INICIO --- */
-        #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        .boton-invisible { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 80px; cursor: pointer; background: transparent; z-index: 999; }
-        .boton-invisible:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; }
-
-        /* --- MAPAS (Ajustados para evitar scroll) --- */
-        #pantalla-mapa, #pantalla-habitacion { background: #010101; }
-        .titulo-mapa { color: #00ffff; font-size: 38px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
-        .contenedor-mapa { position: relative; width: 800px; height: 450px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
+        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; color: white; }
         
-        .nodo { position: absolute; width: 45px; height: 45px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white; border: 2px solid white; z-index: 10; transition: 0.3s; }
-        .nodo-rojo { background: rgba(255, 7, 58, 0.6); border-color: #ff073a; box-shadow: 0 0 15px #ff073a; animation: pulso 1s infinite; }
+        .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
+        .pantalla.activa { display: flex; z-index: 10; }
+
+        /* ================= PANTALLA 1: INICIO ================= */
+        #pantalla-inicio { background: url('fondo (2).png') center/cover; }
+        .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 380px; height: 90px; cursor: pointer; background: rgba(0,255,255,0); z-index: 999; }
+        .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
+
+        /* ================= PANTALLA 2: NARRADOR ================= */
+        #pantalla-narrador { background: url('fondo (2).png') center/cover; }
+        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1; }
+        
+        #caja-narrador { 
+            position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); 
+            width: 90%; background: rgba(0, 25, 50, 0.8); border: 2px solid #00ffff; 
+            border-radius: 12px; padding: 25px; z-index: 5; display: flex; align-items: center; gap: 30px;
+            box-sizing: border-box;
+        }
+        #foto-narrador { width: 220px; height: auto; filter: drop-shadow(0 0 15px #00ffff); }
+        
+        #texto-narrador { 
+            color: #00ffff; font-size: 30px; line-height: 1.3; 
+            white-space: normal; overflow-wrap: break-word; word-wrap: break-word; flex: 1;
+        }
+
+        /* ================= MAPAS (DISEÑO ESTRECHO) ================= */
+        #pantalla-mapa, #pantalla-habitacion { background: #010101; }
+        .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
+        .contenedor-mapa { position: relative; width: 800px; height: 500px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
+        
+        .nodo { position: absolute; width: 45px; height: 45px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; border: 2px solid white; z-index: 20; transition: 0.3s; }
+        .nodo-rojo { background: rgba(255, 7, 58, 0.7); border-color: #ff073a; box-shadow: 0 0 15px #ff073a; animation: pulso 1s infinite; }
         .nodo-verde { background: rgba(57, 255, 20, 0.7); border-color: #39ff14; box-shadow: 0 0 15px #39ff14; }
         .nodo-bloqueado { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
 
         @keyframes pulso { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
-        /* --- PANEL DE PROBLEMA --- */
-        #pantalla-valvula { background: linear-gradient(rgba(0,20,40,0.9), rgba(0,10,20,0.9)), url('techlab.jpg') center/cover; }
-        .panel-azul { background: rgba(0, 40, 80, 0.9); padding: 30px; border-radius: 15px; border: 2px solid #00ffff; width: 500px; text-align: center; backdrop-filter: blur(10px); }
-        
-        /* Input con fondo azul marino y texto blanco para legibilidad */
+        /* ================= PANEL DE PROBLEMA ================= */
+        #pantalla-valvula { background: linear-gradient(rgba(0,15,30,0.95), rgba(0,5,10,0.95)), url('techlab.jpg') center/cover; }
+        .panel-azul { background: rgba(0, 40, 80, 0.9); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 520px; text-align: center; backdrop-filter: blur(10px); }
         input { font-family: 'VT323'; font-size: 35px; width: 240px; background: #002b4d; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
-        
-        .btn-verificar { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; }
-
-/* --- PANTALLA 2: NARRADOR --- */
-#pantalla-narrador { 
-    background: url('fondo (2).png') center/cover; 
-}
-        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 1; }
-        #capa-alarma { position: absolute; width: 100%; height: 100%; background: transparent; z-index: 2; pointer-events: none; }
-        .alarma-activada { animation: parpadeo-rojo 1s infinite !important; }
-        #caja-narrador { position: absolute; bottom: 5%; left: 5%; width: 90%; background: rgba(0, 15, 30, 0.4); backdrop-filter: blur(5px); 
-                        border: 2px solid #00ffff; border-radius: 8px; padding: 20px; z-index: 3; box-shadow: 0 0 30px #00ffff; display: flex; gap: 30px; align-items: center; 
-}
-
-#foto-narrador { width: 250px; height: auto; filter: drop-shadow(0 0 10px #00ffff); }
-#texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; text-shadow: 0 0 5px #00ffff; white-space: normal; word-wrap: break-word; word-spacing: normal; letter-spacing: normal; }
+        .btn-ui { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; }
     </style>
 </head>
 <body>
 
     <div id="pantalla-inicio" class="pantalla activa">
-        <div class="boton-invisible" onclick="irANarrador()"></div>
+        <div class="boton-inicio" onclick="irANarrador()"></div>
     </div>
 
     <div id="pantalla-narrador" class="pantalla">
+        <div id="filtro-oscuro"></div>
         <div id="caja-narrador">
             <img id="foto-narrador" src="chico111.png">
             <div id="texto-narrador"></div>
         </div>
-        <button id="btn-next" class="btn-verificar" style="display:none; position:absolute; top:40%;" onclick="irAMapa()">[ INICIAR PROTOCOLO ]</button>
+        <button id="btn-mision" class="btn-ui" style="display:none; position:absolute; top:40%; z-index:100;" onclick="irAAlerta()">[ ABRIR PROTOCOLO ]</button>
+    </div>
+
+    <div id="pantalla-alerta" class="pantalla">
+        <h1 style="color:#ff073a; font-size: 50px;">SISTEMA COMPROMETIDO</h1>
+        <div id="texto-historia" style="font-size: 26px; max-width: 800px; text-align: left; margin: 20px; color:#39ff14;"></div>
+        <button id="btn-start" class="btn-ui" style="display:none;" onclick="irAMapa()">[ ENTRAR AL SECTOR 11 ]</button>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
-        <h1 class="titulo-mapa">MAPA GLOBAL: SECTOR 11</h1>
+        <h1 class="titulo-mapa">MAPA TÁCTICO: SECTOR 11</h1>
         <div class="contenedor-mapa" style="background: url('mapa_neon.png') center/contain no-repeat;">
             <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 20%;">1</div>
             <div class="nodo nodo-bloqueado" id="main-2" style="top: 25%; left: 80%;">2</div>
@@ -78,24 +86,24 @@
     </div>
 
     <div id="pantalla-habitacion" class="pantalla">
-        <h1 class="titulo-mapa" id="titulo-hab">HABITACIÓN 1</h1>
+        <h1 class="titulo-mapa" id="titulo-hab">HABITACIÓN 1: CONTROL</h1>
         <div class="contenedor-mapa" style="background: rgba(0, 255, 255, 0.05); border-style: dashed;">
             <div class="nodo nodo-rojo" id="sub-1" onclick="irAProblema(1)" style="top: 30%; left: 30%;">A</div>
             <div class="nodo nodo-bloqueado" id="sub-2" style="top: 30%; left: 70%;">B</div>
             <div class="nodo nodo-bloqueado" id="sub-3" style="top: 70%; left: 30%;">C</div>
             <div class="nodo nodo-bloqueado" id="sub-4" style="top: 70%; left: 70%;">D</div>
         </div>
-        <button class="btn-verificar" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA ]</button>
+        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER ]</button>
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
         <div class="panel-azul">
             <div id="paso-info" style="color:#00ffff; font-size:22px;">PASO 1/3</div>
             <h2 style="color:#ffffff; margin:10px 0;">CONVERSIÓN DE PRESIÓN</h2>
-            <div id="enunciado" style="font-size: 26px; color:#e6f2ff; margin-bottom: 15px;"></div>
+            <div id="enunciado" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px;"></div>
             <input type="number" id="inputRes" step="any" placeholder="Resultado">
             <br>
-            <button class="btn-verificar" onclick="verificarRes()">[ VERIFICAR ]</button>
+            <button class="btn-ui" onclick="verificarRes()">[ VERIFICAR ]</button>
             <div id="feed" style="margin-top:20px; font-size:24px;"></div>
         </div>
     </div>
@@ -113,14 +121,28 @@
             document.getElementById(id).classList.add('activa');
         }
 
+        /* --- NARRADOR --- */
         function irANarrador() {
             mostrar('pantalla-narrador');
-            const txt = "Ingeniero, el Sector 11 requiere calibración. Complete los 3 pasos del Punto A para estabilizar la válvula.";
+            const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
             let i = 0; const caja = document.getElementById("texto-narrador");
             let intv = setInterval(() => {
-                caja.innerText += txt.charAt(i); i++;
-                if(i >= txt.length){ clearInterval(intv); document.getElementById('btn-next').style.display="block"; }
-            }, 30);
+                let char = txt.charAt(i);
+                caja.innerHTML += (char === " ") ? "&nbsp;" : char;
+                i++;
+                if(i >= txt.length){ clearInterval(intv); document.getElementById('btn-mision').style.display="block"; }
+            }, 35);
+        }
+
+        function irAAlerta() {
+            mostrar('pantalla-alerta');
+            const hTxt = "SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEl nivel de fluidos aumenta críticamente.\nEstabilice los puntos de control A, B, C y D para evitar el colapso.";
+            let i = 0; const caja = document.getElementById("texto-historia");
+            let intv = setInterval(() => {
+                caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i);
+                i++;
+                if(i >= hTxt.length){ clearInterval(intv); document.getElementById('btn-start').style.display="block"; }
+            }, 25);
         }
 
         function irAMapa() { mostrar('pantalla-mapa'); actualizarMapas(); }
@@ -135,14 +157,13 @@
         function irAProblema(t) {
             tAct = t;
             if (t === 1 && vAct === 1) { 
-                // Generamos valor entre 100 y 999 Pa para evitar confusiones
                 if(subFase === 1) valorBasePa = Math.floor(Math.random() * 900) + 100;
             }
             mostrar('pantalla-valvula');
             generarReto();
         }
 
-        /* --- LÓGICA DE CONVERSIÓN Pa (PASO A PASO) --- */
+        /* --- LÓGICA DE CONVERSIÓN --- */
         function generarReto() {
             const env = document.getElementById("enunciado");
             const paso = document.getElementById("paso-info");
@@ -153,7 +174,7 @@
                 paso.innerText = `PUNTO A: PASO ${subFase}/3`;
                 if (subFase === 1) {
                     sol = valorBasePa / 100000;
-                    env.innerHTML = `Valor actual: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`;
+                    env.innerHTML = `Valor base: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`;
                 } else if (subFase === 2) {
                     sol = valorBasePa / 100;
                     env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>mbar</b>`;
@@ -161,6 +182,9 @@
                     sol = valorBasePa / 1000000;
                     env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>N/mm²</b>`;
                 }
+            } else {
+                paso.innerText = "PRUEBA MECÁNICA";
+                env.innerHTML = "Calibrando sensores de flujo...";
             }
         }
 
@@ -168,17 +192,13 @@
             const res = parseFloat(document.getElementById("inputRes").value);
             const feed = document.getElementById("feed");
 
-            // Margen de error para los decimales de bar y N/mm2
             if (Math.abs(res - sol) < 0.000001) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
+                feed.style.color = "#39ff14"; feed.innerText = "✓ ACCESO CONCEDIDO";
                 setTimeout(() => {
-                    if (subFase < 3) {
-                        subFase++;
-                        generarReto();
-                    } else {
+                    if (subFase < 3) { subFase++; generarReto(); }
+                    else {
                         progreso[vAct][tAct-1] = true;
-                        subFase = 1; 
-                        alert("PUNTO A ESTABILIZADO");
+                        subFase = 1; alert("PUNTO A ESTABILIZADO");
                         abrirHabitacion(vAct);
                     }
                 }, 1000);
@@ -193,7 +213,6 @@
         }
 
         function actualizarMapas() {
-            // Mapa Principal (1, 2, 3, 4)
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`main-${i}`);
                 if(!n) continue;
@@ -203,22 +222,19 @@
                     n.onclick = () => abrirHabitacion(i);
                 }
             }
-            // Sub-Mapa (A, B, C, D)
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`sub-${i}`);
                 if(!n) continue;
-                if(progreso[vAct][i-1]) {
-                    n.className = "nodo nodo-verde";
-                    n.onclick = null;
-                } else if(i === 1 || progreso[vAct][i-2]) {
-                    n.className = "nodo nodo-rojo";
-                    n.onclick = () => irAProblema(i);
-                } else {
-                    n.className = "nodo nodo-bloqueado";
-                    n.onclick = null;
-                }
+                if(progreso[vAct][i-1]) { n.className = "nodo nodo-verde"; n.onclick = null; }
+                else if(i === 1 || progreso[vAct][i-2]) {
+                    n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i);
+                } else { n.className = "nodo nodo-bloqueado"; n.onclick = null; }
             }
         }
+
+        let client;
+        function conectarMQTT() { client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cl_"+Math.random()); client.connect({onSuccess:()=>console.log("MQTT OK")}); }
+        window.onload = conectarMQTT;
     </script>
 </body>
 </html>
