@@ -15,7 +15,20 @@
 
         /* ================= PANTALLA 1: INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        .boton-invisible { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 80px; cursor: pointer; background-color: transparent; border-radius: 10px; }
+        
+        /* FIX: Añadido z-index y background rgba para asegurar el clic */
+        .boton-invisible { 
+            position: absolute; 
+            top: 58%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 350px; 
+            height: 80px; 
+            cursor: pointer; 
+            background-color: rgba(0,0,0,0); /* Sigue siendo invisible */
+            border-radius: 10px; 
+            z-index: 999; /* Asegura que esté por encima de todo */
+        }
         .boton-invisible:hover { background-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 30px #00ffff; }
 
         /* ================= PANTALLA 2: NARRADOR ================= */
@@ -34,7 +47,15 @@
         .btn-rojo { background: #ff073a; color: white; font-family: 'VT323'; font-size: 38px; padding: 15px 60px; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; transition: 0.3s; box-shadow: 0 0 20px #ff073a;}
         .btn-rojo:hover { background: white; color: #ff073a; box-shadow: 0 0 50px white; }
 
-        /* ================= PANTALLA 4: MAPAS ================= */
+        /* ================= PANTALLA 3: TERMINAL HACKER ================= */
+        #pantalla-alerta { background: #050505; color: #39ff14; text-align: center; padding-top: 50px; }
+        .scanlines { position: absolute; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; pointer-events: none; }
+        .titulo-hacker { color: #ff073a; font-size: 50px; text-shadow: 0 0 10px #ff073a; text-transform: uppercase; margin-bottom: 10px; }
+        #texto-historia { font-size: 26px; max-width: 800px; margin: 10px auto; text-align: left; line-height: 1.15; min-height: 150px; }
+        #btn-start-hacker { display: none; background: transparent; color: #00ffff; border: 2px solid #00ffff; padding: 15px 40px; font-size: 30px; font-family: 'VT323'; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); animation: parpadeo-lento 1.5s infinite; z-index: 10; position: relative;}
+        #btn-start-hacker:hover { background: #00ffff; color: #000; }
+
+        /* ================= PANTALLAS DE MAPAS ================= */
         #pantalla-mapa, #pantalla-habitacion { background: #010101; }
         .titulo-mapa { color: #00ffff; font-size: 45px; margin-bottom: 20px; text-shadow: 0 0 15px #00ffff; text-transform: uppercase; }
         .contenedor-mapa { position: relative; width: 850px; height: 850px; border: 1px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
@@ -50,13 +71,12 @@
         #pantalla-valvula { background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('techlab.jpg') center/cover; }
         .panel-azul { background: rgba(0, 51, 102, 0.9); padding: 40px; border-radius: 15px; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); width: 500px; text-align: center; border: 3px solid #00ffff; backdrop-filter: blur(5px); color: #e6f2ff; }
         .panel-azul input { font-family: 'VT323'; font-size: 35px; padding: 10px; width: 80%; margin: 15px 0; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; }
-        .btn-accion { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #001f3f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 85%; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="pantalla-inicio" class="pantalla activa">
-        <div class="boton-invisible" onclick="irANarrador()"></div>
+        <div class="boton-invisible" onclick="irANarrador()" title="Iniciar Sistema"></div>
     </div>
 
     <div id="pantalla-narrador" class="pantalla">
@@ -67,6 +87,7 @@
         </div>
         <div id="notificacion-emergencia">
             <h1>¡FALLO CRÍTICO DE PRESIÓN!</h1>
+            <p>Los depósitos principales están a punto de colapsar.</p>
             <button class="btn-rojo" onclick="irAAlerta()">[ ABRIR PROTOCOLO ]</button>
         </div>
     </div>
@@ -75,7 +96,7 @@
         <div class="scanlines"></div>
         <h1 class="titulo-hacker">ALERTA CRÍTICA</h1>
         <div id="texto-historia"></div>
-        <button id="btn-start-hacker" class="btn-accion" style="display:none;" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
+        <button id="btn-start-hacker" class="btn-accion" style="display:none; width: auto;" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
@@ -84,7 +105,6 @@
             <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 22%; left: 32%;">1</div>
             <div class="nodo nodo-bloqueado" id="main-2" style="top: 18%; left: 71%;">2</div>
             <div class="nodo nodo-bloqueado" id="main-3" style="top: 55%; left: 30%;">3</div>
-            <div class="nodo nodo-bloqueado" id="main-4" style="top: 59%; left: 74%;">4</div>
         </div>
     </div>
 
@@ -130,9 +150,6 @@
         function irAMapa() { mostrarPantalla('pantalla-mapa'); actualizarMapas(); }
 
         function abrirHabitacion(n) {
-            if (n > 1 && !progreso[n-1].every(x => x === true)) {
-                alert("ACCESO DENEGADO: Estabilice la válvula anterior."); return;
-            }
             vAct = n;
             document.getElementById('titulo-hab').innerText = `HABITACIÓN ${n}: PUNTOS DE CONTROL`;
             mostrarPantalla('pantalla-habitacion');
@@ -176,7 +193,7 @@
                 progreso[vAct][tAct-1] = true;
                 setTimeout(() => {
                     if (progreso[vAct].every(x => x === true)) {
-                        alert("¡VÁLVULA SELLADA!"); enviarMQTT(); irAMapa();
+                        alert("¡VÁLVULA SELLADA!"); irAMapa();
                     } else { abrirHabitacion(vAct); }
                 }, 1200);
             } else {
@@ -186,22 +203,20 @@
         }
 
         function actualizarMapas() {
-            // Mapa Principal
             for(let i=1; i<=2; i++) {
                 let n = document.getElementById(`main-${i}`);
-                if (progreso[i] && progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
-                else if (i === 1 || (progreso[i-1] && progreso[i-1].every(x => x === true))) n.className = "nodo nodo-rojo";
+                if (n && progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
+                else if (n && (i === 1 || progreso[i-1].every(x => x === true))) n.className = "nodo nodo-rojo";
             }
-            // Sub-Mapa
             for(let i=1; i<=4; i++) {
                 let n = document.getElementById(`sub-${i}`);
-                if (progreso[vAct][i-1]) n.className = "nodo nodo-verde";
-                else n.className = "nodo nodo-rojo";
+                if (n && progreso[vAct][i-1]) n.className = "nodo nodo-verde";
+                else if (n) n.className = "nodo nodo-rojo";
             }
         }
 
-        /* --- NARRADOR Y MQTT (Tus funciones originales simplificadas) --- */
-        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID... ¡CUIDADO!";
+        /* --- DIÁLOGOS --- */
+        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
         let i_dialogo = 0;
         function escribirDialogo() {
             if (i_dialogo < dialogo.length) {
@@ -224,11 +239,7 @@
             } else { document.getElementById("btn-start-hacker").style.display = "inline-block"; }
         }
 
-        let client;
-        function conectarMQTT() { client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cl_"+Math.random()); client.connect({onSuccess:()=>console.log("MQTT OK")}); }
-        function enviarMQTT() { if(client) client.send(new Paho.MQTT.Message("CERRAR_V"+vAct, 0, false) {{ message.destinationName = "mecfluid/escuela/valvulas"; }}); }
-
-        window.onload = conectarMQTT;
+        window.onload = () => { console.log("Sistema Cargado"); };
     </script>
 </body>
 </html>
