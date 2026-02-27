@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Escape Room</title>
+    <title>AQUALAB - Sector 11 Optimizado</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
@@ -15,19 +15,10 @@
 
         /* ================= PANTALLA 1: INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        
-        /* FIX: Añadido z-index y background rgba para asegurar el clic */
         .boton-invisible { 
-            position: absolute; 
-            top: 58%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 350px; 
-            height: 80px; 
-            cursor: pointer; 
-            background-color: rgba(0,0,0,0); /* Sigue siendo invisible */
-            border-radius: 10px; 
-            z-index: 999; /* Asegura que esté por encima de todo */
+            position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); 
+            width: 350px; height: 80px; cursor: pointer; background-color: rgba(0,0,0,0); 
+            z-index: 999; border-radius: 10px; 
         }
         .boton-invisible:hover { background-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 30px #00ffff; }
 
@@ -43,22 +34,21 @@
 
         #notificacion-emergencia { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a; padding: 50px; text-align: center; z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; min-width: 600px; }
         #notificacion-emergencia h1 { color: #ff073a; font-size: 60px; margin-top:0; text-shadow: 0 0 20px #ff073a; animation: texto-parpadea 0.5s infinite; }
-        #notificacion-emergencia p { font-size: 30px; color: #e6f2ff; margin-bottom: 40px; }
-        .btn-rojo { background: #ff073a; color: white; font-family: 'VT323'; font-size: 38px; padding: 15px 60px; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; transition: 0.3s; box-shadow: 0 0 20px #ff073a;}
-        .btn-rojo:hover { background: white; color: #ff073a; box-shadow: 0 0 50px white; }
-
-        /* ================= PANTALLA 3: TERMINAL HACKER ================= */
-        #pantalla-alerta { background: #050505; color: #39ff14; text-align: center; padding-top: 50px; }
-        .scanlines { position: absolute; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; pointer-events: none; }
-        .titulo-hacker { color: #ff073a; font-size: 50px; text-shadow: 0 0 10px #ff073a; text-transform: uppercase; margin-bottom: 10px; }
-        #texto-historia { font-size: 26px; max-width: 800px; margin: 10px auto; text-align: left; line-height: 1.15; min-height: 150px; }
-        #btn-start-hacker { display: none; background: transparent; color: #00ffff; border: 2px solid #00ffff; padding: 15px 40px; font-size: 30px; font-family: 'VT323'; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); animation: parpadeo-lento 1.5s infinite; z-index: 10; position: relative;}
-        #btn-start-hacker:hover { background: #00ffff; color: #000; }
+        @keyframes texto-parpadea { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
+        .btn-rojo { background: #ff073a; color: white; font-family: 'VT323'; font-size: 38px; padding: 15px 60px; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; box-shadow: 0 0 20px #ff073a;}
 
         /* ================= PANTALLAS DE MAPAS ================= */
         #pantalla-mapa, #pantalla-habitacion { background: #010101; }
-        .titulo-mapa { color: #00ffff; font-size: 45px; margin-bottom: 20px; text-shadow: 0 0 15px #00ffff; text-transform: uppercase; }
-        .contenedor-mapa { position: relative; width: 850px; height: 850px; border: 1px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
+        .titulo-mapa { color: #00ffff; font-size: 40px; margin-bottom: 10px; text-shadow: 0 0 15px #00ffff; text-transform: uppercase; }
+        
+        /* AJUSTE DE TAMAÑO: Más estrecho para que no se escape por abajo */
+        .contenedor-mapa { 
+            position: relative; 
+            width: 800px; 
+            height: 600px; 
+            border: 1px solid #00ffff; 
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); 
+        }
         
         .nodo { position: absolute; width: 45px; height: 45px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; color: white; border: 2px solid white; transition: 0.3s; z-index: 10;}
         .nodo-rojo { background: rgba(255, 7, 58, 0.3); border-color: #ff073a; box-shadow: 0 0 20px #ff073a; animation: pulso-rojo 1s infinite; }
@@ -71,12 +61,13 @@
         #pantalla-valvula { background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('techlab.jpg') center/cover; }
         .panel-azul { background: rgba(0, 51, 102, 0.9); padding: 40px; border-radius: 15px; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); width: 500px; text-align: center; border: 3px solid #00ffff; backdrop-filter: blur(5px); color: #e6f2ff; }
         .panel-azul input { font-family: 'VT323'; font-size: 35px; padding: 10px; width: 80%; margin: 15px 0; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; }
+        .btn-accion { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #001f3f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 85%; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="pantalla-inicio" class="pantalla activa">
-        <div class="boton-invisible" onclick="irANarrador()" title="Iniciar Sistema"></div>
+        <div class="boton-invisible" onclick="irANarrador()"></div>
     </div>
 
     <div id="pantalla-narrador" class="pantalla">
@@ -87,24 +78,23 @@
         </div>
         <div id="notificacion-emergencia">
             <h1>¡FALLO CRÍTICO DE PRESIÓN!</h1>
-            <p>Los depósitos principales están a punto de colapsar.</p>
             <button class="btn-rojo" onclick="irAAlerta()">[ ABRIR PROTOCOLO ]</button>
         </div>
     </div>
 
     <div id="pantalla-alerta" class="pantalla">
-        <div class="scanlines"></div>
-        <h1 class="titulo-hacker">ALERTA CRÍTICA</h1>
-        <div id="texto-historia"></div>
+        <h1 style="color:#ff073a; font-size:50px;">ALERTA CRÍTICA</h1>
+        <div id="texto-historia" style="font-size: 26px; max-width: 800px; text-align: left; margin: 20px;"></div>
         <button id="btn-start-hacker" class="btn-accion" style="display:none; width: auto;" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
         <h1 class="titulo-mapa">SECTOR 11: ESTADO CRÍTICO</h1>
         <div class="contenedor-mapa" style="background: url('mapa_neon.png') center/contain no-repeat;">
-            <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 22%; left: 32%;">1</div>
-            <div class="nodo nodo-bloqueado" id="main-2" style="top: 18%; left: 71%;">2</div>
-            <div class="nodo nodo-bloqueado" id="main-3" style="top: 55%; left: 30%;">3</div>
+            <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 20%;">1</div>
+            <div class="nodo nodo-bloqueado" id="main-2" style="top: 25%; left: 80%;">2</div>
+            <div class="nodo nodo-bloqueado" id="main-3" style="top: 75%; left: 20%;">3</div>
+            <div class="nodo nodo-bloqueado" id="main-4" style="top: 75%; left: 80%;">4</div>
         </div>
     </div>
 
@@ -116,7 +106,7 @@
             <div class="nodo nodo-rojo" id="sub-3" onclick="irAProblema(3)" style="top: 70%; left: 30%;">C</div>
             <div class="nodo nodo-rojo" id="sub-4" onclick="irAProblema(4)" style="top: 70%; left: 70%;">D</div>
         </div>
-        <button class="btn-accion" style="width: auto; margin-top: 20px;" onclick="irAMapa()">[ VOLVER AL MAPA GLOBAL ]</button>
+        <button class="btn-accion" style="width: auto; margin-top: 15px;" onclick="irAMapa()">[ VOLVER AL MAPA GLOBAL ]</button>
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
@@ -125,21 +115,19 @@
             <p id="enunciado-fase"></p>
             <input type="number" id="respuestaAlumno" placeholder="---">
             <button class="btn-accion" onclick="comprobarRespuesta()">[ VERIFICAR ]</button>
-            <div id="mensaje-valvula"></div>
+            <div id="mensaje-valvula" style="margin-top:10px;"></div>
         </div>
     </div>
 
     <script>
-        /* --- ESTADO --- */
-        let vAct = 1; 
-        let tAct = 0; 
-        let sol = 0;
+        let vAct = 1; let tAct = 0; let sol = 0;
         let progreso = {
             1: [false, false, false, false],
-            2: [false, false, false, false]
+            2: [false, false, false, false],
+            3: [false, false, false, false],
+            4: [false, false, false, false]
         };
 
-        /* --- NAVEGACIÓN --- */
         function mostrarPantalla(id) {
             document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
@@ -150,6 +138,7 @@
         function irAMapa() { mostrarPantalla('pantalla-mapa'); actualizarMapas(); }
 
         function abrirHabitacion(n) {
+            if (n > 1 && !progreso[n-1].every(x => x === true)) return;
             vAct = n;
             document.getElementById('titulo-hab').innerText = `HABITACIÓN ${n}: PUNTOS DE CONTROL`;
             mostrarPantalla('pantalla-habitacion');
@@ -157,32 +146,18 @@
         }
 
         function irAProblema(t) {
-            tAct = t;
-            mostrarPantalla('pantalla-valvula');
+            tAct = t; mostrarPantalla('pantalla-valvula');
             document.getElementById('titulo-punto').innerText = `PUNTO ${String.fromCharCode(64+t)}`;
             generarReto();
         }
 
-        /* --- LÓGICA DE JUEGO --- */
         function generarReto() {
             let n1 = Math.floor(Math.random() * 8) + 2;
             const env = document.getElementById("enunciado-fase");
-            document.getElementById("respuestaAlumno").value = "";
-            document.getElementById("mensaje-valvula").innerText = "";
-
-            if (tAct === 1) {
-                sol = 1000 * 10 * n1;
-                env.innerHTML = `Presión Hidrostática: $h = ${n1}m$. <br> Calcula $P$ (Pa). ($\rho=1000, g=10$)`;
-            } else if (tAct === 2) {
-                sol = n1 * 2;
-                env.innerHTML = `Caudal: $v = ${n1}m/s$, $A = 2m^2$. <br> Calcula $Q$.`;
-            } else if (tAct === 3) {
-                sol = n1 * 50;
-                env.innerHTML = `Fuerza: $P = ${n1}Pa$, $A = 50m^2$. <br> Calcula $F$.`;
-            } else {
-                sol = Math.round(Math.sqrt(2 * 10 * n1));
-                env.innerHTML = `Torricelli: $h = ${n1}m$. <br> Calcula $v$ (redondeado).`;
-            }
+            if (tAct === 1) { sol = 1000 * 10 * n1; env.innerHTML = `Presión Hidrostática: $h = ${n1}m$. <br> Calcula $P$ (Pa). ($\rho=1000, g=10$)`; }
+            else if (tAct === 2) { sol = n1 * 2; env.innerHTML = `Caudal: $v = ${n1}m/s$, $A = 2m^2$. <br> Calcula $Q$.`; }
+            else if (tAct === 3) { sol = n1 * 50; env.innerHTML = `Fuerza: $P = ${n1}Pa$, $A = 50m^2$. <br> Calcula $F$.`; }
+            else { sol = Math.round(Math.sqrt(2 * 10 * n1)); env.innerHTML = `Torricelli: $h = ${n1}m$. <br> Calcula $v$ (redondeado).`; }
         }
 
         function comprobarRespuesta() {
@@ -192,31 +167,32 @@
                 feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
                 progreso[vAct][tAct-1] = true;
                 setTimeout(() => {
-                    if (progreso[vAct].every(x => x === true)) {
-                        alert("¡VÁLVULA SELLADA!"); irAMapa();
-                    } else { abrirHabitacion(vAct); }
-                }, 1200);
+                    if (progreso[vAct].every(x => x === true)) { alert("¡VÁLVULA SELLADA!"); irAMapa(); }
+                    else { abrirHabitacion(vAct); }
+                }, 1000);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR: REINTENTE";
-                setTimeout(generarReto, 1000);
+                setTimeout(generarReto, 800);
             }
         }
 
         function actualizarMapas() {
-            for(let i=1; i<=2; i++) {
+            for(let i=1; i<=4; i++) {
                 let n = document.getElementById(`main-${i}`);
-                if (n && progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
-                else if (n && (i === 1 || progreso[i-1].every(x => x === true))) n.className = "nodo nodo-rojo";
+                if (!n) continue;
+                if (progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
+                else if (i === 1 || progreso[i-1].every(x => x === true)) {
+                    n.className = "nodo nodo-rojo";
+                    n.onclick = () => abrirHabitacion(i);
+                }
             }
             for(let i=1; i<=4; i++) {
                 let n = document.getElementById(`sub-${i}`);
-                if (n && progreso[vAct][i-1]) n.className = "nodo nodo-verde";
-                else if (n) n.className = "nodo nodo-rojo";
+                if (n) n.className = progreso[vAct][i-1] ? "nodo nodo-verde" : "nodo nodo-rojo";
             }
         }
 
-        /* --- DIÁLOGOS --- */
-        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
+        const dialogo = "Saludos equipo... ¡CUIDADO! La presión en el sector 11 aumenta.";
         let i_dialogo = 0;
         function escribirDialogo() {
             if (i_dialogo < dialogo.length) {
@@ -226,20 +202,17 @@
                 document.getElementById('caja-narrador').style.display = 'none';
                 document.getElementById('capa-alarma').classList.add('alarma-activada');
                 document.getElementById('notificacion-emergencia').style.display = 'block';
-            }, 2000); }
+            }, 1500); }
         }
 
-        const mensajeHacker = "SISTEMA COMPROMETIDO...\nEstabilice los puntos de control.";
+        const mensajeHacker = "SISTEMA COMPROMETIDO...\nEstabilice los puntos de control A, B, C y D.";
         let i_hacker = 0;
         function escribirHistoriaHacker() {
             if (i_hacker < mensajeHacker.length) {
-                let char = mensajeHacker.charAt(i_hacker);
-                document.getElementById("texto-historia").innerHTML += char === '\n' ? "<br>" : char;
+                document.getElementById("texto-historia").innerHTML += mensajeHacker.charAt(i_hacker) === '\n' ? "<br>" : mensajeHacker.charAt(i_hacker);
                 i_hacker++; setTimeout(escribirHistoriaHacker, 25);
             } else { document.getElementById("btn-start-hacker").style.display = "inline-block"; }
         }
-
-        window.onload = () => { console.log("Sistema Cargado"); };
     </script>
 </body>
 </html>
