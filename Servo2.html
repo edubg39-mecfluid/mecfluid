@@ -2,125 +2,197 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Panel de Válvula 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQUALAB - Control Servo 1</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
     <style>
         body {
-            font-family: 'VT323', monospace; font-size: 22px; color: #e6f2ff; text-align: center; padding: 20px; margin: 0; min-height: 100vh;
-            background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.9)), url('https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; display: flex; align-items: center; justify-content: center;
+            margin: 0; padding: 20px; font-family: 'VT323', monospace;
+            background: #000b1a; color: #e6f2ff;
+            display: flex; align-items: center; justify-content: center; min-height: 100vh;
+            overflow: hidden;
         }
-        .panel {
-            background-color: rgba(0, 51, 102, 0.9); padding: 30px; border-radius: 10px; box-shadow: 0px 0px 30px rgba(0, 255, 255, 0.3); max-width: 400px;
-            width: 100%; border: 3px solid #00ffff; backdrop-filter: blur(5px);
+
+        .panel-mecanico {
+            background: rgba(0, 51, 102, 0.4);
+            border: 2px solid #00ffff;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
         }
-        h2 { color: #00ffff; text-transform: uppercase; letter-spacing: 2px; margin-top: 0;}
-        input {
-            font-family: 'VT323', monospace; font-size: 28px; padding: 10px; width: 80%; margin: 15px 0;
-            background-color: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center;
+
+        .fase-info { color: #00ffff; font-size: 24px; text-transform: uppercase; margin-bottom: 10px; }
+
+        /* BARRA DE PROGRESO */
+        .barra-progreso-container {
+            width: 100%; height: 12px; background: #001f3f;
+            border: 1px solid #00ffff; margin-bottom: 25px; border-radius: 10px; overflow: hidden;
         }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input:focus { outline: none; box-shadow: 0 0 15px #00ffff; } 
-        button {
-            font-family: 'VT323', monospace; font-size: 26px; background-color: #00ffff; color: #001f3f; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 85%;
-            font-weight: bold; text-transform: uppercase; transition: 0.3s;
+        #barra-progreso { width: 0%; height: 100%; background: #39ff14; transition: 0.5s ease-in-out; }
+
+        /* ENUNCIADO */
+        #enunciado-fase {
+            font-size: 26px; line-height: 1.2; margin-bottom: 25px;
+            min-height: 100px; display: flex; align-items: center; justify-content: center;
         }
-        button:hover { background-color: #ffffff; box-shadow: 0px 0px 20px #ffffff; }
-        #warningIcon {
-            width: 80px; height: 80px; margin-top: 20px; display: none; animation: parpadeo 1s infinite; filter: drop-shadow(0px 0px 10px #ff073a); 
+
+        input[type="number"] {
+            font-family: 'VT323'; font-size: 35px; width: 180px;
+            background: #001f3f; color: #00ffff; border: 2px solid #00ffff;
+            text-align: center; margin-bottom: 20px; outline: none;
         }
-        .shake { animation: shake 0.5s; }
-        @keyframes parpadeo { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
-        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
-        #mensaje { margin-top: 15px; font-size: 28px; height: 60px; }
-        .status { font-size: 16px; color: #00aaaa; margin-top: 20px; }
+
+        .btn-accion {
+            font-family: 'VT323'; font-size: 28px; background: #00ffff; color: #001f3f;
+            border: none; padding: 10px 40px; cursor: pointer; font-weight: bold;
+            border-radius: 5px; transition: 0.3s;
+        }
+
+        .btn-accion:hover { background: #fff; box-shadow: 0 0 20px #fff; }
+
+        #feedback { margin-top: 15px; font-size: 24px; height: 30px; font-weight: bold; }
+        
+        .shake { animation: shake 0.4s; }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="panel" id="mainPanel">
-        <h2>Sistema Acceso Control Válvula Compuerta</h2>
-        <p>>>> Fuerza Necesaria (N) <<<</p>
-        
-        <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off" oninput="controlarTeclado(this)" onkeydown="verificarEnter(event)">
-        
-        <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
-        
+    <div class="panel-mecanico" id="panel">
+        <div class="fase-info" id="titulo-fase">VALVULA 1: FASE 1/4</div>
+        <div class="barra-progreso-container">
+            <div id="barra-progreso"></div>
+        </div>
+
+        <div id="enunciado-fase">Iniciando enlace con sensores...</div>
+
+        <input type="number" id="inputRespuesta" placeholder="???" autocomplete="off">
         <br>
-        <svg id="warningIcon" viewBox="0 0 24 24" fill="none" stroke="#ff073a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-            <line x1="12" y1="9" x2="12" y2="13"></line>
-            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-        </svg>
+        <button class="btn-accion" id="btn-check" onclick="validarRespuesta()">[ VERIFICAR ]</button>
         
-        <div id="mensaje"></div>
-        <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
+        <div id="feedback"></div>
     </div>
 
     <script>
-        var broker = "broker.hivemq.com";
-        var port = 8000;
-        
-        // ¡OJO! Este topic ahora es el mismo para todas las válvulas. NO LO CAMBIES en los otros archivos.
-        var topic = "mecfluid/escuela/valvulas"; 
-        
-        var client = new Paho.MQTT.Client(broker, port, "cliente_genially_" + parseInt(Math.random() * 10000, 10));
+        let faseActual = 1;
+        let solucionCorrecta = 0;
+        let client;
 
-        function onConnect() { document.getElementById("statusMQTT").innerText = ">>> Enlace establecido. Sistema listo."; document.getElementById("statusMQTT").style.color = "#00ffff"; }
-        function onFailure(message) { document.getElementById("statusMQTT").innerText = "ERROR: Fallo de enlace."; document.getElementById("statusMQTT").style.color = "red"; }
-        client.connect({onSuccess:onConnect, onFailure:onFailure});
+        // Configuración MQTT
+        function conectarMQTT() {
+            client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "client_" + Math.random());
+            client.connect({ onSuccess: () => console.log("MQTT Conectado") });
+        }
 
-        function verificarEnter(event) {
-            if (event.key === "Enter" || event.keyCode === 13) {
-                event.preventDefault(); 
-                document.getElementById("respuestaAlumno").blur(); 
-                comprobarRespuesta(); 
+        // --- GENERADOR DE PROBLEMAS ---
+        function generarProblema() {
+            const enunciado = document.getElementById("enunciado-fase");
+            const titulo = document.getElementById("titulo-fase");
+            const barra = document.getElementById("barra-progreso");
+            const input = document.getElementById("inputRespuesta");
+            
+            input.value = "";
+            input.focus();
+            titulo.innerText = `VALVULA 1: FASE ${faseActual}/4`;
+            barra.style.width = `${(faseActual - 1) * 25}%`;
+
+            let n1, n2;
+
+            if (faseActual === 1) {
+                // FASE 1: Presión Hidrostática (P = rho * g * h)
+                n1 = Math.floor(Math.random() * 8) + 3; // Profundidad h
+                solucionCorrecta = Math.round(1000 * 9.8 * n1); 
+                enunciado.innerHTML = `Calcula la <b>presión hidrostática</b> en un punto a <b>${n1}m</b> de profundidad. <br>(Usa ρ=1000 kg/m³ y g=9.8 m/s²)`;
+            } 
+            else if (faseActual === 2) {
+                // FASE 2: Caudal (Q = v * A)
+                n1 = Math.floor(Math.random() * 12) + 4; // Velocidad v
+                n2 = 0.5; // Área fija
+                solucionCorrecta = n1 * n2;
+                enunciado.innerHTML = `El sensor marca una velocidad de <b>${n1} m/s</b> en un conducto de <b>${n2} m²</b>. ¿Cuál es el <b>Caudal (Q)</b>?`;
+            }
+            else if (faseActual === 3) {
+                // FASE 3: Fuerza (F = P * A)
+                n1 = (Math.floor(Math.random() * 5) + 1) * 100; // Presión P
+                solucionCorrecta = n1 * 2; // Área 2m2
+                enunciado.innerHTML = `Si la presión sobre la válvula de <b>2 m²</b> es de <b>${n1} Pa</b>, ¿qué <b>Fuerza (N)</b> está soportando?`;
+            }
+            else if (faseActual === 4) {
+                // FASE 4: Torricelli (v = sqrt(2gh))
+                n1 = Math.floor(Math.random() * 15) + 5; // Altura h
+                solucionCorrecta = Math.round(Math.sqrt(2 * 9.8 * n1)); 
+                enunciado.innerHTML = `<b>Teorema de Torricelli:</b> El agua cae desde <b>${n1}m</b>. ¿Cuál es su velocidad final de salida? <br>(Redondea al entero)`;
             }
         }
 
-        function controlarTeclado(el) {
-            if (el.value.length >= 5) {
-                el.blur(); 
-                comprobarRespuesta(); 
-            }
-        }
+        // --- VALIDACIÓN ---
+        function validarRespuesta() {
+            const input = document.getElementById("inputRespuesta");
+            const feedback = document.getElementById("feedback");
+            const panel = document.getElementById("panel");
+            const respuesta = parseInt(input.value);
 
-        function comprobarRespuesta() {
-            let inputAlumno = document.getElementById("respuestaAlumno");
-            let valorEscrito = inputAlumno.value;
-            let mensajePantalla = document.getElementById("mensaje");
-            let warningImg = document.getElementById("warningIcon"); 
-            let panelDiv = document.getElementById("mainPanel"); 
-            let respuestaCorrecta = 50; 
-
-            inputAlumno.blur();
-            panelDiv.classList.remove("shake");
-            warningImg.style.display = "none";
-
-            if (valorEscrito === "") return;
-
-            if (valorEscrito == respuestaCorrecta) {
-                mensajePantalla.style.color = "#39ff14";
-                mensajePantalla.style.textShadow = "0px 0px 10px #39ff14";
-                mensajePantalla.innerHTML = "¡CÁLCULO VERIFICADO!<br>Secuencia de cierre...";
-                message = new Paho.MQTT.Message("CERRAR_V2");
-                message.destinationName = topic;
-                client.send(message);
+            if (respuesta === solucionCorrecta) {
+                feedback.style.color = "#39ff14";
+                feedback.innerText = "SISTEMA VERIFICADO ✓";
                 
+                setTimeout(() => {
+                    faseActual++;
+                    if (faseActual > 4) {
+                        finalizarNivel();
+                    } else {
+                        generarProblema();
+                        feedback.innerText = "";
+                    }
+                }, 1500);
             } else {
-                warningImg.style.display = "inline-block";
-                mensajePantalla.style.color = "#ff073a";
-                mensajePantalla.style.textShadow = "0px 0px 10px #ff073a";
-                mensajePantalla.innerHTML = "ERROR CRÍTICO<br>Parámetros incorrectos.";
+                // FALLO: Vibración y cambio de datos
+                panel.classList.add("shake");
+                feedback.style.color = "#ff073a";
+                feedback.innerText = "ERROR: DATOS REGENERADOS";
                 
-                void panelDiv.offsetWidth; 
-                panelDiv.classList.add("shake");
-                inputAlumno.value = ""; 
+                setTimeout(() => {
+                    panel.classList.remove("shake");
+                    generarProblema(); // Misma fase, pero nuevos números
+                }, 800);
             }
         }
+
+        function finalizarNivel() {
+            document.getElementById("barra-progreso").style.width = "100%";
+            document.getElementById("enunciado-fase").innerHTML = "<b style='color:#39ff14; font-size:35px;'>¡VÁLVULA 1 CERRADA!</b>";
+            document.getElementById("btn-check").style.display = "none";
+            document.getElementById("inputRespuesta").style.display = "none";
+
+            // Enviar orden al Servo real vía MQTT
+            if (client) {
+                let message = new Paho.MQTT.Message("CERRAR_V1");
+                message.destinationName = "mecfluid/escuela/valvulas";
+                client.send(message);
+            }
+
+            // Notificar al index.html (si usas iframe o comunicación entre ventanas)
+            setTimeout(() => {
+                alert("Nivel completado. Vuelve al mapa.");
+            }, 1000);
+        }
+
+        window.onload = () => {
+            conectarMQTT();
+            generarProblema();
+        };
     </script>
 </body>
 </html>
