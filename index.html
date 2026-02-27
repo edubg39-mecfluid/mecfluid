@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Proyecto Maestro</title>
+    <title>AQUALAB - Sector 4</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
@@ -12,40 +12,24 @@
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; }
         .pantalla.activa { display: block; }
 
-        /* --- PANTALLA 1: INICIO --- */
+        /* --- 1. INICIO --- */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        .boton-invisible { 
-            position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); 
-            width: 350px; height: 80px; cursor: pointer; background: transparent; 
-        }
+        .boton-invisible { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 80px; cursor: pointer; background: transparent; }
 
-        /* --- PANTALLA 2: NARRADOR --- */
+        /* --- 2. NARRADOR --- */
         #pantalla-narrador { background: url('techlab.jpg') center/cover; }
         #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 1; }
         #capa-alarma { position: absolute; width: 100%; height: 100%; background: transparent; z-index: 2; pointer-events: none; }
         .alarma-activada { animation: parpadeo-rojo 1s infinite !important; }
         @keyframes parpadeo-rojo { 0% { background: rgba(255, 0, 0, 0.1); } 50% { background: rgba(255, 0, 0, 0.85); } 100% { background: rgba(255, 0, 0, 0.1); } }
         
-        #foto-narrador { 
-            position: absolute; bottom: 0; left: 0; width: 480px; height: auto; 
-            z-index: 4; filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4)); 
-        }
-        #caja-narrador { 
-            position: absolute; bottom: 15%; left: 35%; width: 650px; 
-            background: rgba(0, 15, 30, 0.4); backdrop-filter: blur(8px); 
-            border: 2px solid #00ffff; border-radius: 15px; padding: 40px; 
-            z-index: 5; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); 
-        }
+        #foto-narrador { position: absolute; bottom: 0; left: 0; width: 480px; height: auto; z-index: 4; filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4)); }
+        #caja-narrador { position: absolute; bottom: 15%; left: 35%; width: 650px; background: rgba(0, 15, 30, 0.4); border: 2px solid #00ffff; border-radius: 15px; padding: 40px; z-index: 5; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.3; }
-
-        #notificacion-emergencia { 
-            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            background: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a; padding: 50px; text-align: center; 
-            z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; min-width: 600px; 
-        }
+        #notificacion-emergencia { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 0, 0, 0.95); border: 5px solid #ff073a; padding: 50px; text-align: center; z-index: 10; border-radius: 10px; box-shadow: 0 0 100px #ff073a; min-width: 600px; }
         .btn-rojo { background: #ff073a; color: white; font-family: 'VT323'; font-size: 38px; padding: 15px 60px; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; }
 
-        /* --- PANTALLA 4: MAPA TÁCTICO --- */
+        /* --- 4. MAPA --- */
         #pantalla-mapa { background: #010101; display: none; flex-direction: column; align-items: center; justify-content: center; }
         #pantalla-mapa.activa { display: flex; }
         .contenedor-mapa { position: relative; width: 800px; height: 800px; background: url('mapa_neon.png') center/contain no-repeat; }
@@ -54,53 +38,51 @@
         .nodo-verde { background: rgba(57, 255, 20, 0.3); border-color: #39ff14; box-shadow: 0 0 20px #39ff14; pointer-events: none; }
         @keyframes pulso-rojo { 0% { box-shadow: 0 0 10px #ff073a; } 50% { box-shadow: 0 0 30px #ff073a; } 100% { box-shadow: 0 0 10px #ff073a; } }
 
-        /* --- PANTALLA 5: VÁLVULA 1 (4 FASES) --- */
+        /* --- 5. VÁLVULA 1 (LA HABITACIÓN) --- */
         #pantalla-valvula { background: linear-gradient(rgba(0, 31, 63, 0.9), rgba(0, 5, 15, 1)), url('techlab.jpg') center/cover; display: none; align-items: center; justify-content: center; flex-direction: column; }
         #pantalla-valvula.activa { display: flex; }
-        .panel-mecanico { background: rgba(0, 51, 102, 0.6); border: 2px solid #00ffff; padding: 30px; border-radius: 15px; width: 600px; text-align: center; backdrop-filter: blur(10px); }
-        .barra-progreso-container { width: 100%; height: 15px; background: #001f3f; border: 1px solid #00ffff; margin-bottom: 20px; border-radius: 10px; overflow: hidden; }
+        .panel-mecanico { background: rgba(0, 51, 102, 0.6); border: 2px solid #00ffff; padding: 40px; border-radius: 15px; width: 650px; text-align: center; backdrop-filter: blur(10px); }
+        .barra-progreso-container { width: 100%; height: 15px; background: #001f3f; border: 1px solid #00ffff; margin-bottom: 25px; border-radius: 10px; overflow: hidden; }
         #barra-progreso { width: 0%; height: 100%; background: #39ff14; transition: 0.5s; }
-        #enunciado-fase { font-size: 26px; color: #e6f2ff; margin-bottom: 20px; min-height: 90px; }
-        input { font-family: 'VT323'; font-size: 35px; width: 180px; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; margin-bottom: 15px; }
-        .btn-accion { font-family: 'VT323'; font-size: 28px; background: #00ffff; color: #001f3f; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        #enunciado-fase { font-size: 28px; color: #e6f2ff; margin-bottom: 25px; min-height: 100px; line-height: 1.2; }
+        input { font-family: 'VT323'; font-size: 35px; width: 220px; background: #001f3f; color: #00ffff; border: 2px solid #00ffff; text-align: center; margin-bottom: 20px; outline: none; }
+        .btn-accion { font-family: 'VT323'; font-size: 28px; background: #00ffff; color: #001f3f; border: none; padding: 12px 45px; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        .btn-accion:hover { background: #fff; box-shadow: 0 0 20px #fff; }
     </style>
 </head>
 <body>
 
-    <div id="pantalla-inicio" class="pantalla activa">
-        <div class="boton-invisible" onclick="irANarrador()"></div>
-    </div>
+    <div id="pantalla-inicio" class="pantalla activa"><div class="boton-invisible" onclick="irANarrador()"></div></div>
 
     <div id="pantalla-narrador" class="pantalla">
-        <div id="filtro-oscuro"></div>
-        <div id="capa-alarma"></div>
+        <div id="filtro-oscuro"></div><div id="capa-alarma"></div>
         <img id="foto-narrador" src="scient.png" alt="Científico">
         <div id="caja-narrador"><div id="texto-narrador"></div></div>
         <div id="notificacion-emergencia">
             <h1 style="color:#ff073a; font-size: 60px;">¡FALLO CRÍTICO!</h1>
-            <p style="color:white; font-size: 30px;">Sector 11 comprometido. Iniciando mapa sector 11...</p>
-            <button class="btn-rojo" onclick="irAMapa()">[ ACCEDER AL SECTOR ]</button>
+            <p style="color:white; font-size: 30px;">Fallo en Sector 4. Accediendo al terminal táctico...</p>
+            <button class="btn-rojo" onclick="irAMapa()">[ ENTRAR ]</button>
         </div>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
-        <h1 style="color:#00ffff; text-transform: uppercase;">Estado del Sector 4</h1>
+        <h1 style="color:#00ffff; text-transform: uppercase; letter-spacing: 3px;">TERMINAL DE CONTROL: SECTOR 4</h1>
         <div class="contenedor-mapa">
             <div class="nodo nodo-rojo" id="nodo-1" onclick="abrirHabitacion(1)" style="top: 22%; left: 32%;">1</div>
-            <div class="nodo nodo-rojo" id="nodo-2" onclick="alert('Bloqueado')" style="top: 18%; left: 71%;">2</div>
-            <div class="nodo nodo-rojo" id="nodo-3" onclick="alert('Bloqueado')" style="top: 55%; left: 30%;">3</div>
+            <div class="nodo nodo-rojo" id="nodo-2" onclick="alert('Sistema bloqueado')" style="top: 18%; left: 71%;">2</div>
+            <div class="nodo nodo-rojo" id="nodo-3" onclick="alert('Sistema bloqueado')" style="top: 55%; left: 30%;">3</div>
         </div>
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
         <div class="panel-mecanico">
-            <h2 id="titulo-paso" style="color:#00ffff; margin-top:0;">VÁLVULA 1: FASE 1/4</h2>
+            <h2 id="titulo-paso" style="color:#00ffff; margin-top:0; letter-spacing: 2px;">PROTOCOLO DE CIERRE: V1</h2>
             <div class="barra-progreso-container"><div id="barra-progreso"></div></div>
-            <div id="enunciado-fase">Estabilizando sistema...</div>
-            <input type="number" id="inputRespuesta" placeholder="???">
+            <div id="enunciado-fase">Cargando telemetría...</div>
+            <input type="number" id="inputRespuesta" placeholder="VALOR">
             <br>
-            <button class="btn-accion" id="btn-verificar" onclick="validarFase()">[ VERIFICAR ]</button>
-            <div id="feedback-valvula" style="margin-top:15px; font-size:24px;"></div>
+            <button class="btn-accion" id="btn-verificar" onclick="validarFase()">[ VERIFICAR SISTEMA ]</button>
+            <div id="feedback-valvula" style="margin-top:20px; font-size:26px; height: 30px;"></div>
         </div>
     </div>
 
@@ -113,7 +95,7 @@
         function irANarrador() {
             document.getElementById('pantalla-inicio').classList.remove('activa');
             document.getElementById('pantalla-narrador').classList.add('activa');
-            i = 0; document.getElementById("texto-narrador").innerHTML = "";
+            i_text = 0; document.getElementById("texto-narrador").innerHTML = "";
             setTimeout(escribirDialogo, 1000);
         }
 
@@ -126,25 +108,28 @@
             if(n === 1) {
                 document.getElementById('pantalla-mapa').classList.remove('activa');
                 document.getElementById('pantalla-valvula').classList.add('activa');
-                faseActual = 1; 
+                // IMPORTANTE: Reseteamos todo al entrar
+                faseActual = 1;
+                document.getElementById("feedback-valvula").innerText = "";
+                document.getElementById("inputRespuesta").value = "";
                 generarProblema();
                 conectarMQTT();
             }
         }
 
         /* --- NARRADOR --- */
-        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Vamos a verificar las válvulas... ¡CUIDADO! La presión está fuera de control.";
-        let i = 0;
+        const dialogo = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Vamos a verificar las válvulas... ¡CUIDADO! La presión está fuera de control en el Sector 4.";
+        let i_text = 0;
         function escribirDialogo() {
-            if (i < dialogo.length) {
-                document.getElementById("texto-narrador").innerHTML += dialogo.charAt(i);
-                i++; setTimeout(escribirDialogo, 40);
+            if (i_text < dialogo.length) {
+                document.getElementById("texto-narrador").innerHTML += dialogo.charAt(i_text);
+                i_text++; setTimeout(escribirDialogo, 40);
             } else {
                 setTimeout(() => {
                     document.getElementById('caja-narrador').style.display = 'none';
                     document.getElementById('capa-alarma').classList.add('alarma-activada');
                     document.getElementById('notificacion-emergencia').style.display = 'block';
-                }, 2500);
+                }, 2000);
             }
         }
 
@@ -158,56 +143,68 @@
             titulo.innerText = `VÁLVULA 1: FASE ${faseActual}/4`;
             barra.style.width = `${(faseActual - 1) * 25}%`;
 
-            let n1 = Math.floor(Math.random() * 8) + 2;
+            let n1 = Math.floor(Math.random() * 8) + 3; // Valor aleatorio entre 3 y 10
 
             if (faseActual === 1) {
+                // P = rho * g * h
                 solucionCorrecta = 1000 * 10 * n1;
-                enunciado.innerHTML = `Calcula la presión hidrostática ($P = \rho \cdot g \cdot h$) a <b>${n1}m</b> de profundidad. <br>(Usa $\rho=1000, g=10$)`;
+                enunciado.innerHTML = `Calcula la <b>presión hidrostática</b> en la base si el nivel es de <b>${n1} metros</b>.<br>($P = \rho \cdot g \cdot h$ | $\rho=1000, g=10$)`;
             } else if (faseActual === 2) {
+                // Q = v * A
                 solucionCorrecta = n1 * 2;
-                enunciado.innerHTML = `Determina el caudal ($Q = v \cdot A$) si la velocidad es <b>${n1} m/s</b> y el área es <b>2 m²</b>.`;
+                enunciado.innerHTML = `Calcula el <b>caudal (Q)</b> si la velocidad del agua es <b>${n1} m/s</b> y el área es <b>2 m²</b>.<br>($Q = v \cdot A$)`;
             } else if (faseActual === 3) {
-                solucionCorrecta = n1 * 100;
-                enunciado.innerHTML = `Calcula la fuerza ($F = P \cdot A$) para una presión de <b>${n1} Pa</b> y un área de <b>100 m²</b>.`;
+                // F = P * A
+                solucionCorrecta = n1 * 10;
+                enunciado.innerHTML = `Calcula la <b>fuerza (F)</b> necesaria si la presión es <b>${n1} Pa</b> y el área es <b>10 m²</b>.<br>($F = P \cdot A$)`;
             } else if (faseActual === 4) {
+                // v = sqrt(2gh)
                 solucionCorrecta = Math.round(Math.sqrt(2 * 10 * n1));
-                enunciado.innerHTML = `<b>Torricelli:</b> Velocidad de salida ($v = \sqrt{2 \cdot g \cdot h}$) a una profundidad de <b>${n1}m</b>. <br>(Usa $g=10$, redondea al entero)`;
+                enunciado.innerHTML = `<b>Teorema de Torricelli:</b> Calcula la velocidad de salida si el orificio está a <b>${n1}m</b> de profundidad.<br>($v = \sqrt{2 \cdot g \cdot h}$ | $g=10$, redondea al entero)`;
             }
         }
 
         function validarFase() {
             const res = parseInt(document.getElementById("inputRespuesta").value);
             const feed = document.getElementById("feedback-valvula");
+
             if (res === solucionCorrecta) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
+                feed.style.color = "#39ff14";
+                feed.innerText = "SISTEMA VERIFICADO. ACCEDIENDO...";
                 setTimeout(() => {
                     faseActual++;
                     if (faseActual > 4) {
-                        feed.innerText = "¡SISTEMA ESTABILIZADO!";
-                        enviarMQTT();
-                        setTimeout(() => {
-                            document.getElementById('nodo-1').classList.replace('nodo-rojo', 'nodo-verde');
-                            irAMapa();
-                        }, 2000);
-                    } else { generarProblema(); feed.innerText = ""; }
-                }, 1000);
+                        finalizarMision();
+                    } else {
+                        generarProblema();
+                        feed.innerText = "";
+                    }
+                }, 1500);
             } else {
-                feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR: RECALCULANDO...";
-                setTimeout(generarProblema, 1000);
+                feed.style.color = "#ff073a";
+                feed.innerText = "ERROR: RECALCULANDO TELEMETRÍA...";
+                setTimeout(generarProblema, 1500);
             }
         }
 
-        /* --- MQTT --- */
-        function conectarMQTT() {
-            client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cl_" + Math.random());
-            client.connect({onSuccess: () => console.log("MQTT Conectado")});
-        }
-        function enviarMQTT() {
+        function finalizarMision() {
+            document.getElementById("barra-progreso").style.width = "100%";
+            document.getElementById("enunciado-fase").innerHTML = "<b style='color:#39ff14; font-size:35px;'>¡VÁLVULA 1 SELLADA!</b>";
             if(client) {
                 let m = new Paho.MQTT.Message("CERRAR_V1");
                 m.destinationName = "mecfluid/escuela/valvulas";
                 client.send(m);
             }
+            setTimeout(() => {
+                document.getElementById('nodo-1').classList.replace('nodo-rojo', 'nodo-verde');
+                irAMapa();
+            }, 2500);
+        }
+
+        /* --- MQTT --- */
+        function conectarMQTT() {
+            client = new Paho.MQTT.Client("broker.hivemq.com", 8000, "cl_" + Math.random());
+            client.connect({onSuccess: () => console.log("MQTT OK")});
         }
     </script>
 </body>
