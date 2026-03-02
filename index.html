@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Sistema de Control Sector 11</title>
+    <title>AQUALAB - Sistema de Control</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
@@ -13,37 +13,22 @@
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
         .pantalla.activa { display: flex; z-index: 10; }
 
-        /* === CAPA DE EMERGENCIA GLOBAL EN TODA LA PANTALLA (AÑADIDO) === */
-        #capa-emergencia-global {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: 1000; /* Superpone todo */
-            pointer-events: none; /* No intercepta clics */
-            animation: destelloGlobalAqualab 1s infinite alternate;
-        }
-
-        @keyframes destelloGlobalAqualab {
-            0% { 
-                box-shadow: inset 0 0 100px #ff073a, 0 0 150px #ff073a;
-                opacity: 0.1;
-            }
-            100% { 
-                box-shadow: inset 0 0 200px #ff073a, 0 0 300px #ff073a, 0 0 500px #ff073a;
-                opacity: 0.2;
-            }
-        }
-        /* ============================================================== */
-
         /* ================= INICIO Y NARRADOR ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
         .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
 
-        #pantalla-narrador { background: url('fondo (2).png') center/cover; }
+        /* Pantalla Narrador con parpadeo rojo global de emergencia */
+        #pantalla-narrador { 
+            background: url('fondo (2).png') center/cover; 
+            animation: alertaFondoGlobal 1s infinite alternate;
+        }
+
+        @keyframes alertaFondoGlobal {
+            0% { box-shadow: inset 0 0 50px rgba(255, 7, 58, 0.1); }
+            100% { box-shadow: inset 0 0 250px rgba(255, 7, 58, 0.8), inset 0 0 100px rgba(255, 7, 58, 0.5); }
+        }
+
         #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; }
         
         #caja-narrador { 
@@ -55,82 +40,40 @@
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
-        /* === ESTILOS PARA LA ALERTA DEL NARRADOR (MODIFICADO) === */
+        /* === NUEVO BOTÓN DE ALERTA (MÁS GRANDE, DESPLAZADO Y RADIANTE) === */
         #contenedor-alerta-narrador {
             position: absolute;
             top: 40%;
-            margin-top: -1cm; /* === SE HA AÑADIDO ESTO PARA SUBIRLO 1CM === */
-            display: none; /* Controlado por JS */
-            flex-direction: column;
-            align-items: center;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            z-index: 100;
-            padding: 20px;
-            animation: destelloEmergenciaAqualab 1s infinite alternate; /* Unificado */
+            margin-top: -1cm; display: none; flex-direction: column; align-items: center; background: transparent; border: none; cursor: pointer;
+            z-index: 100; padding: 20px; animation: destelloEmergenciaRadiante 0.8s infinite alternate; /* Animación de radiación unificada */
         }
 
-        #contenedor-alerta-narrador:hover {
-            transform: scale(1.05);
-        }
+        #contenedor-alerta-narrador:hover { transform: scale(1.05); }
 
         .triangulo-warning {
-            font-size: 100px;
-            color: #ff073a; /* Rojo profundo */
-            text-shadow: 0 0 30px #ff073a;
-            animation: pulsoWarning 0.8s infinite;
-            margin-bottom: -10px;
+            font-size: 125px; color: #ff073a; margin-bottom: -10px;
         }
 
         .texto-glitch-alerta {
-            font-size: 50px;
-            color: #ff073a;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            position: relative;
-            text-shadow: 0 0 20px #ff073a; /* Destello base */
-            animation: glitchEffect 3s infinite;
+            font-size: 62.5px; color: #ff073a;  text-transform: uppercase; letter-spacing: 4px; position: relative; animation: glitchEffect 3s infinite;
         }
 
         /* Efecto de duplicado para el glitch */
-        .texto-glitch-alerta::before,
-        .texto-glitch-alerta::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
+        .texto-glitch-alerta::before, .texto-glitch-alerta::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
         }
+        .texto-glitch-alerta::before { left: 2px; text-shadow: -2px 0 #00ffff; clip: rect(44px, 450px, 56px, 0); animation: glitchAnim-1 5s infinite linear alternate-reverse; }
+        .texto-glitch-alerta::after { left: -2px; text-shadow: -2px 0 #ff00ff; clip: rect(85px, 450px, 140px, 0); animation: glitchAnim-2 5s infinite linear alternate-reverse; }
 
-        .texto-glitch-alerta::before {
-            left: 2px;
-            text-shadow: -2px 0 #00ffff;
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitchAnim-1 5s infinite linear alternate-reverse;
-        }
-
-        .texto-glitch-alerta::after {
-            left: -2px;
-            text-shadow: -2px 0 #ff00ff;
-            clip: rect(85px, 450px, 140px, 0);
-            animation: glitchAnim-2 5s infinite linear alternate-reverse;
-        }
-
-        /* Animaciones */
-        @keyframes pulsoWarning {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.9; }
-        }
-
-        @keyframes destelloEmergenciaAqualab {
+        /* Radiación intensa para el contenedor completo */
+        @keyframes destelloEmergenciaRadiante {
             0% { 
-                text-shadow: 0 0 20px #ff073a;
+                transform: scale(1); 
+                filter: drop-shadow(0 0 15px #ff073a); 
             }
             100% { 
-                text-shadow: 0 0 50px #ff073a, 0 0 100px #ff073a, 0 0 150px #ff073a, 0 0 200px rgba(255, 7, 58, 0.5); 
+                transform: scale(1.1); 
+                filter: drop-shadow(0 0 50px #ff073a) drop-shadow(0 0 100px rgba(255, 7, 58, 0.8)); 
             }
         }
 
@@ -140,20 +83,11 @@
             75% { opacity: 0.5; transform: translate(-3px, 1px) skewX(10deg); }
             100% { opacity: 1; }
         }
+        @keyframes glitchAnim-1 { 0% { clip: rect(30px, 9999px, 10px, 0); } 100% { clip: rect(100px, 9999px, 80px, 0); } }
+        @keyframes glitchAnim-2 { 0% { clip: rect(70px, 9999px, 50px, 0); } 100% { clip: rect(10px, 9999px, 60px, 0); } }
 
-        @keyframes glitchAnim-1 {
-            0% { clip: rect(30px, 9999px, 10px, 0); }
-            100% { clip: rect(100px, 9999px, 80px, 0); }
-        }
-
-        @keyframes glitchAnim-2 {
-            0% { clip: rect(70px, 9999px, 50px, 0); }
-            100% { clip: rect(10px, 9999px, 60px, 0); }
-        }
-        /* ============================================================= */
-
-        /* ================= MAPAS ================= */
-        #pantalla-mapa, #pantalla-habitacion { background: #001a33; }
+        /* ================= MAPAS Y PANELES ================= */
+        #pantalla-mapa, #pantalla-habitacion, #pantalla-habitacion-2 { background: #001a33; }
         .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
         .contenedor-mapa { position: relative; width: 800px; height: 480px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
         
@@ -161,11 +95,12 @@
         .nodo-rojo { background: rgba(255, 7, 58, 0.7); border-color: #ff073a; box-shadow: 0 0 15px #ff073a; animation: pulso 1s infinite; }
         .nodo-verde { background: rgba(57, 255, 20, 0.7); border-color: #39ff14; box-shadow: 0 0 15px #39ff14; }
         .nodo-bloqueado { background: #444; border-color: #666; color: #888; cursor: not-allowed; }
+        
+        .nodo-gigante { width: 180px; height: 60px; border-radius: 10px; font-size: 28px; }
 
         @keyframes pulso { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
-        /* ================= PANELES GENERALES ================= */
-        #pantalla-valvula, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final, #pantalla-d { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
+        #pantalla-valvula, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final, #pantalla-d, #pantalla-hab2-megareto { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
         .panel-azul { background: rgba(0, 43, 77, 0.95); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 520px; text-align: center; backdrop-filter: blur(10px); z-index: 5;}
         
         .panel-quiz, .panel-c-final, #pantalla-c-mini .panel-azul, .panel-d { width: 750px; }
@@ -182,7 +117,7 @@
         .btn-volver-top { position: absolute; top: 25px; left: 25px; font-family: 'VT323'; font-size: 24px; background: rgba(0, 20, 40, 0.8); color: #00ffff; border: 2px solid #00ffff; padding: 8px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; z-index: 100; transition: 0.3s; backdrop-filter: blur(5px); }
         .btn-volver-top:hover { background: #ff073a; border-color: #ff073a; color: #fff; box-shadow: 0 0 15px #ff073a; }
 
-        /* ================= ESTILOS PUNTO D (PUZLE ECUACIÓN) ================= */
+        /* ESTILOS PUNTO D */
         .ecuacion-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 30px 0; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border: 1px solid #00ffff; flex-wrap: wrap; }
         .slot { min-width: 100px; padding: 0 10px; height: 70px; border: 3px dashed #00ffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 255, 0.05); cursor: pointer; transition: 0.3s; }
         .slot:hover { background: rgba(0, 255, 255, 0.2); }
@@ -192,11 +127,17 @@
         .pieza:hover { transform: scale(1.05); }
         .pieza.seleccionada { background: #00ffff; color: #000; border-color: #fff; box-shadow: 0 0 20px #00ffff; transform: scale(1.05); }
         #inputPreguntaD { font-family: 'VT323'; font-size: 30px; width: 85%; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; padding: 10px; outline: none; margin-bottom: 20px;}
+
+        /* ESTILOS HAB 2 (TANQUES) */
+        .fase-oculta { display: none; }
+        .fase-activa { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .tanque-container { width: 120px; height: 250px; border: 4px solid #888; border-top: none; border-radius: 0 0 15px 15px; margin: 0 auto; position: relative; background: rgba(0,0,0,0.5); overflow: hidden; }
+        .agua-tanque { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 255, 255, 0.6); box-shadow: 0 0 20px #00ffff; transition: height 0.1s linear; }
+        .fuga-tanque { position: absolute; bottom: 10px; right: -8px; width: 16px; height: 16px; background: #ff073a; border-radius: 50%; box-shadow: 0 0 15px #ff073a; animation: pulso 0.5s infinite; }
     </style>
 </head>
 <body>
-
-    <div id="capa-emergencia-global"></div>
 
     <div id="pantalla-inicio" class="pantalla activa"><div class="boton-inicio" onclick="irANarrador()" title="Iniciar Sistema"></div></div>
 
@@ -208,7 +149,7 @@
             <div class="triangulo-warning">&#9888;</div>
             <span class="texto-glitch-alerta" data-text="SECTOR 11">SECTOR 11</span>
         </button>
-        </div>
+    </div>
 
     <div id="pantalla-alerta" class="pantalla">
         <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
@@ -356,6 +297,74 @@
         </div>
     </div>
 
+    <div id="pantalla-habitacion-2" class="pantalla">
+        <h1 class="titulo-mapa">SECTOR 2: TANQUES DE ALMACENAMIENTO</h1>
+        <div class="contenedor-mapa" style="background: rgba(255, 7, 58, 0.05); border-style: dashed; border-color: #ff073a;">
+            <div class="nodo nodo-rojo nodo-gigante" id="sub-2-1" onclick="iniciarMegaRetoHab2()" style="top: 50%; left: 50%;">[ INICIAR ]</div>
+        </div>
+        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
+    </div>
+
+    <div id="pantalla-hab2-megareto" class="pantalla">
+        <button class="btn-volver-top" onclick="abortarMegaReto()">[ ◄ ABORTAR MISIÓN ]</button>
+        <div class="panel-azul" style="width: 750px;">
+            <div id="progreso-hab2" style="font-size: 22px; color: #888; margin-bottom: 10px; letter-spacing: 5px;">
+                <span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- 
+                <span id="indicador-f2">[ FASE 2 ]</span> --- 
+                <span id="indicador-f3">[ FASE 3 ]</span>
+            </div>
+
+            <div id="fase-hab2-1" class="fase-activa">
+                <h2 style="color:#ffffff;">CALIBRACIÓN MANOMÉTRICA</h2>
+                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
+                    El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>
+                    Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>
+                    Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>
+                    Introduce la Presión Manométrica <b>P₁</b> (en Pascales) en la tubería principal.
+                </p>
+                <input type="number" id="input-h2-f1" placeholder="P₁ (Pa)">
+                <br>
+                <button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button>
+            </div>
+
+            <div id="fase-hab2-2" class="fase-oculta">
+                <h2 style="color:#ffffff;">ESTABILIZACIÓN DE CAUDAL</h2>
+                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
+                    Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>
+                    La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>
+                    Por el principio de continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>
+                    Aplica la Ecuación de Bernoulli horizontal y calcula la velocidad de entrada <b>V₁</b> (m/s).
+                </p>
+                <input type="number" id="input-h2-f2" placeholder="V₁ (m/s)">
+                <br>
+                <button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button>
+            </div>
+
+            <div id="fase-hab2-3" class="fase-oculta">
+                <h2 style="color:#ff073a;">¡ALERTA DE DESBORDAMIENTO!</h2>
+                <div style="display:flex; justify-content: center; gap: 40px; align-items: center; margin: 20px 0;">
+                    <div class="tanque-container">
+                        <div id="agua-visual" class="agua-tanque" style="height: 100%;"></div>
+                        <div class="fuga-tanque"></div>
+                    </div>
+                    <div style="text-align:left; max-width: 350px;">
+                        <p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p>
+                        <div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span>
+                        </div>
+                        <button id="btn-escanear" class="btn-ui" style="font-size:22px; padding: 10px;" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button>
+                        <div id="zona-disparo" style="display:none; margin-top: 15px;">
+                            <input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;">
+                            <button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="feed-hab2" style="margin-top:20px; font-size:26px; height:30px;"></div>
+        </div>
+    </div>
+
     <script>
         let vAct = 1; let tAct = 0; let subFase = 1; 
         let valorBasePa = 0; let sol = 0;
@@ -393,7 +402,6 @@
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
-                    // === MOSTRAR EL CONTENEDOR DE ALERTA ===
                     document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
                 }
             }, 30);
@@ -407,7 +415,13 @@
         }
 
         function irAMapa() { mostrar('pantalla-mapa'); actualizarMapas(); }
-        function abrirHabitacion(n) { if(n>1 && !progreso[n-1].every(x=>x===true)) return; vAct = n; mostrar('pantalla-habitacion'); actualizarMapas(); }
+        function abrirHabitacion(n) { 
+            if(n>1 && !progreso[n-1].every(x=>x===true)) return; 
+            vAct = n; 
+            if (n === 2) mostrar('pantalla-habitacion-2');
+            else mostrar('pantalla-habitacion'); 
+            actualizarMapas(); 
+        }
 
         function irAProblema(t) {
             tAct = t; subFase = 1;
@@ -537,7 +551,6 @@
 
             if (!s1 || !s2 || !s3) { feed.style.color = "#ff073a"; feed.innerText = "✗ FALTAN TÉRMINOS POR ASIGNAR"; return; }
 
-            // ρ(dV/dt) = ρg - ∇P
             if (s1 === "p-dt" && s2 === "p-pg" && s3 === "p-gradP") {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ SINTAXIS MATEMÁTICA CORRECTA";
                 setTimeout(() => {
@@ -551,8 +564,6 @@
         function verificarPreguntaD() {
             const feed = document.getElementById("feed-d");
             const res = document.getElementById("inputPreguntaD").value.toLowerCase();
-            
-            // Elimina acentos y normaliza espacios para perdonar errores ortográficos
             const resNorm = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
             if (resNorm.includes("cantidad de movimiento") || resNorm.includes("conservacion del momento") || resNorm.includes("navier stokes") || resNorm.includes("euler")) {
@@ -560,7 +571,6 @@
                 setTimeout(() => {
                     progreso[vAct][3] = true; 
                     abrirHabitacion(vAct);
-                    // Comprobar si TODOS los de la Habitación 1 están listos
                     if(progreso[1].every(x => x === true)) {
                         setTimeout(() => { alert("¡ENHORABUENA! LA COMPUERTA DEL SECTOR 2 HA SIDO DESBLOQUEADA."); }, 500);
                     }
@@ -580,13 +590,163 @@
                 else if(i === 1 || progreso[i-1].every(x => x === true)) { n.className = "nodo nodo-rojo"; n.onclick = () => abrirHabitacion(i); }
             }
             
-            // FIX NAVEGACIÓN MAPAS:
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`sub-${i}`);
                 if(n) {
                     if(progreso[vAct][i-1]) { n.className = "nodo nodo-verde"; n.onclick = null; } 
                     else { n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i); }
                 }
+            }
+
+            // Lógica mapa Habitación 2
+            let n2 = document.getElementById('sub-2-1');
+            if(n2) {
+                if(progreso[2][0]) { 
+                    n2.className = "nodo nodo-verde nodo-gigante"; n2.innerText = "[ ESTABLE ]"; n2.onclick = null; 
+                } else { 
+                    n2.className = "nodo nodo-rojo nodo-gigante"; n2.innerText = "[ INICIAR ]"; n2.onclick = iniciarMegaRetoHab2; 
+                }
+            }
+        }
+
+        /* ===== HABITACIÓN 2 (MEGA-RETO CON REINTENTOS) ===== */
+        let faseHab2 = 1;
+        let tankInterval = null;
+        let escanerTimeout = null;
+        let tankH = 25.0; 
+        let alturasClave = [20.0, 16.2, 12.8, 11.25, 9.8, 7.2, 5.0];
+        let alturaActualEscaneada = 0;
+        let vCorrectaF3 = 0;
+
+        function iniciarMegaRetoHab2() {
+            faseHab2 = 1;
+            document.getElementById('fase-hab2-1').className = "fase-activa";
+            document.getElementById('fase-hab2-2').className = "fase-oculta";
+            document.getElementById('fase-hab2-3').className = "fase-oculta";
+            document.getElementById('indicador-f1').style.color = "#00ffff";
+            document.getElementById('indicador-f2').style.color = "#888";
+            document.getElementById('indicador-f3').style.color = "#888";
+            document.getElementById('feed-hab2').innerText = "";
+            document.getElementById('input-h2-f1').value = "";
+            mostrar('pantalla-hab2-megareto');
+        }
+
+        function abortarMegaReto() {
+            clearInterval(tankInterval);
+            clearTimeout(escanerTimeout);
+            abrirHabitacion(2);
+        }
+
+        function validarH2F1() {
+            const res = parseFloat(document.getElementById("input-h2-f1").value);
+            const feed = document.getElementById("feed-hab2");
+            if(res === 50000) {
+                feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CALIBRADA";
+                setTimeout(() => {
+                    document.getElementById('fase-hab2-1').className = "fase-oculta";
+                    document.getElementById('fase-hab2-2').className = "fase-activa";
+                    document.getElementById('indicador-f2').style.color = "#00ffff";
+                    feed.innerText = "";
+                    document.getElementById('input-h2-f2').value = "";
+                }, 1500);
+            } else { 
+                feed.style.color = "#ff073a"; 
+                feed.innerText = "✗ INCORRECTO. REVISA EL CÁLCULO."; 
+                setTimeout(() => {
+                    feed.innerText = "";
+                    document.getElementById('input-h2-f1').value = "";
+                }, 1500);
+            }
+        }
+
+        function validarH2F2() {
+            const res = parseFloat(document.getElementById("input-h2-f2").value);
+            const feed = document.getElementById("feed-hab2");
+            if(res === 4) {
+                feed.style.color = "#39ff14"; feed.innerText = "✓ CAUDAL ESTABILIZADO";
+                setTimeout(() => {
+                    document.getElementById('fase-hab2-2').className = "fase-oculta";
+                    document.getElementById('fase-hab2-3').className = "fase-activa";
+                    document.getElementById('indicador-f3').style.color = "#00ffff";
+                    feed.innerText = "";
+                    iniciarDrenajeTanque();
+                }, 1500);
+            } else { 
+                feed.style.color = "#ff073a"; 
+                feed.innerText = "✗ INCORRECTO. REVISA BERNOULLI."; 
+                setTimeout(() => {
+                    feed.innerText = "";
+                    document.getElementById('input-h2-f2').value = "";
+                }, 1500);
+            }
+        }
+
+        function iniciarDrenajeTanque() {
+            tankH = 22.0;
+            document.getElementById("txt-escaner").innerText = "EN ESPERA";
+            document.getElementById("txt-escaner").style.color = "#fff";
+            document.getElementById("btn-escanear").style.display = "inline-block";
+            document.getElementById("zona-disparo").style.display = "none";
+            
+            clearInterval(tankInterval);
+            tankInterval = setInterval(() => {
+                tankH -= 0.2; 
+                if(tankH < 3) tankH = 22.0; 
+                let porcentaje = (tankH / 25.0) * 100;
+                document.getElementById("agua-visual").style.height = `${porcentaje}%`;
+            }, 300);
+        }
+
+        function escanearNivel() {
+            let hSnap = alturasClave.find(h => h <= tankH);
+            if(!hSnap) hSnap = 5.0; 
+            alturaActualEscaneada = hSnap;
+            vCorrectaF3 = Math.sqrt(2 * 10 * hSnap); 
+
+            clearInterval(tankInterval);
+            
+            document.getElementById("txt-escaner").innerHTML = `<b>h = ${hSnap} m</b><br><span style="font-size:16px; color:#ff073a;">TIEMPO DE VENTANA: 12s</span>`;
+            document.getElementById("txt-escaner").style.color = "#39ff14";
+            document.getElementById("btn-escanear").style.display = "none";
+            document.getElementById("zona-disparo").style.display = "block";
+            document.getElementById("input-h2-f3").value = "";
+            document.getElementById("feed-hab2").innerText = "";
+
+            clearTimeout(escanerTimeout);
+            escanerTimeout = setTimeout(() => {
+                document.getElementById("feed-hab2").style.color = "#ff073a";
+                document.getElementById("feed-hab2").innerText = "¡VENTANA PERDIDA! RECALCULANDO...";
+                setTimeout(() => {
+                    document.getElementById("feed-hab2").innerText = "";
+                    iniciarDrenajeTanque();
+                }, 1500);
+            }, 12000);
+        }
+
+        function validarH2F3() {
+            const res = parseFloat(document.getElementById("input-h2-f3").value);
+            const feed = document.getElementById("feed-hab2");
+            
+            if(res === vCorrectaF3) {
+                clearTimeout(escanerTimeout);
+                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡FUGA SELLADA!";
+                document.querySelector('.fuga-tanque').style.background = "#39ff14";
+                document.querySelector('.fuga-tanque').style.boxShadow = "0 0 15px #39ff14";
+                document.querySelector('.fuga-tanque').style.animation = "none";
+                
+                setTimeout(() => {
+                    progreso[2][0] = true;
+                    alert("¡Misión Completada! El Sector 2 ha sido salvado.");
+                    abrirHabitacion(2);
+                }, 2000);
+            } else {
+                feed.style.color = "#ff073a"; 
+                feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
+                clearTimeout(escanerTimeout);
+                setTimeout(() => {
+                    feed.innerText = "";
+                    iniciarDrenajeTanque();
+                }, 2000);
             }
         }
 
