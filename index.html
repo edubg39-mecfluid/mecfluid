@@ -10,56 +10,65 @@
     <style>
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; color: white; }
         
+        /* Capas de Pantallas */
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
         .pantalla.activa { display: flex; z-index: 10; }
 
         /* ================= PANTALLA 1: INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: rgba(0,255,255,0); z-index: 9999; }
+        .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
         .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
 
         /* ================= PANTALLA 2: NARRADOR ================= */
         #pantalla-narrador { background: url('fondo (2).png') center/cover; }
-        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(4px); z-index: 1; }
+        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; }
         
         #caja-narrador { 
-            position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); 
-            width: 90%; background: rgba(0, 30, 60, 0.9); border: 2px solid #00ffff; 
-            border-radius: 12px; padding: 25px; z-index: 5; display: flex; align-items: center; gap: 25px;
-            box-sizing: border-box; min-height: 200px;
+            position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; 
+            border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px;
+            box-sizing: border-box; overflow-y: auto; 
         }
-        
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
-        
-        #texto-narrador { 
-            color: #00ffff; font-size: 30px; line-height: 1.3; 
-            white-space: normal; word-wrap: break-word; overflow-wrap: break-word;
-            flex: 1; min-width: 0; text-align: left;
-        }
+        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
         /* ================= MAPAS ================= */
-        #pantalla-mapa, #pantalla-habitacion { background: #000c1a; }
-        .titulo-mapa { color: #00ffff; font-size: 34px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
+        #pantalla-mapa, #pantalla-habitacion { background: #001a33; }
+        .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
         .contenedor-mapa { position: relative; width: 800px; height: 480px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
         
         .nodo { position: absolute; width: 45px; height: 45px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; border: 2px solid white; z-index: 20; transition: 0.3s; }
         .nodo-rojo { background: rgba(255, 7, 58, 0.7); border-color: #ff073a; box-shadow: 0 0 15px #ff073a; animation: pulso 1s infinite; }
         .nodo-verde { background: rgba(57, 255, 20, 0.7); border-color: #39ff14; box-shadow: 0 0 15px #39ff14; }
-        .nodo-bloqueado { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
+        .nodo-bloqueado { background: #444; border-color: #666; color: #888; cursor: not-allowed; }
 
         @keyframes pulso { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
-        /* ================= PANEL DE PROBLEMA ================= */
-        #pantalla-valvula { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
-        .panel-azul { background: rgba(0, 43, 77, 0.95); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 500px; text-align: center; backdrop-filter: blur(10px); }
-        input { font-family: 'VT323'; font-size: 35px; width: 220px; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
+        /* ================= PANELES DE PROBLEMA Y QUIZ ================= */
+        #pantalla-valvula, #pantalla-quiz { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
+        .panel-azul { background: rgba(0, 43, 77, 0.95); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 520px; text-align: center; backdrop-filter: blur(10px); }
+        
+        /* Panel del Quiz (Más ancho para el texto) */
+        .panel-quiz { width: 750px; }
+        
+        input { font-family: 'VT323'; font-size: 35px; width: 240px; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
         .btn-ui { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        
+        /* Botones de respuesta teórica */
+        .btn-opcion {
+            font-family: 'VT323'; font-size: 22px; background: #002b4d; color: #e6f2ff;
+            border: 2px solid #00ffff; padding: 12px; margin: 8px 0; cursor: pointer;
+            border-radius: 5px; text-align: left; transition: 0.3s; width: 100%;
+            line-height: 1.2;
+        }
+        .btn-opcion:hover { background: #00ffff; color: #000; box-shadow: 0 0 15px #00ffff; }
+        .btn-opcion:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <div id="pantalla-inicio" class="pantalla activa">
-        <div class="boton-inicio" onclick="irANarrador()"></div>
+        <div class="boton-inicio" onclick="irANarrador()" title="Iniciar Sistema"></div>
     </div>
 
     <div id="pantalla-narrador" class="pantalla">
@@ -72,7 +81,7 @@
     </div>
 
     <div id="pantalla-alerta" class="pantalla">
-        <h1 style="color:#ff073a; font-size: 45px;">ALERTA DE SISTEMA</h1>
+        <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
         <div id="texto-historia" style="font-size: 26px; max-width: 800px; text-align: left; margin: 20px; color:#39ff14;"></div>
         <button id="btn-start" class="btn-ui" style="display:none;" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
     </div>
@@ -110,6 +119,16 @@
         </div>
     </div>
 
+    <div id="pantalla-quiz" class="pantalla">
+        <div class="panel-azul panel-quiz">
+            <div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO B: PREGUNTA 1/3</div>
+            <h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA UD1</h2>
+            <div id="quiz-pregunta" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px; padding: 0 15px;"></div>
+            <div id="quiz-opciones" style="display:flex; flex-direction:column; align-items: center; padding: 0 20px;"></div>
+            <div id="quiz-feed" style="margin-top:20px; font-size:24px; height: 30px;"></div>
+        </div>
+    </div>
+
     <script>
         let vAct = 1; let tAct = 0; let subFase = 1; 
         let valorBasePa = 0; let sol = 0;
@@ -118,39 +137,75 @@
             3: [false, false, false, false], 4: [false, false, false, false] 
         };
 
+        // Base de Datos de Teoría (UD1)
+        const bdTeoria = [
+            { q: "¿Cuál es la característica principal que define a un fluido?", opciones: [
+                { t: "Se deforma continuamente bajo un esfuerzo cortante.", c: true },
+                { t: "Su densidad permanece siempre constante.", c: false },
+                { t: "Resiste fuerzas de tracción sin alterar su forma.", c: false }
+            ]},
+            { q: "¿En qué consiste el enfoque Euleriano (Euler) en cinemática?", opciones: [
+                { t: "Observar el flujo desde un volumen de control estático.", c: true },
+                { t: "Seguir la trayectoria de una partícula individual.", c: false },
+                { t: "Promediar las velocidades en un instante inicial.", c: false }
+            ]},
+            { q: "¿Qué principio físico universal es la base de la Ecuación de Continuidad?", opciones: [
+                { t: "El principio de conservación de la masa.", c: true },
+                { t: "La conservación de la cantidad de movimiento.", c: false },
+                { t: "La Segunda Ley de Newton.", c: false }
+            ]},
+            { q: "¿Qué se asume bajo la hipótesis de un fluido incompresible?", opciones: [
+                { t: "Que la densidad permanece constante en todo el flujo.", c: true },
+                { t: "Que la viscosidad del fluido es cero.", c: false },
+                { t: "Que la velocidad del flujo no cambia con el tiempo.", c: false }
+            ]},
+            { q: "¿Qué concepto se define como una línea tangente al vector velocidad en todo punto?", opciones: [
+                { t: "Línea de corriente.", c: true },
+                { t: "Línea de traza.", c: false },
+                { t: "Trayectoria de la partícula.", c: false }
+            ]},
+            { q: "Si el flujo es 'estacionario' o 'permanente', ¿qué ocurre matemáticamente?", opciones: [
+                { t: "La derivada local respecto al tiempo es cero.", c: true },
+                { t: "La velocidad del fluido es siempre constante en el espacio.", c: false },
+                { t: "La derivada convectiva se anula.", c: false }
+            ]},
+            { q: "Para un flujo incompresible, si el área del conducto se reduce a la mitad...", opciones: [
+                { t: "La velocidad se duplica para mantener el caudal.", c: true },
+                { t: "La velocidad se reduce a la mitad.", c: false },
+                { t: "La velocidad permanece constante.", c: false }
+            ]}
+        ];
+        let preguntasSeleccionadas = [];
+
         function mostrar(id) {
             document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
         }
 
+        /* --- NARRADOR Y ALERTA --- */
         function irANarrador() {
             mostrar('pantalla-narrador');
-            const txt = "Saludos equipo.Bienvenidos al laboratorio AQUAFLUID.Vamos a proceder a verificar todas las válvulas del recinto. Los niveles de presión parece que son estables, el flujo de agua es constante y...Un momento, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente...";
-            let i = 0; const caja = document.getElementById("texto-narrador");
-            caja.innerHTML = "";
+            const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
+            let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
             let intv = setInterval(() => {
                 let char = txt.charAt(i);
                 caja.innerHTML += (char === " ") ? "&nbsp;" : char;
                 i++;
-                if(i >= txt.length){ 
-                    clearInterval(intv); 
-                    document.getElementById('btn-mision').style.display="block"; 
-                }
+                if(i >= txt.length){ clearInterval(intv); document.getElementById('btn-mision').style.display="block"; }
             }, 30);
         }
 
         function irAAlerta() {
             mostrar('pantalla-alerta');
-            const hTxt = "SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEl nivel de fluidos aumenta críticamente.\nEstabilice los puntos de control A, B, C y D.";
-            let i = 0; const caja = document.getElementById("texto-historia");
-            caja.innerHTML = "";
+            const hTxt = "SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEstabilice los puntos de control A, B, C y D.";
+            let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
             let intv = setInterval(() => {
-                caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i);
-                i++;
+                caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); i++;
                 if(i >= hTxt.length){ clearInterval(intv); document.getElementById('btn-start').style.display="block"; }
             }, 25);
         }
 
+        /* --- NAVEGACIÓN --- */
         function irAMapa() { mostrar('pantalla-mapa'); actualizarMapas(); }
 
         function abrirHabitacion(n) {
@@ -159,39 +214,39 @@
             actualizarMapas();
         }
 
+        /* --- RUTADOR DE PROBLEMAS --- */
         function irAProblema(t) {
             tAct = t;
+            subFase = 1; // Reiniciamos fase siempre al entrar
+
             if (t === 1 && vAct === 1) { 
-                if(subFase === 1) valorBasePa = Math.floor(Math.random() * 900) + 100;
+                // PUNTO A: Matemáticas
+                valorBasePa = Math.floor(Math.random() * 900) + 100;
+                mostrar('pantalla-valvula');
+                generarRetoA();
+            } else if (t === 2 && vAct === 1) {
+                // PUNTO B: Quiz Teórico (Selecciona 3 al azar)
+                preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3);
+                mostrar('pantalla-quiz');
+                generarRetoB();
+            } else {
+                // PUNTOS C y D (Comodines temporales)
+                mostrar('pantalla-valvula');
+                generarRetoComodin();
             }
-            mostrar('pantalla-valvula');
-            generarReto();
         }
 
-        function generarReto() {
+        /* ================= PUNTO A (MATEMÁTICAS) ================= */
+        function generarRetoA() {
             const env = document.getElementById("enunciado");
             const paso = document.getElementById("paso-info");
             document.getElementById("inputRes").value = "";
             document.getElementById("feed").innerText = "";
 
-            if (tAct === 1 && vAct === 1) { // Lógica estricta de 3 pasos para el PUNTO A
-                paso.innerText = `PUNTO A: PASO ${subFase}/3`;
-                if (subFase === 1) {
-                    sol = valorBasePa / 100000;
-                    env.innerHTML = `Presión detectada: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`;
-                } else if (subFase === 2) {
-                    sol = valorBasePa / 100;
-                    env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>mbar</b>`;
-                } else {
-                    sol = valorBasePa / 1000000;
-                    env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>N/mm²</b>`;
-                }
-            } else {
-                // Comodín temporal para B, C y D
-                paso.innerText = `PUNTO ${String.fromCharCode(64+tAct)}: EN CONSTRUCCIÓN`;
-                env.innerHTML = `Prueba mecánica en desarrollo. <br> Para superar esta prueba temporal, escribe <b>100</b>.`;
-                sol = 100;
-            }
+            paso.innerText = `PUNTO A: PASO ${subFase}/3`;
+            if (subFase === 1) { sol = valorBasePa / 100000; env.innerHTML = `Presión detectada: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`; } 
+            else if (subFase === 2) { sol = valorBasePa / 100; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>mbar</b>`; } 
+            else { sol = valorBasePa / 1000000; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>N/mm²</b>`; }
         }
 
         function verificarRes() {
@@ -201,48 +256,90 @@
             if (Math.abs(res - sol) < 0.000001) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ ACCESO CONCEDIDO";
                 setTimeout(() => {
-                    if (tAct === 1 && vAct === 1 && subFase < 3) {
-                        subFase++; generarReto(); 
-                    } else {
-                        // Resuelto! Quitamos el alert y volvemos directo
-                        progreso[vAct][tAct-1] = true; 
-                        subFase = 1; 
-                        abrirHabitacion(vAct);
+                    if (tAct === 1 && subFase < 3) { subFase++; generarRetoA(); }
+                    else {
+                        progreso[vAct][tAct-1] = true; subFase = 1;
+                        abrirHabitacion(vAct); // Vuelve sin alert
                     }
-                }, 1000);
+                }, 800);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO: REGENERANDO DATOS...";
                 setTimeout(() => {
+                    subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100;
+                    if(tAct === 1) generarRetoA(); else generarRetoComodin();
+                }, 1200);
+            }
+        }
+
+        /* ================= PUNTO B (QUIZ TEÓRICO) ================= */
+        function generarRetoB() {
+            const preg = preguntasSeleccionadas[subFase - 1];
+            document.getElementById('quiz-paso').innerText = `PUNTO B: PREGUNTA ${subFase}/3`;
+            document.getElementById('quiz-pregunta').innerText = preg.q;
+            document.getElementById('quiz-feed').innerText = "";
+            
+            const opcionesDiv = document.getElementById('quiz-opciones');
+            opcionesDiv.innerHTML = "";
+            
+            // Barajamos opciones para que la correcta no esté siempre en el mismo sitio
+            let opcionesMezcladas = [...preg.opciones].sort(() => 0.5 - Math.random());
+            
+            opcionesMezcladas.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = "btn-opcion";
+                btn.innerText = opt.t;
+                btn.onclick = () => verificarQuiz(opt.c);
+                opcionesDiv.appendChild(btn);
+            });
+        }
+
+        function verificarQuiz(esCorrecta) {
+            const feed = document.getElementById('quiz-feed');
+            const botones = document.querySelectorAll('.btn-opcion');
+            botones.forEach(b => b.disabled = true); // Bloquea clics extra
+            
+            if (esCorrecta) {
+                feed.style.color = "#39ff14"; feed.innerText = "✓ RESPUESTA CORRECTA";
+                setTimeout(() => {
+                    if (subFase < 3) {
+                        subFase++; generarRetoB();
+                    } else {
+                        progreso[vAct][tAct-1] = true; subFase = 1;
+                        abrirHabitacion(vAct); // Vuelve directo
+                    }
+                }, 800);
+            } else {
+                feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR TEÓRICO: REINICIANDO PROTOCOLO...";
+                setTimeout(() => {
                     subFase = 1; 
-                    if (tAct === 1 && vAct === 1) valorBasePa = Math.floor(Math.random() * 900) + 100;
-                    generarReto();
+                    // Si falla, sacamos 3 preguntas nuevas
+                    preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3);
+                    generarRetoB();
                 }, 1500);
             }
         }
 
+        /* --- COMODÍN PARA C Y D --- */
+        function generarRetoComodin() {
+            document.getElementById("paso-info").innerText = `PUNTO ${String.fromCharCode(64+tAct)}`;
+            document.getElementById("enunciado").innerHTML = `Prueba en desarrollo. Escribe <b>100</b> para pasar.`;
+            sol = 100;
+        }
+
+        /* --- ACTUALIZACIÓN DE INTERFAZ --- */
         function actualizarMapas() {
-            // Actualizar nodos del Mapa Global
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`main-${i}`);
                 if(!n) continue;
                 if(progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
-                else if(i === 1 || progreso[i-1].every(x => x === true)) {
-                    n.className = "nodo nodo-rojo"; n.onclick = () => abrirHabitacion(i);
-                }
+                else if(i === 1 || progreso[i-1].every(x => x === true)) { n.className = "nodo nodo-rojo"; n.onclick = () => abrirHabitacion(i); }
             }
             
-            // Actualizar nodos del Sub-Mapa (Habitación)
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`sub-${i}`);
                 if(!n) continue;
-                
-                if(progreso[vAct][i-1]) { 
-                    n.className = "nodo nodo-verde"; 
-                    n.onclick = null; // Desactiva si ya está en verde
-                } else { 
-                    n.className = "nodo nodo-rojo"; 
-                    n.onclick = () => irAProblema(i); // Siempre clickables si están rojos
-                }
+                if(progreso[vAct][i-1]) { n.className = "nodo nodo-verde"; n.onclick = null; } 
+                else { n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i); }
             }
         }
 
