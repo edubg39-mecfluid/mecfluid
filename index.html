@@ -17,14 +17,11 @@
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
         .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
-
-        /* Pantalla Narrador base (sin alarma al principio) */
+        
         #pantalla-narrador { 
             background: url('fondo (2).png') center/cover; 
             transition: all 0.5s ease;
         }
-
-        /* Clase que activaremos con JavaScript para la emergencia */
         .emergencia-activa {
             animation: alertaFondoGlobal 1s infinite alternate !important;
         }
@@ -54,36 +51,18 @@
 
         /* === BOTÓN DE ALERTA === */
         #contenedor-alerta-narrador {
-            position: absolute;
-            top: 40%;
-            margin-top: -1cm; 
-            display: none; 
-            flex-direction: column;
-            align-items: center;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            z-index: 100;
-            padding: 20px;
-            animation: destelloEmergenciaAqualab 1s infinite alternate; 
+            position: absolute; top: 40%; margin-top: -1cm;  display: none;  flex-direction: column; align-items: center; background: transparent;
+            border: none; cursor: pointer; z-index: 100; padding: 20px; animation: destelloEmergenciaAqualab 1s infinite alternate; 
         }
 
         #contenedor-alerta-narrador:hover { transform: scale(1.05); }
 
         .triangulo-warning {
-            font-size: 125px; 
-            color: #ff073a;
-            text-shadow: 0 0 30px #ff073a;
-            margin-bottom: -10px;
+            font-size: 125px;  color: #ff073a; text-shadow: 0 0 30px #ff073a; margin-bottom: -10px;
         }
 
         .texto-glitch-alerta {
-            font-size: 62.5px; 
-            color: #ff073a;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            position: relative;
-            text-shadow: 0 0 20px #ff073a; 
+            font-size: 62.5px;  color: #ff073a; text-transform: uppercase; letter-spacing: 4px; position: relative; text-shadow: 0 0 20px #ff073a; 
             animation: glitchEffect 3s infinite;
         }
 
@@ -458,7 +437,7 @@
             else if (t === 4) { generarRetoD(); mostrar('pantalla-d'); }
         }
 
-        /* ===== PUNTO Re (A) ===== */
+        /* ===== PUNTO Re ===== */
         function generarRetoA() {
             const env = document.getElementById("enunciado"); document.getElementById("inputRes").value = ""; document.getElementById("feed").innerText = "";
             document.getElementById("paso-info").innerText = `PUNTO Re: PASO ${subFase}/3`;
@@ -475,7 +454,7 @@
             } else { feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; generarRetoA(); }, 1200); }
         }
 
-        /* ===== PUNTO Pr (B) ===== */
+        /* ===== PUNTO Pr ===== */
         function generarRetoB() {
             const preg = preguntasSeleccionadas[subFase - 1]; document.getElementById('quiz-paso').innerText = `PUNTO Pr: PREGUNTA ${subFase}/3`;
             document.getElementById('quiz-pregunta').innerHTML = preg.q; document.getElementById('quiz-feed').innerText = "";
@@ -492,7 +471,7 @@
             } else { feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
         }
 
-        /* ===== PUNTO M (C) ===== */
+        /* ===== PUNTO M ===== */
         function iniciarRetoC() {
             tiradasC = 5; pistasC = 0; document.getElementById('tiradas-ui').innerText = tiradasC; document.getElementById('btn-tirar').disabled = false;
             for(let i=1; i<=5; i++) { let p = document.getElementById(`pista-ui-${i}`); p.innerHTML = `${i}. [ ENCRIPTADO ]`; p.style.color = "#888"; } mostrar('pantalla-c');
@@ -540,7 +519,7 @@
             } else { document.getElementById("feed-final-c").style.color = "#ff073a"; document.getElementById("feed-final-c").innerText = "✗ INCORRECTO. REINICIANDO..."; setTimeout(iniciarRetoC, 2000); }
         }
 
-        /* ===== PUNTO Pe (D) ===== */
+        /* ===== PUNTO Pe ===== */
         function generarRetoD() {
             document.getElementById("fase-puzle-d").style.display = "block";
             document.getElementById("fase-pregunta-d").style.display = "none";
@@ -636,7 +615,7 @@
             }
         }
 
-        /* ===== HABITACIÓN 2 (MEGA-RETO CON REINTENTOS) ===== */
+        /* ===== HABITACIÓN 2 (RETO CON REINTENTOS) ===== */
         let faseHab2 = 1;
         let tankInterval = null;
         let escanerTimeout = null;
