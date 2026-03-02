@@ -43,7 +43,7 @@
 
         #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; }
         
-        #caja-narrador { 
+        #caja- { 
             position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); 
             width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; 
             border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px;
@@ -415,7 +415,7 @@
 
         function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
 
-        function irANarrador() {
+function irANarrador() {
             mostrar('pantalla-narrador');
             // Quitar clase de emergencia si reinician
             document.getElementById('pantalla-narrador').classList.remove('emergencia-activa'); 
@@ -426,13 +426,14 @@
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
-                    document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
-                    // Activar alerta visual de emergencia
-                    document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
+                    setTimeout(() => {
+                        document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
+                        // Activar alerta visual de emergencia
+                        document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
+                    }, 2500); 
                 }
             }, 30);
         }
-
         function irAAlerta() {
             mostrar('pantalla-alerta');
             // ACTUALIZADO CON NOMBRES ADIMENSIONALES
