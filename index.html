@@ -370,6 +370,11 @@
                     </div>
                     <div style="text-align:left; max-width: 350px;">
                         <p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p>
+                        
+                        <p style="font-size: 19px; color:#39ff14; background: rgba(57, 255, 20, 0.1); padding: 10px; border-left: 3px solid #39ff14; margin-bottom: 15px;">
+                            [SISTEMA DE AYUDA]: Aplica el <b>Teorema de Torricelli</b>. Recuerda que la gravedad (<b>g</b>) en esta instalación es de <b>10 m/s²</b>.
+                        </p>
+
                         <div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                             <span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span>
                         </div>
@@ -426,16 +431,18 @@
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
-                    document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
-                    // Activar alerta visual de emergencia
-                    document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
+                    
+                    setTimeout(() => {
+                        document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
+                        // Activar alerta visual de emergencia
+                        document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
+                    }, 2500);
                 }
             }, 30);
         }
 
         function irAAlerta() {
             mostrar('pantalla-alerta');
-            // ACTUALIZADO CON NOMBRES ADIMENSIONALES
             const hTxt = "SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEstabilice los puntos de control Re, Pr, M y Pe.";
             let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
             let intv = setInterval(() => { caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); i++; if(i >= hTxt.length){ clearInterval(intv); document.getElementById('btn-start').style.display="block"; }}, 25);
@@ -762,9 +769,11 @@
                 document.querySelector('.fuga-tanque').style.animation = "none";
                 
                 setTimeout(() => {
-                    progreso[2][0] = true;
-                    alert("¡Misión Completada! El Sector γ ha sido salvado.");
-                    abrirHabitacion(2);
+                    // ARREGLO DE PROGRESO: Llenamos los 4 "huecos" virtuales para que el mapa lo lea como 100% completado
+                    progreso[2] = [true, true, true, true]; 
+                    
+                    alert("¡Misión Completada! El Sector γ ha sido salvado. ACCESO AL SECTOR Δ DESBLOQUEADO.");
+                    irAMapa(); // Redirige al mapa para que vean la habitación 3 desbloqueada
                 }, 2000);
             } else {
                 feed.style.color = "#ff073a"; 
@@ -780,4 +789,4 @@
         window.onload = () => { console.log("Sistema Cargado"); };
     </script>
 </body>
-</html>
+    </html>
