@@ -565,7 +565,7 @@
             }
         }
 
-        /* ===== LÓGICA DE PROGRAMACIÓN HABITACIÓN 2 (MEGA-RETO) (AÑADIDO) ===== */
+/* ===== LÓGICA DE PROGRAMACIÓN HABITACIÓN 2 (MEGA-RETO) ===== */
         let faseHab2 = 1;
         let tankInterval = null;
         let escanerTimeout = null;
@@ -605,7 +605,15 @@
                     feed.innerText = "";
                     document.getElementById('input-h2-f2').value = "";
                 }, 1500);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ CÁLCULO INCORRECTO"; }
+            } else { 
+                // NUEVO: Resetea el input y deja volver a intentar en la misma fase
+                feed.style.color = "#ff073a"; 
+                feed.innerText = "✗ INCORRECTO. REVISA EL CÁLCULO."; 
+                setTimeout(() => {
+                    feed.innerText = "";
+                    document.getElementById('input-h2-f1').value = "";
+                }, 1500);
+            }
         }
 
         function validarH2F2() {
@@ -620,7 +628,15 @@
                     feed.innerText = "";
                     iniciarDrenajeTanque();
                 }, 1500);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ VELOCIDAD INCORRECTA"; }
+            } else { 
+                // NUEVO: Resetea el input y deja volver a intentar en la misma fase
+                feed.style.color = "#ff073a"; 
+                feed.innerText = "✗ INCORRECTO. REVISA BERNOULLI."; 
+                setTimeout(() => {
+                    feed.innerText = "";
+                    document.getElementById('input-h2-f2').value = "";
+                }, 1500);
+            }
         }
 
         function iniciarDrenajeTanque() {
@@ -682,15 +698,16 @@
                     abrirHabitacion(2);
                 }, 2000);
             } else {
-                feed.style.color = "#ff073a"; feed.innerText = "✗ VELOCIDAD INCORRECTA. EL PARCHE HA FALLADO.";
+                // NUEVO: Mensaje más claro de que se reintenta esta misma fase
+                feed.style.color = "#ff073a"; 
+                feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
                 clearTimeout(escanerTimeout);
                 setTimeout(() => {
                     feed.innerText = "";
                     iniciarDrenajeTanque();
-                }, 1500);
+                }, 2000);
             }
         }
-
         window.onload = () => { console.log("Sistema Cargado"); };
     </script>
 </body>
