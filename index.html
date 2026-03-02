@@ -13,6 +13,31 @@
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
         .pantalla.activa { display: flex; z-index: 10; }
 
+        /* === CAPA DE EMERGENCIA GLOBAL EN TODA LA PANTALLA (AÑADIDO) === */
+        #capa-emergencia-global {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 1000; /* Superpone todo */
+            pointer-events: none; /* No intercepta clics */
+            animation: destelloGlobalAqualab 1s infinite alternate;
+        }
+
+        @keyframes destelloGlobalAqualab {
+            0% { 
+                box-shadow: inset 0 0 100px #ff073a, 0 0 150px #ff073a;
+                opacity: 0.1;
+            }
+            100% { 
+                box-shadow: inset 0 0 200px #ff073a, 0 0 300px #ff073a, 0 0 500px #ff073a;
+                opacity: 0.2;
+            }
+        }
+        /* ============================================================== */
+
         /* ================= INICIO Y NARRADOR ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
@@ -30,10 +55,20 @@
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
-        /* === NUEVOS ESTILOS PARA LA ALERTA DEL NARRADOR (AÑADIDO) === */
+        /* === ESTILOS PARA LA ALERTA DEL NARRADOR (MODIFICADO) === */
         #contenedor-alerta-narrador {
-            position: absolute; top: 40%; margin-top: -5cm; display: none; flex-direction: column; align-items: center; background: transparent; border: none;
-            cursor: pointer; z-index: 100; padding: 20px;
+            position: absolute;
+            top: 40%;
+            margin-top: -1cm; /* === SE HA AÑADIDO ESTO PARA SUBIRLO 1CM === */
+            display: none; /* Controlado por JS */
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            padding: 20px;
+            animation: destelloEmergenciaAqualab 1s infinite alternate; /* Unificado */
         }
 
         #contenedor-alerta-narrador:hover {
@@ -41,19 +76,20 @@
         }
 
         .triangulo-warning {
-            font-size: 250px;
+            font-size: 100px;
             color: #ff073a; /* Rojo profundo */
             text-shadow: 0 0 30px #ff073a;
-            animation: pulsoWarning 0.5s infinite;
+            animation: pulsoWarning 0.8s infinite;
             margin-bottom: -10px;
         }
 
         .texto-glitch-alerta {
-            font-size: 125px;
+            font-size: 50px;
             color: #ff073a;
             text-transform: uppercase;
             letter-spacing: 4px;
             position: relative;
+            text-shadow: 0 0 20px #ff073a; /* Destello base */
             animation: glitchEffect 3s infinite;
         }
 
@@ -85,17 +121,17 @@
 
         /* Animaciones */
         @keyframes pulsoWarning {
-            0%, 100% { 
-                transform: scale(1); 
-                opacity: 1; 
-                text-shadow: 0 0 20px #ff073a, 0 0 40px #ff073a; 
-            }
-            50% { 
-                transform: scale(1.15); 
-                opacity: 0.9; 
-                text-shadow: 0 0 40px #ff073a, 0 0 80px #ff073a, 0 0 120px #ff073a, 0 0 150px rgba(255, 7, 58, 0.5); 
-            }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.9; }
         }
+
+        @keyframes destelloEmergenciaAqualab {
+            0% { 
+                text-shadow: 0 0 20px #ff073a;
+            }
+            100% { 
+                text-shadow: 0 0 50px #ff073a, 0 0 100px #ff073a, 0 0 150px #ff073a, 0 0 200px rgba(255, 7, 58, 0.5); 
+            }
         }
 
         @keyframes glitchEffect {
@@ -159,6 +195,8 @@
     </style>
 </head>
 <body>
+
+    <div id="capa-emergencia-global"></div>
 
     <div id="pantalla-inicio" class="pantalla activa"><div class="boton-inicio" onclick="irANarrador()" title="Iniciar Sistema"></div></div>
 
@@ -355,7 +393,7 @@
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
-                    // === MODIFICADO PARA MOSTRAR EL NUEVO CONTENEDOR DE ALERTA ===
+                    // === MOSTRAR EL CONTENEDOR DE ALERTA ===
                     document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
                 }
             }, 30);
