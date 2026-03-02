@@ -58,6 +58,31 @@
         .btn-opcion:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .pista-item { font-size: 24px; padding: 5px; color: #888; border-bottom: 1px dashed #00ffff; margin-bottom: 5px; text-align: left; }
+
+        /* ===== BOTÓN VOLVER TÁCTICO (NUEVO) ===== */
+        .btn-volver-top {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            font-family: 'VT323';
+            font-size: 24px;
+            background: rgba(0, 20, 40, 0.8);
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            z-index: 100;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        .btn-volver-top:hover {
+            background: #ff073a; /* Se vuelve rojo al pasar el ratón indicando aborto de misión */
+            border-color: #ff073a;
+            color: #fff;
+            box-shadow: 0 0 15px #ff073a;
+        }
     </style>
 </head>
 <body>
@@ -98,6 +123,8 @@
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        
         <div class="panel-azul">
             <div id="paso-info" style="color:#00ffff; font-size:22px;">---</div>
             <h2 style="color:#ffffff; margin:10px 0;">SISTEMA DE CALIBRACIÓN</h2>
@@ -110,6 +137,8 @@
     </div>
 
     <div id="pantalla-quiz" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        
         <div class="panel-azul panel-quiz">
             <div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO B: PREGUNTA 1/3</div>
             <h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA UD1</h2>
@@ -120,6 +149,8 @@
     </div>
 
     <div id="pantalla-c" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        
         <div class="panel-azul panel-c">
             <h2 style="color:#ffffff; margin:0 0 10px 0;">EXTRACCIÓN DE DATOS C</h2>
             <p style="font-size:26px; margin: 5px 0;">Tiradas restantes: <span id="tiradas-ui" style="color:#ff073a; font-weight:bold; text-shadow: 0 0 10px #ff073a;">5</span></p>
@@ -139,6 +170,8 @@
     </div>
 
     <div id="pantalla-c-mini" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR SECUENCIA ]</button>
+        
         <div class="panel-azul">
             <h2 style="color:#ffffff;">DESAFÍO DE DESENCRIPTACIÓN</h2>
             <div id="enunciado-mini-c" style="font-size: 28px; color:#00ffff; margin: 20px 0;"></div>
@@ -157,6 +190,8 @@
     </div>
 
     <div id="pantalla-c-final" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        
         <div class="panel-azul panel-c-final">
             <h2 style="color:#ffffff;">EVALUACIÓN CINEMÁTICA FINAL</h2>
             <div id="resumen-pistas-c" style="text-align: left; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 24px; color:#39ff14;"></div>
@@ -331,7 +366,6 @@
                 zBotones.style.display = "flex";
                 zBotones.innerHTML = "";
                 
-                // Carga una pregunta aleatoria de fórmulas/teoría
                 let preg = bdMiniTeoria[Math.floor(Math.random() * bdMiniTeoria.length)];
                 env.innerHTML = preg.q;
                 
