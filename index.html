@@ -17,19 +17,24 @@
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
         .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
-
-        /* Pantalla Narrador con parpadeo rojo global de emergencia */
+        
+        /*============ Pantalla Narrador base ===============*/
         #pantalla-narrador { 
             background: url('fondo (2).png') center/cover; 
-            animation: alertaFondoGlobal 1s infinite alternate;
+            transition: all 0.5s ease;
         }
+        .emergencia-activa {
+            animation: alertaFondoGlobal 1s infinite alternate !important;
+        }
+
         @keyframes alertaFondoGlobal {
             0% { 
                 box-shadow: inset 0 0 100px rgba(255, 7, 58, 0.4); 
                 background-color: transparent;
             }
             100% { 
-                box-shadow: inset 0 0 600px rgba(255, 7, 58, 1), inset 0 0 250px #ff073a; background-color: rgba(255, 7, 58, 0.6); 
+                box-shadow: inset 0 0 600px rgba(255, 7, 58, 1), inset 0 0 250px #ff073a; 
+                background-color: rgba(255, 7, 58, 0.6); 
                 background-blend-mode: color-burn; 
             }
         }
@@ -45,7 +50,7 @@
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
-        /* === NUEVO BOTÓN DE ALERTA (MÁS GRANDE, DESPLAZADO Y RADIANTE) === */
+        /* ======== BOTÓN DE ALERTA  ======== */
         #contenedor-alerta-narrador {
             position: absolute;
             top: 40%;
@@ -63,14 +68,12 @@
             font-size: 62.5px; color: #ff073a;  text-transform: uppercase; letter-spacing: 4px; position: relative; animation: glitchEffect 3s infinite;
         }
 
-        /* Efecto de duplicado para el glitch */
         .texto-glitch-alerta::before, .texto-glitch-alerta::after {
             content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
         }
         .texto-glitch-alerta::before { left: 2px; text-shadow: -2px 0 #00ffff; clip: rect(44px, 450px, 56px, 0); animation: glitchAnim-1 5s infinite linear alternate-reverse; }
         .texto-glitch-alerta::after { left: -2px; text-shadow: -2px 0 #ff00ff; clip: rect(85px, 450px, 140px, 0); animation: glitchAnim-2 5s infinite linear alternate-reverse; }
 
-        /* Radiación intensa para el contenedor completo */
         @keyframes destelloEmergenciaRadiante {
             0% { 
                 transform: scale(1); 
@@ -398,16 +401,20 @@
         let preguntasSeleccionadas = [];
 
         function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
-
+        
         function irANarrador() {
             mostrar('pantalla-narrador');
+            document.getElementById('pantalla-narrador').classList.remove('emergencia-activa'); 
             const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
             let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
             let intv = setInterval(() => { 
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
+                    // Muestra el triángulo
                     document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
+                    // ¡ENCIENDE LA ALARMA ROJA GLOBAL!
+                    document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
                 }
             }, 30);
         }
