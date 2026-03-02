@@ -18,97 +18,36 @@
         .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
         .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
 
-        /* Pantalla Narrador base (sin alarma al principio) */
-        #pantalla-narrador { 
-            background: url('fondo (2).png') center/cover; 
-            transition: all 0.5s ease;
-        }
-
-        /* Clase que activaremos con JavaScript para la emergencia */
-        .emergencia-activa {
-            animation: alertaFondoGlobal 1s infinite alternate !important;
-        }
+        #pantalla-narrador { background: url('fondo (2).png') center/cover; transition: all 0.5s ease; }
+        .emergencia-activa { animation: alertaFondoGlobal 1s infinite alternate !important; }
 
         @keyframes alertaFondoGlobal {
-            0% { 
-                box-shadow: inset 0 0 100px rgba(255, 7, 58, 0.4); 
-                background-color: transparent;
-            }
-            100% { 
-                box-shadow: inset 0 0 600px rgba(255, 7, 58, 1), inset 0 0 250px #ff073a; 
-                background-color: rgba(255, 7, 58, 0.6); 
-                background-blend-mode: color-burn; 
-            }
+            0% { box-shadow: inset 0 0 100px rgba(255, 7, 58, 0.4); background-color: transparent; }
+            100% { box-shadow: inset 0 0 600px rgba(255, 7, 58, 1), inset 0 0 250px #ff073a; background-color: rgba(255, 7, 58, 0.6); background-blend-mode: color-burn; }
         }
 
         #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; }
         
-        #caja-narrador { 
-            position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); 
-            width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; 
-            border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px;
-            box-sizing: border-box; overflow-y: hidden; 
-        }
+        #caja-narrador { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px; box-sizing: border-box; overflow-y: hidden; }
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
-        /* === BOTÓN DE ALERTA === */
-        #contenedor-alerta-narrador {
-            position: absolute;
-            top: 40%;
-            margin-top: -1cm; 
-            display: none; 
-            flex-direction: column;
-            align-items: center;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            z-index: 100;
-            padding: 20px;
-            animation: destelloEmergenciaAqualab 1s infinite alternate; 
-        }
-
+        #contenedor-alerta-narrador { position: absolute; top: 40%; margin-top: -1cm; display: none; flex-direction: column; align-items: center; background: transparent; border: none; cursor: pointer; z-index: 100; padding: 20px; animation: destelloEmergenciaAqualab 1s infinite alternate; }
         #contenedor-alerta-narrador:hover { transform: scale(1.05); }
 
-        .triangulo-warning {
-            font-size: 125px; 
-            color: #ff073a;
-            text-shadow: 0 0 30px #ff073a;
-            margin-bottom: -10px;
-        }
-
-        .texto-glitch-alerta {
-            font-size: 62.5px; 
-            color: #ff073a;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            position: relative;
-            text-shadow: 0 0 20px #ff073a; 
-            animation: glitchEffect 3s infinite;
-        }
-
-        .texto-glitch-alerta::before, .texto-glitch-alerta::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
-        }
+        .triangulo-warning { font-size: 125px; color: #ff073a; text-shadow: 0 0 30px #ff073a; margin-bottom: -10px; }
+        .texto-glitch-alerta { font-size: 62.5px; color: #ff073a; text-transform: uppercase; letter-spacing: 4px; position: relative; text-shadow: 0 0 20px #ff073a; animation: glitchEffect 3s infinite; }
+        .texto-glitch-alerta::before, .texto-glitch-alerta::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; }
         .texto-glitch-alerta::before { left: 2px; text-shadow: -2px 0 #00ffff; clip: rect(44px, 450px, 56px, 0); animation: glitchAnim-1 5s infinite linear alternate-reverse; }
         .texto-glitch-alerta::after { left: -2px; text-shadow: -2px 0 #ff00ff; clip: rect(85px, 450px, 140px, 0); animation: glitchAnim-2 5s infinite linear alternate-reverse; }
 
-        @keyframes destelloEmergenciaAqualab {
-            0% { transform: scale(1); text-shadow: 0 0 20px #ff073a; }
-            100% { transform: scale(1.1); text-shadow: 0 0 50px #ff073a, 0 0 100px #ff073a, 0 0 150px #ff073a, 0 0 200px rgba(255, 7, 58, 0.5); }
-        }
-
-        @keyframes glitchEffect {
-            0%, 20%, 40%, 60%, 70%, 90% { opacity: 1; transform: none; }
-            10%, 30%, 50%, 80% { opacity: 0.8; transform: translate(2px, -1px); }
-            75% { opacity: 0.5; transform: translate(-3px, 1px) skewX(10deg); }
-            100% { opacity: 1; }
-        }
+        @keyframes destelloEmergenciaAqualab { 0% { transform: scale(1); text-shadow: 0 0 20px #ff073a; } 100% { transform: scale(1.1); text-shadow: 0 0 50px #ff073a, 0 0 100px #ff073a, 0 0 150px #ff073a, 0 0 200px rgba(255, 7, 58, 0.5); } }
+        @keyframes glitchEffect { 0%, 20%, 40%, 60%, 70%, 90% { opacity: 1; transform: none; } 10%, 30%, 50%, 80% { opacity: 0.8; transform: translate(2px, -1px); } 75% { opacity: 0.5; transform: translate(-3px, 1px) skewX(10deg); } 100% { opacity: 1; } }
         @keyframes glitchAnim-1 { 0% { clip: rect(30px, 9999px, 10px, 0); } 100% { clip: rect(100px, 9999px, 80px, 0); } }
         @keyframes glitchAnim-2 { 0% { clip: rect(70px, 9999px, 50px, 0); } 100% { clip: rect(10px, 9999px, 60px, 0); } }
 
         /* ================= MAPAS Y PANELES ================= */
-        #pantalla-mapa, #pantalla-habitacion, #pantalla-habitacion-2 { background: #001a33; }
+        #pantalla-mapa, #pantalla-habitacion, #pantalla-habitacion-2, #pantalla-habitacion-3 { background: #001a33; }
         .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
         .contenedor-mapa { position: relative; width: 800px; height: 480px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
         
@@ -116,38 +55,36 @@
         .nodo-rojo { background: rgba(255, 7, 58, 0.7); border-color: #ff073a; box-shadow: 0 0 15px #ff073a; animation: pulso 1s infinite; }
         .nodo-verde { background: rgba(57, 255, 20, 0.7); border-color: #39ff14; box-shadow: 0 0 15px #39ff14; }
         .nodo-bloqueado { background: #444; border-color: #666; color: #888; cursor: not-allowed; }
-        
         .nodo-gigante { width: 180px; height: 60px; border-radius: 10px; font-size: 28px; }
 
         @keyframes pulso { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
-        #pantalla-valvula, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final, #pantalla-d, #pantalla-hab2-megareto { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
+        #pantalla-valvula, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final, #pantalla-d, #pantalla-hab2-megareto, #pantalla-hab3-megareto { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
         .panel-azul { background: rgba(0, 43, 77, 0.95); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 520px; text-align: center; backdrop-filter: blur(10px); z-index: 5;}
         
-        .panel-quiz, .panel-c-final, #pantalla-c-mini .panel-azul, .panel-d { width: 750px; }
+        .panel-quiz, .panel-c-final, #pantalla-c-mini .panel-azul, .panel-d, .panel-delta { width: 800px; }
         .panel-c { width: 600px; }
         
         input { font-family: 'VT323'; font-size: 35px; width: 240px; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
-        .btn-ui { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        .btn-ui { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.2s; }
+        .btn-ui:hover { background: #fff; box-shadow: 0 0 15px #fff; }
         .btn-ui:disabled { background: #555; color: #222; cursor: not-allowed; box-shadow: none; }
         
-        .btn-opcion { font-family: 'VT323'; font-size: 24px; background: #002b4d; color: #e6f2ff; border: 2px solid #00ffff; padding: 12px; margin: 8px 0; cursor: pointer; border-radius: 5px; text-align: left; transition: 0.3s; width: 100%; line-height: 1.2; }
-        .btn-opcion:hover { background: #00ffff; color: #000; box-shadow: 0 0 15px #00ffff; }
-        .btn-opcion:disabled { opacity: 0.6; cursor: not-allowed; }
-
         .btn-volver-top { position: absolute; top: 25px; left: 25px; font-family: 'VT323'; font-size: 24px; background: rgba(0, 20, 40, 0.8); color: #00ffff; border: 2px solid #00ffff; padding: 8px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; z-index: 100; transition: 0.3s; backdrop-filter: blur(5px); }
         .btn-volver-top:hover { background: #ff073a; border-color: #ff073a; color: #fff; box-shadow: 0 0 15px #ff073a; }
 
-        /* ESTILOS PUNTO D */
-        .ecuacion-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 30px 0; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border: 1px solid #00ffff; flex-wrap: wrap; }
-        .slot { min-width: 100px; padding: 0 10px; height: 70px; border: 3px dashed #00ffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 255, 0.05); cursor: pointer; transition: 0.3s; }
-        .slot:hover { background: rgba(0, 255, 255, 0.2); }
-        .operador { font-size: 50px; color: #00ffff; }
-        .piezas-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; min-height: 90px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; flex-wrap: wrap;}
-        .pieza { min-width: 80px; padding: 0 15px; height: 66px; background: #002b4d; border: 3px solid #39ff14; color: #39ff14; font-size: 32px; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; user-select: none; transition: 0.2s; }
-        .pieza:hover { transform: scale(1.05); }
-        .pieza.seleccionada { background: #00ffff; color: #000; border-color: #fff; box-shadow: 0 0 20px #00ffff; transform: scale(1.05); }
-        #inputPreguntaD { font-family: 'VT323'; font-size: 30px; width: 85%; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; padding: 10px; outline: none; margin-bottom: 20px;}
+        /* ESTILOS HABITACIÓN 3 (DELTA) - SIMULADOR DE COMPUERTA */
+        .simulador-container { display: flex; justify-content: center; align-items: center; height: 250px; margin: 20px 0; background: rgba(0,0,0,0.6); border: 2px dashed #888; border-radius: 10px; overflow: hidden; position: relative; }
+        .zona-agua { width: 45%; height: 100%; background: rgba(0, 150, 255, 0.4); border-right: 4px solid #00aaff; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;}
+        .flechas-agua { color: #00ffff; font-size: 40px; animation: empujeAgua 1s infinite alternate; font-weight: bold; }
+        
+        .compuerta-fisica { width: 15px; height: 180px; background: #bbb; border-radius: 5px; box-shadow: 0 0 10px #fff; position: absolute; left: 45%; top: 35px; transform-origin: top center; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), background 0.5s; z-index: 2; }
+        
+        .zona-piston { width: 55%; height: 100%; display: flex; align-items: center; position: relative; padding-left: 10px; }
+        .eje-piston { width: 100px; height: 20px; background: #ff073a; border-radius: 3px; box-shadow: 0 0 10px #ff073a; transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1), background 0.5s; transform-origin: left center;}
+        .base-piston { width: 40px; height: 60px; background: #444; border: 2px solid #888; border-radius: 5px; }
+
+        @keyframes empujeAgua { 0% { transform: translateX(-10px); opacity: 0.5; } 100% { transform: translateX(0); opacity: 1; } }
 
         /* ESTILOS HAB 2 (TANQUES) */
         .fase-oculta { display: none; }
@@ -165,7 +102,6 @@
     <div id="pantalla-narrador" class="pantalla">
         <div id="filtro-oscuro"></div>
         <div id="caja-narrador"><img id="foto-narrador" src="chico111.png"><div id="texto-narrador"></div></div>
-        
         <button id="contenedor-alerta-narrador" onclick="irAAlerta()">
             <div class="triangulo-warning">&#9888;</div>
             <span class="texto-glitch-alerta" data-text="SECTOR 11">SECTOR 11</span>
@@ -183,7 +119,7 @@
         <div class="contenedor-mapa" style="background: url('mapa_neon.png') center/contain no-repeat;">
             <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 25%;">ρ</div>
             <div class="nodo nodo-bloqueado" id="main-2" onclick="abrirHabitacion(2)" style="top: 25%; left: 75%;">γ</div>
-            <div class="nodo nodo-bloqueado" id="main-3" style="top: 75%; left: 25%;">Δ</div>
+            <div class="nodo nodo-bloqueado" id="main-3" onclick="abrirHabitacion(3)" style="top: 75%; left: 25%;">Δ</div>
             <div class="nodo nodo-bloqueado" id="main-4" style="top: 75%; left: 75%;">p</div>
         </div>
     </div>
@@ -199,124 +135,8 @@
         <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
     </div>
 
-    <div id="pantalla-valvula" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
-        <div class="panel-azul">
-            <div id="paso-info" style="color:#00ffff; font-size:22px;">---</div>
-            <h2 style="color:#ffffff; margin:10px 0;">SISTEMA DE CALIBRACIÓN</h2>
-            <div id="enunciado" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px;"></div>
-            <input type="number" id="inputRes" step="any" placeholder="0.00">
-            <br>
-            <button class="btn-ui" onclick="verificarRes()">[ VERIFICAR ]</button>
-            <div id="feed" style="margin-top:20px; font-size:24px;"></div>
-        </div>
-    </div>
-
-    <div id="pantalla-quiz" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
-        <div class="panel-azul panel-quiz">
-            <div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO Pr: PREGUNTA 1/3</div>
-            <h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA UD1</h2>
-            <div id="quiz-pregunta" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px; padding: 0 15px;"></div>
-            <div id="quiz-opciones" style="display:flex; flex-direction:column; align-items: center; padding: 0 20px;"></div>
-            <div id="quiz-feed" style="margin-top:20px; font-size:24px; height: 30px;"></div>
-        </div>
-    </div>
-
-    <div id="pantalla-c" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
-        <div class="panel-azul panel-c">
-            <h2 style="color:#ffffff; margin:0 0 10px 0;">EXTRACCIÓN DE DATOS M</h2>
-            <p style="font-size:26px; margin: 5px 0;">Tiradas restantes: <span id="tiradas-ui" style="color:#ff073a; font-weight:bold; text-shadow: 0 0 10px #ff073a;">5</span></p>
-            <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                <div id="pista-ui-1" class="pista-item">1. [ ENCRIPTADO ]</div>
-                <div id="pista-ui-2" class="pista-item">2. [ ENCRIPTADO ]</div>
-                <div id="pista-ui-3" class="pista-item">3. [ ENCRIPTADO ]</div>
-                <div id="pista-ui-4" class="pista-item">4. [ ENCRIPTADO ]</div>
-                <div id="pista-ui-5" class="pista-item" style="border:none;">5. [ ENCRIPTADO ]</div>
-            </div>
-            <button class="btn-ui" id="btn-tirar" onclick="tirarRuletaC()">[ OBTENER PISTA ]</button>
-            <br>
-            <button class="btn-ui" onclick="faseFinalC()" style="margin-top: 15px; background: #333; color: white;">[ EVALUAR DATOS ]</button>
-        </div>
-    </div>
-
-    <div id="pantalla-c-mini" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR SECUENCIA ]</button>
-        <div class="panel-azul">
-            <h2 style="color:#ffffff;">DESAFÍO DE DESENCRIPTACIÓN</h2>
-            <div id="enunciado-mini-c" style="font-size: 28px; color:#00ffff; margin: 20px 0;"></div>
-            <div id="zona-input-mini" style="display:none;">
-                <input type="number" id="inputResMiniC" step="any" placeholder="Resultado">
-                <br>
-                <button class="btn-ui" onclick="verificarMiniCNumerico()">[ VALIDAR ]</button>
-            </div>
-            <div id="zona-botones-mini" style="display:none; flex-direction:column; align-items: center; padding: 0 20px;"></div>
-            <div id="feed-mini-c" style="margin-top:20px; font-size:24px; height: 30px;"></div>
-        </div>
-    </div>
-
-    <div id="pantalla-c-final" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
-        <div class="panel-azul panel-c-final">
-            <h2 style="color:#ffffff;">EVALUACIÓN FINAL M</h2>
-            <div id="resumen-pistas-c" style="text-align: left; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 24px; color:#39ff14;"></div>
-            <div id="enunciado-final-c" style="font-size: 28px; color:#00ffff; margin-bottom: 20px;"></div>
-            <div id="zona-input-c">
-                <input type="number" id="inputResFinalC" step="any" placeholder="Resultado">
-                <br>
-                <button class="btn-ui" onclick="verificarFinalC()">[ VERIFICAR CÁLCULO ]</button>
-            </div>
-            <div id="feed-final-c" style="margin-top:20px; font-size:24px; height:30px;"></div>
-        </div>
-    </div>
-
-    <div id="pantalla-d" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
-        <div class="panel-azul panel-d">
-            <h2 style="color:#ffffff;">RESTAURACIÓN DE CÓDIGO FUENTE</h2>
-            
-            <div id="fase-puzle-d">
-                <p style="font-size: 26px; color:#e6f2ff; margin: 10px 0;">
-                    El sistema ha perdido su <b>Ecuación Diferencial fundamental</b> de fluidos.<br>
-                    <span style="color:#00ffff;">Haz clic en un término y asígnalo al hueco correcto.</span>
-                </p>
-                
-                <div class="ecuacion-container">
-                    <div class="slot" id="slot-1" onclick="clickSlot(this)"></div>
-                    <span class="operador"> = </span>
-                    <div class="slot" id="slot-2" onclick="clickSlot(this)"></div>
-                    <span class="operador"> - </span>
-                    <div class="slot" id="slot-3" onclick="clickSlot(this)"></div>
-                </div>
-
-                <div class="piezas-container" id="caja-piezas">
-                    <div class="pieza" id="p-dt" onclick="seleccionarPieza(this)">ρ(dV/dt)</div>
-                    <div class="pieza" id="p-pg" onclick="seleccionarPieza(this)">ρg</div>
-                    <div class="pieza" id="p-gradP" onclick="seleccionarPieza(this)">∇P</div>
-                    <div class="pieza" id="p-mu" onclick="seleccionarPieza(this)" title="Distractor: Viscosidad">μ∇²V</div>
-                    <div class="pieza" id="p-div" onclick="seleccionarPieza(this)" title="Distractor: Divergencia">∇·V</div>
-                </div>
-
-                <button class="btn-ui" onclick="verificarPuzzleD()">[ COMPILAR ECUACIÓN ]</button>
-            </div>
-
-            <div id="fase-pregunta-d" style="display:none;">
-                <p style="font-size: 28px; color:#39ff14; margin: 10px 0; font-weight:bold;">¡SINTAXIS RESTAURADA CON ÉXITO!</p>
-                
-                <div style="font-size: 38px; color:#ffffff; background: rgba(0,0,0,0.5); padding: 15px; border-radius:10px; border:2px solid #39ff14; margin:20px 0;">
-                    ρ(dV/dt) = ρg - ∇P
-                </div>
-                
-                <p style="font-size: 28px; color:#e6f2ff;">¿Qué principio o ecuación representa exactamente esta fórmula diferencial?</p>
-                <input type="text" id="inputPreguntaD" placeholder="Escribe aquí el nombre...">
-                <br>
-                <button class="btn-ui" onclick="verificarPreguntaD()">[ IDENTIFICAR FÓRMULA ]</button>
-            </div>
-
-            <div id="feed-d" style="margin-top:20px; font-size:26px; height:30px;"></div>
-        </div>
-    </div>
+    <div id="pantalla-valvula" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER ]</button><div class="panel-azul"><div id="paso-info" style="color:#00ffff; font-size:22px;">---</div><h2 style="color:#ffffff;">SISTEMA DE CALIBRACIÓN</h2><div id="enunciado" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px;"></div><input type="number" id="inputRes" step="any"><br><button class="btn-ui" onclick="verificarRes()">[ VERIFICAR ]</button><div id="feed" style="margin-top:20px; font-size:24px;"></div></div></div>
+    <div id="pantalla-quiz" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER ]</button><div class="panel-azul panel-quiz"><div id="quiz-paso" style="color:#00ffff; font-size:22px;">PREGUNTA</div><h2 style="color:#ffffff;">VERIFICACIÓN TEÓRICA</h2><div id="quiz-pregunta" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px;"></div><div id="quiz-opciones" style="display:flex; flex-direction:column; align-items: center;"></div><div id="quiz-feed" style="margin-top:20px; font-size:24px; height: 30px;"></div></div></div>
 
     <div id="pantalla-habitacion-2" class="pantalla">
         <h1 class="titulo-mapa">SECTOR γ: TANQUES DE ALMACENAMIENTO</h1>
@@ -330,99 +150,83 @@
         <button class="btn-volver-top" onclick="abortarMegaReto()">[ ◄ ABORTAR MISIÓN ]</button>
         <div class="panel-azul" style="width: 750px;">
             <div id="progreso-hab2" style="font-size: 22px; color: #888; margin-bottom: 10px; letter-spacing: 5px;">
-                <span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- 
-                <span id="indicador-f2">[ FASE 2 ]</span> --- 
-                <span id="indicador-f3">[ FASE 3 ]</span>
+                <span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- <span id="indicador-f2">[ FASE 2 ]</span> --- <span id="indicador-f3">[ FASE 3 ]</span>
             </div>
-
             <div id="fase-hab2-1" class="fase-activa">
                 <h2 style="color:#ffffff;">CALIBRACIÓN MANOMÉTRICA</h2>
-                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
-                    El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>
-                    Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>
-                    Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>
-                    Introduce la Presión Manométrica <b>P₁</b> (en Pascales) en la tubería principal.
-                </p>
-                <input type="number" id="input-h2-f1" placeholder="P₁ (Pa)">
-                <br>
-                <button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button>
+                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>Introduce la Presión Manométrica <b>P₁</b> (en Pascales).</p>
+                <input type="number" id="input-h2-f1" placeholder="P₁ (Pa)"><br><button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button>
             </div>
-
             <div id="fase-hab2-2" class="fase-oculta">
                 <h2 style="color:#ffffff;">ESTABILIZACIÓN DE CAUDAL</h2>
-                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
-                    Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>
-                    La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>
-                    Por el principio de continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>
-                    Aplica la Ecuación de Bernoulli horizontal y calcula la velocidad de entrada <b>V₁</b> (m/s).
-                </p>
-                <input type="number" id="input-h2-f2" placeholder="V₁ (m/s)">
-                <br>
-                <button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button>
+                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>Por continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>Aplica Bernoulli y calcula <b>V₁</b> (m/s).</p>
+                <input type="number" id="input-h2-f2" placeholder="V₁ (m/s)"><br><button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button>
             </div>
-
             <div id="fase-hab2-3" class="fase-oculta">
                 <h2 style="color:#ff073a;">¡ALERTA DE DESBORDAMIENTO!</h2>
                 <div style="display:flex; justify-content: center; gap: 40px; align-items: center; margin: 20px 0;">
-                    <div class="tanque-container">
-                        <div id="agua-visual" class="agua-tanque" style="height: 100%;"></div>
-                        <div class="fuga-tanque"></div>
-                    </div>
+                    <div class="tanque-container"><div id="agua-visual" class="agua-tanque" style="height: 100%;"></div><div class="fuga-tanque"></div></div>
                     <div style="text-align:left; max-width: 350px;">
-                        <p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p>
-                        
-                        <p style="font-size: 19px; color:#39ff14; background: rgba(57, 255, 20, 0.1); padding: 10px; border-left: 3px solid #39ff14; margin-bottom: 15px;">
-                            [SISTEMA DE AYUDA]: Aplica el <b>Teorema de Torricelli</b>. Recuerda que la gravedad (<b>g</b>) en esta instalación es de <b>10 m/s²</b>.
-                        </p>
-
-                        <div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                            <span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span>
-                        </div>
-                        <button id="btn-escanear" class="btn-ui" style="font-size:22px; padding: 10px;" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button>
-                        <div id="zona-disparo" style="display:none; margin-top: 15px;">
-                            <input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;">
-                            <button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button>
-                        </div>
+                        <p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p>
+                        <p style="font-size: 19px; color:#39ff14; background: rgba(57, 255, 20, 0.1); padding: 10px; border-left: 3px solid #39ff14; margin-bottom: 15px;">[SISTEMA DE AYUDA]: Aplica el <b>Teorema de Torricelli</b>. Recuerda que la gravedad (<b>g</b>) en esta instalación es de <b>10 m/s²</b>.</p>
+                        <div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span></div>
+                        <button id="btn-escanear" class="btn-ui" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button>
+                        <div id="zona-disparo" style="display:none; margin-top: 15px;"><input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;"><button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button></div>
                     </div>
                 </div>
             </div>
-
             <div id="feed-hab2" style="margin-top:20px; font-size:26px; height:30px;"></div>
         </div>
     </div>
+
+    <div id="pantalla-habitacion-3" class="pantalla">
+        <h1 class="titulo-mapa">SECTOR Δ: ESCLUSAS SUBMARINAS</h1>
+        <div class="contenedor-mapa" style="background: rgba(255, 165, 0, 0.05); border-style: dashed; border-color: #ffa500;">
+            <div class="nodo nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ CALIBRAR COMPUERTA ]</div>
+        </div>
+        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
+    </div>
+
+    <div id="pantalla-hab3-megareto" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(3)">[ ◄ ABORTAR MISIÓN ]</button>
+        <div class="panel-azul panel-delta">
+            <h2 style="color:#ffffff;">SISTEMA HIDRÁULICO DE EMERGENCIA</h2>
+            <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
+                Fallo en actuadores principales. Es necesario inyectar presión manual exacta para compensar el empuje hidrostático del agua exterior y no colapsar la compuerta rectangular.
+                <br><br>
+                <span style="color:#00ffff;">DATOS DE INGENIERÍA:</span><br>
+                - Anchura compuerta (b): <b>2 m</b> | Altura compuerta (h): <b>3 m</b><br>
+                - Borde superior sumergido a <b>4 m</b> de profundidad.<br>
+                - Agua externa (<span style="color:#00ffff;">ρ</span>) = 1000 kg/m³ | Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>
+                Calcula la <b>Fuerza Hidrostática Resultante</b> y aplícala al pistón en <b>kN</b> (KiloNewtons).
+            </p>
+
+            <div class="simulador-container">
+                <div class="zona-agua"><span class="flechas-agua">►►</span></div>
+                <div class="compuerta-fisica" id="compuerta-ui"></div>
+                <div class="zona-piston">
+                    <div class="eje-piston" id="piston-ui"></div>
+                    <div class="base-piston"></div>
+                </div>
+            </div>
+
+            <input type="number" id="input-h3-fuerza" placeholder="Fuerza (kN)" style="width: 280px;">
+            <br>
+            <button class="btn-ui" id="btn-delta" onclick="simularFuerzaDelta()">[ APLICAR FUERZA ]</button>
+            <div id="feed-hab3" style="margin-top:20px; font-size:26px; height:30px;"></div>
+        </div>
+    </div>
+
 
     <script>
         let vAct = 1; let tAct = 0; let subFase = 1; 
         let valorBasePa = 0; let sol = 0;
         let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false] };
 
-        // Variables C
-        let tiradasC = 5; let pistasC = 0; let miniSolC = 0; let finalSolC = 0;
-        const datosPistasC = ["Caudal Q = 20 m³/s", "Área de entrada A1 = 4 m²", "Área de salida A2 = 2 m²", "Densidad ρ = 1000 kg/m³", "Tiempo de flujo t = 10 s"];
-        
-        // Variables D
-        let piezaSel = null;
-
-        const bdMiniTeoria = [
-            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Re = (ρ &middot; v &middot; D) / μ</span>", opciones: [{t: "Número de Reynolds", c: true}, {t: "Ecuación de Bernoulli", c: false}, {t: "Número de Froude", c: false}] },
-            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton", c: false}] },
-            { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
-            { q: "Si las líneas de corriente son paralelas y rectas en todo momento, el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
-            { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
-        ];
-
-        const bdTeoria = [
-            { q: "¿Cuál es la característica principal que define a un fluido?", opciones: [ { t: "Se deforma continuamente bajo un esfuerzo cortante.", c: true }, { t: "Su densidad permanece siempre constante.", c: false }, { t: "Resiste fuerzas de tracción sin alterar su forma.", c: false }]},
-            { q: "¿En qué consiste el enfoque Euleriano (Euler) en cinemática?", opciones: [ { t: "Observar el flujo desde un volumen de control estático.", c: true }, { t: "Seguir la trayectoria de una partícula individual.", c: false }, { t: "Promediar las velocidades en un instante inicial.", c: false }]},
-            { q: "¿Qué principio físico universal es la base de la Ecuación de Continuidad?", opciones: [ { t: "El principio de conservación de la masa.", c: true }, { t: "La conservación de la cantidad de movimiento.", c: false }, { t: "La Segunda Ley de Newton.", c: false }]}
-        ];
-        let preguntasSeleccionadas = [];
-
         function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
 
         function irANarrador() {
             mostrar('pantalla-narrador');
-            // Quitar clase de emergencia si reinician
             document.getElementById('pantalla-narrador').classList.remove('emergencia-activa'); 
 
             const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
@@ -431,10 +235,8 @@
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
-                    
                     setTimeout(() => {
                         document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
-                        // Activar alerta visual de emergencia
                         document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
                     }, 2500);
                 }
@@ -443,7 +245,7 @@
 
         function irAAlerta() {
             mostrar('pantalla-alerta');
-            const hTxt = "SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEstabilice los puntos de control Re, Pr, M y Pe.";
+            const hTxt = "SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEstabilice los puntos de control ρ, γ, Δ y p.";
             let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
             let intv = setInterval(() => { caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); i++; if(i >= hTxt.length){ clearInterval(intv); document.getElementById('btn-start').style.display="block"; }}, 25);
         }
@@ -453,166 +255,9 @@
             if(n>1 && !progreso[n-1].every(x=>x===true)) return; 
             vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
+            else if (n === 3) mostrar('pantalla-habitacion-3');
             else mostrar('pantalla-habitacion'); 
             actualizarMapas(); 
-        }
-
-        function irAProblema(t) {
-            tAct = t; subFase = 1;
-            if (t === 1) { valorBasePa = Math.floor(Math.random() * 900) + 100; mostrar('pantalla-valvula'); generarRetoA(); } 
-            else if (t === 2) { preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); mostrar('pantalla-quiz'); generarRetoB(); } 
-            else if (t === 3) { iniciarRetoC(); } 
-            else if (t === 4) { generarRetoD(); mostrar('pantalla-d'); }
-        }
-
-        /* ===== PUNTO Re (A) ===== */
-        function generarRetoA() {
-            const env = document.getElementById("enunciado"); document.getElementById("inputRes").value = ""; document.getElementById("feed").innerText = "";
-            document.getElementById("paso-info").innerText = `PUNTO Re: PASO ${subFase}/3`;
-            if (subFase === 1) { sol = valorBasePa / 100000; env.innerHTML = `Presión detectada: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`; } 
-            else if (subFase === 2) { sol = valorBasePa / 100; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>mbar</b>`; } 
-            else { sol = valorBasePa / 1000000; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>N/mm²</b>`; }
-        }
-
-        function verificarRes() {
-            const res = parseFloat(document.getElementById("inputRes").value); const feed = document.getElementById("feed");
-            if (Math.abs(res - sol) < 0.000001) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ACCESO CONCEDIDO";
-                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoA(); } else { progreso[vAct][0] = true; abrirHabitacion(vAct); } }, 800);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; generarRetoA(); }, 1200); }
-        }
-
-        /* ===== PUNTO Pr (B) ===== */
-        function generarRetoB() {
-            const preg = preguntasSeleccionadas[subFase - 1]; document.getElementById('quiz-paso').innerText = `PUNTO Pr: PREGUNTA ${subFase}/3`;
-            document.getElementById('quiz-pregunta').innerHTML = preg.q; document.getElementById('quiz-feed').innerText = "";
-            const opcionesDiv = document.getElementById('quiz-opciones'); opcionesDiv.innerHTML = "";
-            let opcionesMezcladas = [...preg.opciones].sort(() => 0.5 - Math.random());
-            opcionesMezcladas.forEach(opt => { let btn = document.createElement('button'); btn.className = "btn-opcion"; btn.innerText = opt.t; btn.onclick = () => verificarQuiz(opt.c); opcionesDiv.appendChild(btn); });
-        }
-
-        function verificarQuiz(esCorrecta) {
-            const feed = document.getElementById('quiz-feed'); document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
-            if (esCorrecta) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
-                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { progreso[vAct][1] = true; abrirHabitacion(vAct); } }, 800);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
-        }
-
-        /* ===== PUNTO M (C) ===== */
-        function iniciarRetoC() {
-            tiradasC = 5; pistasC = 0; document.getElementById('tiradas-ui').innerText = tiradasC; document.getElementById('btn-tirar').disabled = false;
-            for(let i=1; i<=5; i++) { let p = document.getElementById(`pista-ui-${i}`); p.innerHTML = `${i}. [ ENCRIPTADO ]`; p.style.color = "#888"; } mostrar('pantalla-c');
-        }
-
-        function tirarRuletaC() {
-            if(tiradasC <= 0) return; let env = document.getElementById("enunciado-mini-c"); let zInput = document.getElementById("zona-input-mini"); let zBotones = document.getElementById("zona-botones-mini"); document.getElementById("feed-mini-c").innerText = "";
-            if (Math.random() < 0.5) {
-                zInput.style.display = "block"; zBotones.style.display = "none"; document.getElementById("inputResMiniC").value = "";
-                let tipo = Math.floor(Math.random() * 4); let val = Math.floor(Math.random() * 9) + 1;
-                if(tipo===0){env.innerHTML=`Pasa <b>${val} m³</b> a <b>Litros</b>`; miniSolC=val*1000;}else if(tipo===1){env.innerHTML=`Pasa <b>${val*1000} L</b> a <b>m³</b>`; miniSolC=val;}else if(tipo===2){env.innerHTML=`Pasa <b>${val} m²</b> a <b>cm²</b>`; miniSolC=val*10000;}else{env.innerHTML=`Pasa <b>${val} horas</b> a <b>segundos</b>`; miniSolC=val*3600;}
-            } else {
-                zInput.style.display = "none"; zBotones.style.display = "flex"; zBotones.innerHTML = "";
-                let preg = bdMiniTeoria[Math.floor(Math.random() * bdMiniTeoria.length)]; env.innerHTML = preg.q;
-                let opc = [...preg.opciones].sort(() => 0.5 - Math.random());
-                opc.forEach(opt => { let btn = document.createElement('button'); btn.className = "btn-opcion"; btn.innerHTML = opt.t; btn.onclick = () => procesarMiniC(opt.c); zBotones.appendChild(btn); });
-            } mostrar('pantalla-c-mini');
-        }
-
-        function verificarMiniCNumerico() { procesarMiniC(Math.abs(parseFloat(document.getElementById("inputResMiniC").value) - miniSolC) < 0.000001); }
-
-        function procesarMiniC(esCorrecto) {
-            const feed = document.getElementById("feed-mini-c"); tiradasC--; document.querySelectorAll('#zona-botones-mini .btn-opcion').forEach(b => b.disabled = true);
-            if(esCorrecto) {
-                pistasC++; feed.style.color = "#39ff14"; feed.innerText = "✓ DESENCRIPTADO";
-                setTimeout(() => { document.getElementById(`pista-ui-${pistasC}`).innerHTML = `${pistasC}. <span style="color:#39ff14;">${datosPistasC[pistasC-1]}</span>`; document.getElementById('tiradas-ui').innerText = tiradasC; if(tiradasC === 0) document.getElementById('btn-tirar').disabled = true; mostrar('pantalla-c'); }, 1200);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { document.getElementById('tiradas-ui').innerText = tiradasC; if(tiradasC === 0) document.getElementById('btn-tirar').disabled = true; mostrar('pantalla-c'); }, 1200); }
-        }
-
-        function faseFinalC() {
-            mostrar('pantalla-c-final'); document.getElementById("inputResFinalC").value = ""; document.getElementById("feed-final-c").innerText = "";
-            let env = document.getElementById("enunciado-final-c"); let resumenDiv = document.getElementById("resumen-pistas-c");
-            if(pistasC === 0) { resumenDiv.innerHTML = "<span style='color:#ff073a;'>ERROR: 0 DATOS OBTENIDOS.</span>"; env.innerHTML = "Reinicio de sistema..."; document.getElementById("zona-input-c").style.display = "none"; setTimeout(iniciarRetoC, 3000); return; }
-            document.getElementById("zona-input-c").style.display = "block"; let resText = "DATOS RECUPERADOS:<br>"; for(let i=0; i<pistasC; i++) resText += "• " + datosPistasC[i] + "<br>"; resumenDiv.innerHTML = resText;
-            if(pistasC===1){ env.innerHTML="NIVEL 1: Si Q = 20 m³/s, ¿Qué volumen (m³) pasará en 1s?"; finalSolC=20; }
-            else if(pistasC===2){ env.innerHTML="NIVEL 2: Calcula la velocidad V1 (m/s)."; finalSolC=5; }
-            else if(pistasC===3){ env.innerHTML="NIVEL 3: Calcula la velocidad V2 (m/s)."; finalSolC=10; }
-            else if(pistasC===4){ env.innerHTML="NIVEL 4: Calcula el Caudal Másico de salida (kg/s)."; finalSolC=20000; }
-            else if(pistasC===5){ env.innerHTML="NIVEL MAESTRO: Calcula la Masa Total (kg) trasladada."; finalSolC=200000; }
-        }
-
-        function verificarFinalC() {
-            if(parseFloat(document.getElementById("inputResFinalC").value) === finalSolC) {
-                document.getElementById("feed-final-c").style.color = "#39ff14"; document.getElementById("feed-final-c").innerText = "✓ PUNTO M ESTABILIZADO"; setTimeout(() => { progreso[vAct][2] = true; abrirHabitacion(vAct); }, 1200);
-            } else { document.getElementById("feed-final-c").style.color = "#ff073a"; document.getElementById("feed-final-c").innerText = "✗ INCORRECTO. REINICIANDO..."; setTimeout(iniciarRetoC, 2000); }
-        }
-
-        /* ===== PUNTO Pe (D) ===== */
-        function generarRetoD() {
-            document.getElementById("fase-puzle-d").style.display = "block";
-            document.getElementById("fase-pregunta-d").style.display = "none";
-            document.getElementById("feed-d").innerText = "";
-            document.getElementById("inputPreguntaD").value = "";
-            
-            const caja = document.getElementById("caja-piezas");
-            ["p-dt", "p-pg", "p-gradP", "p-mu", "p-div"].forEach(id => {
-                let p = document.getElementById(id);
-                if(p) { p.classList.remove("seleccionada"); caja.appendChild(p); }
-            });
-            piezaSel = null;
-        }
-
-        function seleccionarPieza(elemento) {
-            if(elemento.parentElement.classList.contains('slot')) {
-                document.getElementById('caja-piezas').appendChild(elemento);
-                if(piezaSel === elemento) { piezaSel.classList.remove('seleccionada'); piezaSel = null; }
-                return;
-            }
-            if(piezaSel) piezaSel.classList.remove('seleccionada');
-            piezaSel = elemento; piezaSel.classList.add('seleccionada');
-        }
-
-        function clickSlot(slot) {
-            if(piezaSel && slot.children.length === 0) { slot.appendChild(piezaSel); piezaSel.classList.remove('seleccionada'); piezaSel = null; } 
-            else if (slot.children.length > 0 && !piezaSel) { document.getElementById('caja-piezas').appendChild(slot.firstChild); }
-        }
-
-        function verificarPuzzleD() {
-            const feed = document.getElementById("feed-d");
-            const s1 = document.getElementById("slot-1").firstChild?.id;
-            const s2 = document.getElementById("slot-2").firstChild?.id;
-            const s3 = document.getElementById("slot-3").firstChild?.id;
-
-            if (!s1 || !s2 || !s3) { feed.style.color = "#ff073a"; feed.innerText = "✗ FALTAN TÉRMINOS POR ASIGNAR"; return; }
-
-            if (s1 === "p-dt" && s2 === "p-pg" && s3 === "p-gradP") {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ SINTAXIS MATEMÁTICA CORRECTA";
-                setTimeout(() => {
-                    document.getElementById("fase-puzle-d").style.display = "none";
-                    document.getElementById("fase-pregunta-d").style.display = "block";
-                    feed.innerText = "";
-                }, 1500);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ LA ECUACIÓN DIFERENCIAL ES INCORRECTA"; }
-        }
-
-        function verificarPreguntaD() {
-            const feed = document.getElementById("feed-d");
-            const res = document.getElementById("inputPreguntaD").value.toLowerCase();
-            const resNorm = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-
-            if (resNorm.includes("cantidad de movimiento") || resNorm.includes("conservacion del momento") || resNorm.includes("navier stokes") || resNorm.includes("euler")) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡SECTOR 11 ESTABILIZADO POR COMPLETO!";
-                setTimeout(() => {
-                    progreso[vAct][3] = true; 
-                    abrirHabitacion(vAct);
-                    if(progreso[1].every(x => x === true)) {
-                        setTimeout(() => { alert("¡ENHORABUENA! LA COMPUERTA DEL SECTOR γ HA SIDO DESBLOQUEADA."); }, 500);
-                    }
-                }, 2000);
-            } else {
-                feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR DE IDENTIFICACIÓN";
-                setTimeout(() => { feed.innerText = ""; }, 2000);
-            }
         }
 
         /* ===== ACTUALIZACIÓN DE MAPAS ===== */
@@ -624,169 +269,98 @@
                 else if(i === 1 || progreso[i-1].every(x => x === true)) { n.className = "nodo nodo-rojo"; n.onclick = () => abrirHabitacion(i); }
             }
             
-            for(let i=1; i<=4; i++){
-                let n = document.getElementById(`sub-${i}`);
-                if(n) {
-                    if(progreso[vAct][i-1]) { n.className = "nodo nodo-verde"; n.onclick = null; } 
-                    else { n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i); }
-                }
-            }
-
-            // Lógica mapa Habitación 2
+            // Habitación 2 (Tanques)
             let n2 = document.getElementById('sub-2-1');
             if(n2) {
-                if(progreso[2][0]) { 
-                    n2.className = "nodo nodo-verde nodo-gigante"; n2.innerText = "[ ESTABLE ]"; n2.onclick = null; 
-                } else { 
-                    n2.className = "nodo nodo-rojo nodo-gigante"; n2.innerText = "[ INICIAR ]"; n2.onclick = iniciarMegaRetoHab2; 
+                if(progreso[2][0]) { n2.className = "nodo nodo-verde nodo-gigante"; n2.innerText = "[ ESTABLE ]"; n2.onclick = null; } 
+                else { n2.className = "nodo nodo-rojo nodo-gigante"; n2.innerText = "[ INICIAR ]"; n2.onclick = iniciarMegaRetoHab2; }
+            }
+
+            // Habitación 3 (Esclusas Delta)
+            let n3 = document.getElementById('sub-3-1');
+            if(n3) {
+                if(progreso[3][0]) { 
+                    n3.className = "nodo nodo-verde nodo-gigante"; n3.innerText = "[ SELLADA ]"; n3.style.borderColor = "#39ff14"; n3.style.color = "#39ff14"; n3.style.boxShadow = "0 0 15px #39ff14"; n3.onclick = null; 
+                } 
+                else { 
+                    n3.className = "nodo nodo-rojo nodo-gigante"; n3.innerText = "[ CALIBRAR ]"; n3.style.borderColor = "#ffa500"; n3.style.color = "#ffa500"; n3.style.boxShadow = "0 0 15px #ffa500"; n3.onclick = iniciarRetoDelta; 
                 }
             }
         }
 
-        /* ===== HABITACIÓN 2 (MEGA-RETO CON REINTENTOS) ===== */
-        let faseHab2 = 1;
-        let tankInterval = null;
-        let escanerTimeout = null;
-        let tankH = 25.0; 
-        let alturasClave = [20.0, 16.2, 12.8, 11.25, 9.8, 7.2, 5.0];
-        let alturaActualEscaneada = 0;
-        let vCorrectaF3 = 0;
+        /* ===== LÓGICA HABITACIÓN 2 (MEGA-RETO) - RESUMIDA AQUÍ ===== */
+        let tankInterval = null; let escanerTimeout = null; let tankH = 25.0; let vCorrectaF3 = 0; let alturasClave = [20.0, 16.2, 12.8, 11.25, 9.8, 7.2, 5.0];
+        function iniciarMegaRetoHab2() { document.getElementById('fase-hab2-1').className = "fase-activa"; document.getElementById('fase-hab2-2').className = "fase-oculta"; document.getElementById('fase-hab2-3').className = "fase-oculta"; document.getElementById('feed-hab2').innerText = ""; mostrar('pantalla-hab2-megareto'); }
+        function abortarMegaReto() { clearInterval(tankInterval); clearTimeout(escanerTimeout); abrirHabitacion(2); }
+        function validarH2F1() { const r = parseFloat(document.getElementById("input-h2-f1").value); if(r===50000){ setTimeout(()=>{document.getElementById('fase-hab2-1').className="fase-oculta"; document.getElementById('fase-hab2-2').className="fase-activa"; document.getElementById('input-h2-f2').value="";},1000); } }
+        function validarH2F2() { const r = parseFloat(document.getElementById("input-h2-f2").value); if(r===4){ setTimeout(()=>{document.getElementById('fase-hab2-2').className="fase-oculta"; document.getElementById('fase-hab2-3').className="fase-activa"; iniciarDrenajeTanque();},1000); } }
+        function iniciarDrenajeTanque() { tankH = 22.0; document.getElementById("btn-escanear").style.display = "inline-block"; document.getElementById("zona-disparo").style.display = "none"; clearInterval(tankInterval); tankInterval = setInterval(() => { tankH -= 0.2; if(tankH < 3) tankH = 22.0; document.getElementById("agua-visual").style.height = `${(tankH / 25.0) * 100}%`; }, 300); }
+        function escanearNivel() { let hSnap = alturasClave.find(h => h <= tankH) || 5.0; vCorrectaF3 = Math.sqrt(2 * 10 * hSnap); clearInterval(tankInterval); document.getElementById("btn-escanear").style.display = "none"; document.getElementById("zona-disparo").style.display = "block"; document.getElementById("txt-escaner").innerText = "ACTIVO"; }
+        function validarH2F3() { const r = parseFloat(document.getElementById("input-h2-f3").value); if(r === vCorrectaF3) { progreso[2] = [true,true,true,true]; alert("¡Sector γ Salvado!"); irAMapa(); } else { iniciarDrenajeTanque(); } }
 
-        function iniciarMegaRetoHab2() {
-            faseHab2 = 1;
-            document.getElementById('fase-hab2-1').className = "fase-activa";
-            document.getElementById('fase-hab2-2').className = "fase-oculta";
-            document.getElementById('fase-hab2-3').className = "fase-oculta";
-            document.getElementById('indicador-f1').style.color = "#00ffff";
-            document.getElementById('indicador-f2').style.color = "#888";
-            document.getElementById('indicador-f3').style.color = "#888";
-            document.getElementById('feed-hab2').innerText = "";
-            document.getElementById('input-h2-f1').value = "";
-            mostrar('pantalla-hab2-megareto');
+        /* ===== NUEVA LÓGICA HABITACIÓN 3 (SECTOR DELTA) ===== */
+        let fuerzaCorrectaDelta = 330; // 330 kN (Area=6, hcg=5.5 -> 1000*10*5.5*6 = 330,000 N)
+
+        function iniciarRetoDelta() {
+            document.getElementById('input-h3-fuerza').value = "";
+            document.getElementById('feed-hab3').innerText = "";
+            document.getElementById('compuerta-ui').style.transform = "rotate(0deg)";
+            document.getElementById('compuerta-ui').style.background = "#bbb";
+            document.getElementById('piston-ui').style.width = "100px";
+            document.getElementById('piston-ui').style.background = "#ff073a";
+            document.getElementById('btn-delta').disabled = false;
+            mostrar('pantalla-hab3-megareto');
         }
 
-        function abortarMegaReto() {
-            clearInterval(tankInterval);
-            clearTimeout(escanerTimeout);
-            abrirHabitacion(2);
-        }
-
-        function validarH2F1() {
-            const res = parseFloat(document.getElementById("input-h2-f1").value);
-            const feed = document.getElementById("feed-hab2");
-            if(res === 50000) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CALIBRADA";
-                setTimeout(() => {
-                    document.getElementById('fase-hab2-1').className = "fase-oculta";
-                    document.getElementById('fase-hab2-2').className = "fase-activa";
-                    document.getElementById('indicador-f2').style.color = "#00ffff";
-                    feed.innerText = "";
-                    document.getElementById('input-h2-f2').value = "";
-                }, 1500);
-            } else { 
-                feed.style.color = "#ff073a"; 
-                feed.innerText = "✗ INCORRECTO. REVISA EL CÁLCULO."; 
-                setTimeout(() => {
-                    feed.innerText = "";
-                    document.getElementById('input-h2-f1').value = "";
-                }, 1500);
-            }
-        }
-
-        function validarH2F2() {
-            const res = parseFloat(document.getElementById("input-h2-f2").value);
-            const feed = document.getElementById("feed-hab2");
-            if(res === 4) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ CAUDAL ESTABILIZADO";
-                setTimeout(() => {
-                    document.getElementById('fase-hab2-2').className = "fase-oculta";
-                    document.getElementById('fase-hab2-3').className = "fase-activa";
-                    document.getElementById('indicador-f3').style.color = "#00ffff";
-                    feed.innerText = "";
-                    iniciarDrenajeTanque();
-                }, 1500);
-            } else { 
-                feed.style.color = "#ff073a"; 
-                feed.innerText = "✗ INCORRECTO. REVISA BERNOULLI."; 
-                setTimeout(() => {
-                    feed.innerText = "";
-                    document.getElementById('input-h2-f2').value = "";
-                }, 1500);
-            }
-        }
-
-        function iniciarDrenajeTanque() {
-            tankH = 22.0;
-            document.getElementById("txt-escaner").innerText = "EN ESPERA";
-            document.getElementById("txt-escaner").style.color = "#fff";
-            document.getElementById("btn-escanear").style.display = "inline-block";
-            document.getElementById("zona-disparo").style.display = "none";
+        function simularFuerzaDelta() {
+            let valInput = document.getElementById('input-h3-fuerza').value;
+            if(!valInput) return;
+            let fuerzaUsr = parseFloat(valInput);
             
-            clearInterval(tankInterval);
-            tankInterval = setInterval(() => {
-                tankH -= 0.2; 
-                if(tankH < 3) tankH = 22.0; 
-                let porcentaje = (tankH / 25.0) * 100;
-                document.getElementById("agua-visual").style.height = `${porcentaje}%`;
-            }, 300);
-        }
+            let compuerta = document.getElementById('compuerta-ui');
+            let piston = document.getElementById('piston-ui');
+            let feed = document.getElementById('feed-hab3');
+            let btn = document.getElementById('btn-delta');
 
-        function escanearNivel() {
-            let hSnap = alturasClave.find(h => h <= tankH);
-            if(!hSnap) hSnap = 5.0; 
-            alturaActualEscaneada = hSnap;
-            vCorrectaF3 = Math.sqrt(2 * 10 * hSnap); 
+            btn.disabled = true;
 
-            clearInterval(tankInterval);
-            
-            document.getElementById("txt-escaner").innerHTML = `<b>h = ${hSnap} m</b><br><span style="font-size:16px; color:#ff073a;">TIEMPO DE VENTANA: 12s</span>`;
-            document.getElementById("txt-escaner").style.color = "#39ff14";
-            document.getElementById("btn-escanear").style.display = "none";
-            document.getElementById("zona-disparo").style.display = "block";
-            document.getElementById("input-h2-f3").value = "";
-            document.getElementById("feed-hab2").innerText = "";
+            if (fuerzaUsr < fuerzaCorrectaDelta) {
+                // MUY POCA FUERZA - El agua entra
+                piston.style.width = "40px"; // Pistón retrocede
+                compuerta.style.transform = "rotate(-20deg)"; // Compuerta cede hacia adentro
+                feed.style.color = "#ff073a";
+                feed.innerText = "¡FUERZA INSUFICIENTE! EL AGUA ESTÁ ENTRANDO.";
+                setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 2500);
 
-            clearTimeout(escanerTimeout);
-            escanerTimeout = setTimeout(() => {
-                document.getElementById("feed-hab2").style.color = "#ff073a";
-                document.getElementById("feed-hab2").innerText = "¡VENTANA PERDIDA! RECALCULANDO...";
-                setTimeout(() => {
-                    document.getElementById("feed-hab2").innerText = "";
-                    iniciarDrenajeTanque();
-                }, 1500);
-            }, 12000);
-        }
+            } else if (fuerzaUsr > fuerzaCorrectaDelta) {
+                // DEMASIADA FUERZA - Pistón empuja demasiado
+                piston.style.width = "180px"; // Pistón se extiende a tope
+                compuerta.style.transform = "rotate(15deg)"; // Compuerta se dobla hacia afuera
+                feed.style.color = "#ffa500";
+                feed.innerText = "¡EXCESO DE PRESIÓN! RIESGO DE RUPTURA ESTRUCTURAL.";
+                setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 2500);
 
-        function validarH2F3() {
-            const res = parseFloat(document.getElementById("input-h2-f3").value);
-            const feed = document.getElementById("feed-hab2");
-            
-            if(res === vCorrectaF3) {
-                clearTimeout(escanerTimeout);
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡FUGA SELLADA!";
-                document.querySelector('.fuga-tanque').style.background = "#39ff14";
-                document.querySelector('.fuga-tanque').style.boxShadow = "0 0 15px #39ff14";
-                document.querySelector('.fuga-tanque').style.animation = "none";
+            } else {
+                // FUERZA EXACTA - 330 kN
+                piston.style.width = "110px"; // Pistón ajustado perfecto
+                compuerta.style.transform = "rotate(0deg)"; // Recta perfecta
+                compuerta.style.background = "#39ff14";
+                compuerta.style.boxShadow = "0 0 20px #39ff14";
+                piston.style.background = "#39ff14";
+                piston.style.boxShadow = "0 0 20px #39ff14";
+                
+                feed.style.color = "#39ff14";
+                feed.innerText = "✓ FUERZA HIDROSTÁTICA COMPENSADA. COMPUERTA SELLADA.";
                 
                 setTimeout(() => {
-                    // ARREGLO DE PROGRESO: Llenamos los 4 "huecos" virtuales para que el mapa lo lea como 100% completado
-                    progreso[2] = [true, true, true, true]; 
-                    
-                    alert("¡Misión Completada! El Sector γ ha sido salvado. ACCESO AL SECTOR Δ DESBLOQUEADO.");
-                    irAMapa(); // Redirige al mapa para que vean la habitación 3 desbloqueada
-                }, 2000);
-            } else {
-                feed.style.color = "#ff073a"; 
-                feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
-                clearTimeout(escanerTimeout);
-                setTimeout(() => {
-                    feed.innerText = "";
-                    iniciarDrenajeTanque();
-                }, 2000);
+                    progreso[3] = [true, true, true, true]; // Llenamos el progreso de Delta
+                    alert("¡Misión Completada! El Sector Δ ha sido estabilizado. ACCESO AL SECTOR FINAL p DESBLOQUEADO.");
+                    irAMapa();
+                }, 3000);
             }
         }
 
         window.onload = () => { console.log("Sistema Cargado"); };
     </script>
 </body>
-    </html>
+</html>
