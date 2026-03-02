@@ -32,7 +32,7 @@
 
         /* === NUEVOS ESTILOS PARA LA ALERTA DEL NARRADOR (AÑADIDO) === */
         #contenedor-alerta-narrador {
-            position: absolute; top: 40%; margin-top: -3cm; display: none; flex-direction: column; align-items: center; background: transparent; border: none;
+            position: absolute; top: 40%; margin-top: -5cm; display: none; flex-direction: column; align-items: center; background: transparent; border: none;
             cursor: pointer; z-index: 100; padding: 20px;
         }
 
@@ -41,7 +41,7 @@
         }
 
         .triangulo-warning {
-            font-size: 300px;
+            font-size: 250px;
             color: #ff073a; /* Rojo profundo */
             text-shadow: 0 0 30px #ff073a;
             animation: pulsoWarning 0.5s infinite;
@@ -49,7 +49,7 @@
         }
 
         .texto-glitch-alerta {
-            font-size: 150px;
+            font-size: 125px;
             color: #ff073a;
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -85,8 +85,17 @@
 
         /* Animaciones */
         @keyframes pulsoWarning {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 1; 
+                text-shadow: 0 0 20px #ff073a, 0 0 40px #ff073a; 
+            }
+            50% { 
+                transform: scale(1.15); 
+                opacity: 0.9; 
+                text-shadow: 0 0 40px #ff073a, 0 0 80px #ff073a, 0 0 120px #ff073a, 0 0 150px rgba(255, 7, 58, 0.5); 
+            }
+        }
         }
 
         @keyframes glitchEffect {
