@@ -30,7 +30,13 @@
             box-sizing: border-box; overflow-y: auto; 
         }
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
-        #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
+        
+        /* SOLUCIÓN AL TEXTO: white-space: pre-wrap permite espacios y saltos de línea perfectos */
+        #texto-narrador { 
+            color: #00ffff; font-size: 32px; line-height: 1.4; 
+            white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; 
+            flex: 1; margin: 0; 
+        }
 
         /* ================= MAPAS ================= */
         #pantalla-mapa, #pantalla-habitacion { background: #001a33; }
@@ -182,16 +188,20 @@
             document.getElementById(id).classList.add('activa');
         }
 
-        /* --- NARRADOR Y ALERTA --- */
+        /* --- NARRADOR (AHORA SIN EL &NBSP; QUE IMPEDÍA EL SALTO DE LÍNEA) --- */
         function irANarrador() {
             mostrar('pantalla-narrador');
             const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11? La presión interna está aumentando exponencialmente. ¡CUIDADO!";
-            let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
+            let i = 0; 
+            const caja = document.getElementById("texto-narrador"); 
+            caja.innerHTML = "";
             let intv = setInterval(() => {
-                let char = txt.charAt(i);
-                caja.innerHTML += (char === " ") ? "&nbsp;" : char;
+                caja.innerHTML += txt.charAt(i); // Simplemente agregamos el caracter tal cual
                 i++;
-                if(i >= txt.length){ clearInterval(intv); document.getElementById('btn-mision').style.display="block"; }
+                if(i >= txt.length){ 
+                    clearInterval(intv); 
+                    document.getElementById('btn-mision').style.display="block"; 
+                }
             }, 30);
         }
 
@@ -259,7 +269,7 @@
                     if (tAct === 1 && subFase < 3) { subFase++; generarRetoA(); }
                     else {
                         progreso[vAct][tAct-1] = true; subFase = 1;
-                        abrirHabitacion(vAct); // Vuelve sin alert
+                        abrirHabitacion(vAct);
                     }
                 }, 800);
             } else {
@@ -296,7 +306,7 @@
         function verificarQuiz(esCorrecta) {
             const feed = document.getElementById('quiz-feed');
             const botones = document.querySelectorAll('.btn-opcion');
-            botones.forEach(b => b.disabled = true); // Bloquea clics extra
+            botones.forEach(b => b.disabled = true); 
             
             if (esCorrecta) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ RESPUESTA CORRECTA";
@@ -305,14 +315,13 @@
                         subFase++; generarRetoB();
                     } else {
                         progreso[vAct][tAct-1] = true; subFase = 1;
-                        abrirHabitacion(vAct); // Vuelve directo
+                        abrirHabitacion(vAct);
                     }
                 }, 800);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR TEÓRICO: REINICIANDO PROTOCOLO...";
                 setTimeout(() => {
                     subFase = 1; 
-                    // Si falla, sacamos 3 preguntas nuevas
                     preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3);
                     generarRetoB();
                 }, 1500);
@@ -338,8 +347,13 @@
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`sub-${i}`);
                 if(!n) continue;
-                if(progreso[vAct][i-1]) { n.className = "nodo nodo-verde"; n.onclick = null; } 
-                else { n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i); }
+                if(progreso[vAct][i-1]) { 
+                    n.className = "nodo nodo-verde"; 
+                    n.onclick = null; 
+                } else { 
+                    n.className = "nodo nodo-rojo"; 
+                    n.onclick = () => irAProblema(i); 
+                }
             }
         }
 
