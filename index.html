@@ -30,6 +30,91 @@
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
+        /* === NUEVOS ESTILOS PARA LA ALERTA DEL NARRADOR (AÑADIDO) === */
+        #contenedor-alerta-narrador {
+            position: absolute;
+            top: 40%;
+            display: none; /* Controlado por JS */
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        #contenedor-alerta-narrador:hover {
+            transform: scale(1.05);
+        }
+
+        .triangulo-warning {
+            font-size: 100px;
+            color: #ff073a; /* Rojo profundo */
+            text-shadow: 0 0 30px #ff073a;
+            animation: pulsoWarning 0.8s infinite;
+            margin-bottom: -10px;
+        }
+
+        .texto-glitch-alerta {
+            font-size: 50px;
+            color: #ff073a;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+            animation: glitchEffect 3s infinite;
+        }
+
+        /* Efecto de duplicado para el glitch */
+        .texto-glitch-alerta::before,
+        .texto-glitch-alerta::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .texto-glitch-alerta::before {
+            left: 2px;
+            text-shadow: -2px 0 #00ffff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitchAnim-1 5s infinite linear alternate-reverse;
+        }
+
+        .texto-glitch-alerta::after {
+            left: -2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(85px, 450px, 140px, 0);
+            animation: glitchAnim-2 5s infinite linear alternate-reverse;
+        }
+
+        /* Animaciones */
+        @keyframes pulsoWarning {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes glitchEffect {
+            0%, 20%, 40%, 60%, 70%, 90% { opacity: 1; transform: none; }
+            10%, 30%, 50%, 80% { opacity: 0.8; transform: translate(2px, -1px); }
+            75% { opacity: 0.5; transform: translate(-3px, 1px) skewX(10deg); }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glitchAnim-1 {
+            0% { clip: rect(30px, 9999px, 10px, 0); }
+            100% { clip: rect(100px, 9999px, 80px, 0); }
+        }
+
+        @keyframes glitchAnim-2 {
+            0% { clip: rect(70px, 9999px, 50px, 0); }
+            100% { clip: rect(10px, 9999px, 60px, 0); }
+        }
+        /* ============================================================= */
+
         /* ================= MAPAS ================= */
         #pantalla-mapa, #pantalla-habitacion { background: #001a33; }
         .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
@@ -70,17 +155,6 @@
         .pieza:hover { transform: scale(1.05); }
         .pieza.seleccionada { background: #00ffff; color: #000; border-color: #fff; box-shadow: 0 0 20px #00ffff; transform: scale(1.05); }
         #inputPreguntaD { font-family: 'VT323'; font-size: 30px; width: 85%; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; padding: 10px; outline: none; margin-bottom: 20px;}
-
-        /* ===== ESTILOS HABITACIÓN 2 (AÑADIDO) ===== */
-        #pantalla-habitacion-2 { background: #001a33; }
-        .nodo-gigante { width: 180px; height: 60px; border-radius: 10px; font-size: 28px; }
-        #pantalla-hab2-megareto { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
-        .fase-oculta { display: none; }
-        .fase-activa { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .tanque-container { width: 120px; height: 250px; border: 4px solid #888; border-top: none; border-radius: 0 0 15px 15px; margin: 0 auto; position: relative; background: rgba(0,0,0,0.5); overflow: hidden; }
-        .agua-tanque { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 255, 255, 0.6); box-shadow: 0 0 20px #00ffff; transition: height 0.1s linear; }
-        .fuga-tanque { position: absolute; bottom: 10px; right: -8px; width: 16px; height: 16px; background: #ff073a; border-radius: 50%; box-shadow: 0 0 15px #ff073a; animation: pulso 0.5s infinite; }
     </style>
 </head>
 <body>
@@ -90,8 +164,12 @@
     <div id="pantalla-narrador" class="pantalla">
         <div id="filtro-oscuro"></div>
         <div id="caja-narrador"><img id="foto-narrador" src="chico111.png"><div id="texto-narrador"></div></div>
-        <button id="btn-mision" class="btn-ui" style="display:none; position:absolute; top:40%; z-index:100;" onclick="irAAlerta()">[ ABRIR PROTOCOLO ]</button>
-    </div>
+        
+        <button id="contenedor-alerta-narrador" onclick="irAAlerta()">
+            <div class="triangulo-warning">&#9888;</div>
+            <span class="texto-glitch-alerta" data-text="SECTOR 11">SECTOR 11</span>
+        </button>
+        </div>
 
     <div id="pantalla-alerta" class="pantalla">
         <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
@@ -239,74 +317,6 @@
         </div>
     </div>
 
-    <div id="pantalla-habitacion-2" class="pantalla">
-        <h1 class="titulo-mapa">SECTOR 2: TANQUES DE ALMACENAMIENTO</h1>
-        <div class="contenedor-mapa" style="background: rgba(255, 7, 58, 0.05); border-style: dashed; border-color: #ff073a;">
-            <div class="nodo nodo-rojo nodo-gigante" id="sub-2-1" onclick="iniciarMegaRetoHab2()" style="top: 50%; left: 50%;">[ INICIAR ]</div>
-        </div>
-        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
-    </div>
-
-    <div id="pantalla-hab2-megareto" class="pantalla">
-        <button class="btn-volver-top" onclick="abortarMegaReto()">[ ◄ ABORTAR MISIÓN ]</button>
-        <div class="panel-azul" style="width: 750px;">
-            <div id="progreso-hab2" style="font-size: 22px; color: #888; margin-bottom: 10px; letter-spacing: 5px;">
-                <span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- 
-                <span id="indicador-f2">[ FASE 2 ]</span> --- 
-                <span id="indicador-f3">[ FASE 3 ]</span>
-            </div>
-
-            <div id="fase-hab2-1" class="fase-activa">
-                <h2 style="color:#ffffff;">CALIBRACIÓN MANOMÉTRICA</h2>
-                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
-                    El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>
-                    Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>
-                    Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>
-                    Introduce la Presión Manométrica <b>P₁</b> (en Pascales) en la tubería principal.
-                </p>
-                <input type="number" id="input-h2-f1" placeholder="P₁ (Pa)">
-                <br>
-                <button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button>
-            </div>
-
-            <div id="fase-hab2-2" class="fase-oculta">
-                <h2 style="color:#ffffff;">ESTABILIZACIÓN DE CAUDAL</h2>
-                <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
-                    Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>
-                    La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>
-                    Por el principio de continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>
-                    Aplica la Ecuación de Bernoulli horizontal y calcula la velocidad de entrada <b>V₁</b> (m/s).
-                </p>
-                <input type="number" id="input-h2-f2" placeholder="V₁ (m/s)">
-                <br>
-                <button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button>
-            </div>
-
-            <div id="fase-hab2-3" class="fase-oculta">
-                <h2 style="color:#ff073a;">¡ALERTA DE DESBORDAMIENTO!</h2>
-                <div style="display:flex; justify-content: center; gap: 40px; align-items: center; margin: 20px 0;">
-                    <div class="tanque-container">
-                        <div id="agua-visual" class="agua-tanque" style="height: 100%;"></div>
-                        <div class="fuga-tanque"></div>
-                    </div>
-                    <div style="text-align:left; max-width: 350px;">
-                        <p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p>
-                        <div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                            <span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span>
-                        </div>
-                        <button id="btn-escanear" class="btn-ui" style="font-size:22px; padding: 10px;" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button>
-                        <div id="zona-disparo" style="display:none; margin-top: 15px;">
-                            <input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;">
-                            <button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="feed-hab2" style="margin-top:20px; font-size:26px; height:30px;"></div>
-        </div>
-    </div>
-
     <script>
         let vAct = 1; let tAct = 0; let subFase = 1; 
         let valorBasePa = 0; let sol = 0;
@@ -340,7 +350,14 @@
             mostrar('pantalla-narrador');
             const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
             let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
-            let intv = setInterval(() => { caja.innerHTML += txt.charAt(i); i++; if(i >= txt.length){ clearInterval(intv); document.getElementById('btn-mision').style.display="block"; }}, 30);
+            let intv = setInterval(() => { 
+                caja.innerHTML += txt.charAt(i); i++; 
+                if(i >= txt.length){ 
+                    clearInterval(intv); 
+                    // === MODIFICADO PARA MOSTRAR EL NUEVO CONTENEDOR DE ALERTA ===
+                    document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
+                }
+            }, 30);
         }
 
         function irAAlerta() {
@@ -351,18 +368,7 @@
         }
 
         function irAMapa() { mostrar('pantalla-mapa'); actualizarMapas(); }
-        
-        // ===== MODIFICADO PARA SOPORTAR HABITACIÓN 2 SIN ROMPER LA 1 =====
-        function abrirHabitacion(n) { 
-            if(n>1 && !progreso[n-1].every(x=>x===true)) return; 
-            vAct = n; 
-            if (n === 2) {
-                mostrar('pantalla-habitacion-2');
-            } else {
-                mostrar('pantalla-habitacion'); 
-            }
-            actualizarMapas(); 
-        }
+        function abrirHabitacion(n) { if(n>1 && !progreso[n-1].every(x=>x===true)) return; vAct = n; mostrar('pantalla-habitacion'); actualizarMapas(); }
 
         function irAProblema(t) {
             tAct = t; subFase = 1;
@@ -534,12 +540,6 @@
                 if(progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
                 else if(i === 1 || progreso[i-1].every(x => x === true)) { n.className = "nodo nodo-rojo"; n.onclick = () => abrirHabitacion(i); }
             }
-            for(let i=1; i<=4; i++){
-                let n = document.getElementById(`sub-${i}`);
-                if(!n) continue;
-                if(progreso[vAct][i-1]) { n.className = "nodo nodo-verde"; n.onclick = null; } 
-                else { n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i+1); } // Re-ajustado: irAProblema toma el id real 1,2,3,4. Si hay algun bug aqui, lo ideal es pasar 'i' directamente.
-            }
             
             // FIX NAVEGACIÓN MAPAS:
             for(let i=1; i<=4; i++){
@@ -549,165 +549,8 @@
                     else { n.className = "nodo nodo-rojo"; n.onclick = () => irAProblema(i); }
                 }
             }
-
-            // ===== LÓGICA DE MAPA PARA HABITACIÓN 2 (AÑADIDO) =====
-            let n2 = document.getElementById('sub-2-1');
-            if(n2) {
-                if(progreso[2][0]) { 
-                    n2.className = "nodo nodo-verde nodo-gigante"; 
-                    n2.innerText = "[ ESTABLE ]"; 
-                    n2.onclick = null; 
-                } else { 
-                    n2.className = "nodo nodo-rojo nodo-gigante"; 
-                    n2.innerText = "[ INICIAR ]"; 
-                    n2.onclick = iniciarMegaRetoHab2; 
-                }
-            }
         }
 
-/* ===== LÓGICA DE PROGRAMACIÓN HABITACIÓN 2 (MEGA-RETO) ===== */
-        let faseHab2 = 1;
-        let tankInterval = null;
-        let escanerTimeout = null;
-        let tankH = 25.0; 
-        let alturasClave = [20.0, 16.2, 12.8, 11.25, 9.8, 7.2, 5.0];
-        let alturaActualEscaneada = 0;
-        let vCorrectaF3 = 0;
-
-        function iniciarMegaRetoHab2() {
-            faseHab2 = 1;
-            document.getElementById('fase-hab2-1').className = "fase-activa";
-            document.getElementById('fase-hab2-2').className = "fase-oculta";
-            document.getElementById('fase-hab2-3').className = "fase-oculta";
-            document.getElementById('indicador-f1').style.color = "#00ffff";
-            document.getElementById('indicador-f2').style.color = "#888";
-            document.getElementById('indicador-f3').style.color = "#888";
-            document.getElementById('feed-hab2').innerText = "";
-            document.getElementById('input-h2-f1').value = "";
-            mostrar('pantalla-hab2-megareto');
-        }
-
-        function abortarMegaReto() {
-            clearInterval(tankInterval);
-            clearTimeout(escanerTimeout);
-            abrirHabitacion(2);
-        }
-
-        function validarH2F1() {
-            const res = parseFloat(document.getElementById("input-h2-f1").value);
-            const feed = document.getElementById("feed-hab2");
-            if(res === 50000) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CALIBRADA";
-                setTimeout(() => {
-                    document.getElementById('fase-hab2-1').className = "fase-oculta";
-                    document.getElementById('fase-hab2-2').className = "fase-activa";
-                    document.getElementById('indicador-f2').style.color = "#00ffff";
-                    feed.innerText = "";
-                    document.getElementById('input-h2-f2').value = "";
-                }, 1500);
-            } else { 
-                // NUEVO: Resetea el input y deja volver a intentar en la misma fase
-                feed.style.color = "#ff073a"; 
-                feed.innerText = "✗ INCORRECTO. REVISA EL CÁLCULO."; 
-                setTimeout(() => {
-                    feed.innerText = "";
-                    document.getElementById('input-h2-f1').value = "";
-                }, 1500);
-            }
-        }
-
-        function validarH2F2() {
-            const res = parseFloat(document.getElementById("input-h2-f2").value);
-            const feed = document.getElementById("feed-hab2");
-            if(res === 4) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ CAUDAL ESTABILIZADO";
-                setTimeout(() => {
-                    document.getElementById('fase-hab2-2').className = "fase-oculta";
-                    document.getElementById('fase-hab2-3').className = "fase-activa";
-                    document.getElementById('indicador-f3').style.color = "#00ffff";
-                    feed.innerText = "";
-                    iniciarDrenajeTanque();
-                }, 1500);
-            } else { 
-                // NUEVO: Resetea el input y deja volver a intentar en la misma fase
-                feed.style.color = "#ff073a"; 
-                feed.innerText = "✗ INCORRECTO. REVISA BERNOULLI."; 
-                setTimeout(() => {
-                    feed.innerText = "";
-                    document.getElementById('input-h2-f2').value = "";
-                }, 1500);
-            }
-        }
-
-        function iniciarDrenajeTanque() {
-            tankH = 22.0;
-            document.getElementById("txt-escaner").innerText = "EN ESPERA";
-            document.getElementById("txt-escaner").style.color = "#fff";
-            document.getElementById("btn-escanear").style.display = "inline-block";
-            document.getElementById("zona-disparo").style.display = "none";
-            
-            clearInterval(tankInterval);
-            tankInterval = setInterval(() => {
-                tankH -= 0.2; 
-                if(tankH < 3) tankH = 22.0; 
-                let porcentaje = (tankH / 25.0) * 100;
-                document.getElementById("agua-visual").style.height = `${porcentaje}%`;
-            }, 300);
-        }
-
-        function escanearNivel() {
-            let hSnap = alturasClave.find(h => h <= tankH);
-            if(!hSnap) hSnap = 5.0; 
-            alturaActualEscaneada = hSnap;
-            vCorrectaF3 = Math.sqrt(2 * 10 * hSnap); 
-
-            clearInterval(tankInterval);
-            
-            document.getElementById("txt-escaner").innerHTML = `<b>h = ${hSnap} m</b><br><span style="font-size:16px; color:#ff073a;">TIEMPO DE VENTANA: 12s</span>`;
-            document.getElementById("txt-escaner").style.color = "#39ff14";
-            document.getElementById("btn-escanear").style.display = "none";
-            document.getElementById("zona-disparo").style.display = "block";
-            document.getElementById("input-h2-f3").value = "";
-            document.getElementById("feed-hab2").innerText = "";
-
-            clearTimeout(escanerTimeout);
-            escanerTimeout = setTimeout(() => {
-                document.getElementById("feed-hab2").style.color = "#ff073a";
-                document.getElementById("feed-hab2").innerText = "¡VENTANA PERDIDA! RECALCULANDO...";
-                setTimeout(() => {
-                    document.getElementById("feed-hab2").innerText = "";
-                    iniciarDrenajeTanque();
-                }, 1500);
-            }, 12000);
-        }
-
-        function validarH2F3() {
-            const res = parseFloat(document.getElementById("input-h2-f3").value);
-            const feed = document.getElementById("feed-hab2");
-            
-            if(res === vCorrectaF3) {
-                clearTimeout(escanerTimeout);
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡FUGA SELLADA!";
-                document.querySelector('.fuga-tanque').style.background = "#39ff14";
-                document.querySelector('.fuga-tanque').style.boxShadow = "0 0 15px #39ff14";
-                document.querySelector('.fuga-tanque').style.animation = "none";
-                
-                setTimeout(() => {
-                    progreso[2][0] = true;
-                    alert("¡Misión Completada! El Sector 2 ha sido salvado.");
-                    abrirHabitacion(2);
-                }, 2000);
-            } else {
-                // NUEVO: Mensaje más claro de que se reintenta esta misma fase
-                feed.style.color = "#ff073a"; 
-                feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
-                clearTimeout(escanerTimeout);
-                setTimeout(() => {
-                    feed.innerText = "";
-                    iniciarDrenajeTanque();
-                }, 2000);
-            }
-        }
         window.onload = () => { console.log("Sistema Cargado"); };
     </script>
 </body>
