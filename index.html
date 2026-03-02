@@ -93,7 +93,7 @@
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
-        <h1 class="titulo-mapa">ESTADO GLOBAL: SECTOR 11</h1>
+        <h1 class="titulo-mapa">SECTOR 11</h1>
         <div class="contenedor-mapa" style="background: url('mapa_neon.png') center/contain no-repeat;">
             <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 25%;">1</div>
             <div class="nodo nodo-bloqueado" id="main-2" style="top: 25%; left: 75%;">2</div>
@@ -188,7 +188,6 @@
             document.getElementById(id).classList.add('activa');
         }
 
-        /* --- NARRADOR (AHORA SIN EL &NBSP; QUE IMPEDÍA EL SALTO DE LÍNEA) --- */
         function irANarrador() {
             mostrar('pantalla-narrador');
             const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
@@ -246,7 +245,6 @@
             }
         }
 
-        /* ================= PUNTO A (MATEMÁTICAS) ================= */
         function generarRetoA() {
             const env = document.getElementById("enunciado");
             const paso = document.getElementById("paso-info");
@@ -281,7 +279,6 @@
             }
         }
 
-        /* ================= PUNTO B (QUIZ TEÓRICO) ================= */
         function generarRetoB() {
             const preg = preguntasSeleccionadas[subFase - 1];
             document.getElementById('quiz-paso').innerText = `PUNTO B: PREGUNTA ${subFase}/3`;
@@ -335,7 +332,6 @@
             sol = 100;
         }
 
-        /* --- ACTUALIZACIÓN DE INTERFAZ --- */
         function actualizarMapas() {
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`main-${i}`);
