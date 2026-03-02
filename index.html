@@ -23,10 +23,15 @@
             background: url('fondo (2).png') center/cover; 
             animation: alertaFondoGlobal 1s infinite alternate;
         }
-
         @keyframes alertaFondoGlobal {
-            0% { box-shadow: inset 0 0 50px rgba(255, 7, 58, 0.1); }
-            100% { box-shadow: inset 0 0 250px rgba(255, 7, 58, 0.8), inset 0 0 100px rgba(255, 7, 58, 0.5); }
+            0% { 
+                box-shadow: inset 0 0 100px rgba(255, 7, 58, 0.4); 
+                background-color: transparent;
+            }
+            100% { 
+                box-shadow: inset 0 0 600px rgba(255, 7, 58, 1), inset 0 0 250px #ff073a; background-color: rgba(255, 7, 58, 0.6); 
+                background-blend-mode: color-burn; 
+            }
         }
 
         #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; }
