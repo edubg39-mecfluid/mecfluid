@@ -46,19 +46,18 @@
         #pantalla-valvula, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
         .panel-azul { background: rgba(0, 43, 77, 0.95); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 520px; text-align: center; backdrop-filter: blur(10px); z-index: 5;}
         
-        .panel-quiz, .panel-c-final { width: 750px; }
+        .panel-quiz, .panel-c-final, #pantalla-c-mini .panel-azul { width: 750px; }
         .panel-c { width: 600px; }
         
         input { font-family: 'VT323'; font-size: 35px; width: 240px; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
         .btn-ui { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; }
         .btn-ui:disabled { background: #555; color: #222; cursor: not-allowed; box-shadow: none; }
         
-        .btn-opcion { font-family: 'VT323'; font-size: 22px; background: #002b4d; color: #e6f2ff; border: 2px solid #00ffff; padding: 12px; margin: 8px 0; cursor: pointer; border-radius: 5px; text-align: left; transition: 0.3s; width: 100%; line-height: 1.2; }
+        .btn-opcion { font-family: 'VT323'; font-size: 24px; background: #002b4d; color: #e6f2ff; border: 2px solid #00ffff; padding: 12px; margin: 8px 0; cursor: pointer; border-radius: 5px; text-align: left; transition: 0.3s; width: 100%; line-height: 1.2; }
         .btn-opcion:hover { background: #00ffff; color: #000; box-shadow: 0 0 15px #00ffff; }
         .btn-opcion:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* Lista de pistas Punto C */
-        .pista-item { font-size: 24px; padding: 5px; color: #888; border-bottom: 1px dashed #00ffff; margin-bottom: 5px; }
+        .pista-item { font-size: 24px; padding: 5px; color: #888; border-bottom: 1px dashed #00ffff; margin-bottom: 5px; text-align: left; }
     </style>
 </head>
 <body>
@@ -125,7 +124,7 @@
             <h2 style="color:#ffffff; margin:0 0 10px 0;">EXTRACCIÓN DE DATOS C</h2>
             <p style="font-size:26px; margin: 5px 0;">Tiradas restantes: <span id="tiradas-ui" style="color:#ff073a; font-weight:bold; text-shadow: 0 0 10px #ff073a;">5</span></p>
             
-            <div style="text-align: left; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin: 20px 0;">
+            <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin: 20px 0;">
                 <div id="pista-ui-1" class="pista-item">1. [ ENCRIPTADO ]</div>
                 <div id="pista-ui-2" class="pista-item">2. [ ENCRIPTADO ]</div>
                 <div id="pista-ui-3" class="pista-item">3. [ ENCRIPTADO ]</div>
@@ -141,12 +140,19 @@
 
     <div id="pantalla-c-mini" class="pantalla">
         <div class="panel-azul">
-            <h2 style="color:#ffffff;">DESAFÍO RÁPIDO</h2>
+            <h2 style="color:#ffffff;">DESAFÍO DE DESENCRIPTACIÓN</h2>
             <div id="enunciado-mini-c" style="font-size: 28px; color:#00ffff; margin: 20px 0;"></div>
-            <input type="number" id="inputResMiniC" step="any" placeholder="Resultado">
-            <br>
-            <button class="btn-ui" onclick="verificarMiniC()">[ VALIDAR ]</button>
-            <div id="feed-mini-c" style="margin-top:20px; font-size:24px;"></div>
+            
+            <div id="zona-input-mini" style="display:none;">
+                <input type="number" id="inputResMiniC" step="any" placeholder="Resultado">
+                <br>
+                <button class="btn-ui" onclick="verificarMiniCNumerico()">[ VALIDAR ]</button>
+            </div>
+
+            <div id="zona-botones-mini" style="display:none; flex-direction:column; align-items: center; padding: 0 20px;">
+                </div>
+
+            <div id="feed-mini-c" style="margin-top:20px; font-size:24px; height: 30px;"></div>
         </div>
     </div>
 
@@ -169,7 +175,7 @@
         let valorBasePa = 0; let sol = 0;
         let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false] };
 
-        // VARIABLES PUNTO C (RULETA ADAPTATIVA)
+        // ================= VARIABLES PUNTO C =================
         let tiradasC = 5;
         let pistasC = 0;
         let miniSolC = 0;
@@ -183,23 +189,25 @@
             "Tiempo de flujo t = 10 s"
         ];
 
+        // Base de datos de mini-retos teóricos (Aparición 50%)
+        const bdMiniTeoria = [
+            { q: "¿A qué corresponde la siguiente fórmula?<br><br><span style='font-size:35px; color:#e6f2ff;'>Re = (ρ &middot; v &middot; D) / μ</span>", opciones: [{t: "Número de Reynolds", c: true}, {t: "Ecuación de Bernoulli", c: false}, {t: "Número de Froude", c: false}] },
+            { q: "¿A qué corresponde la siguiente fórmula?<br><br><span style='font-size:35px; color:#e6f2ff;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton de la Viscosidad", c: false}] },
+            { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de las masas de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
+            { q: "Si las líneas de corriente son paralelas y rectas en todo momento, decimos que el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
+            { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa a las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción / Viscosidad", c: false}] }
+        ];
+
+        // Base de Datos de Teoría (UD1 - PUNTO B)
         const bdTeoria = [
             { q: "¿Cuál es la característica principal que define a un fluido?", opciones: [ { t: "Se deforma continuamente bajo un esfuerzo cortante.", c: true }, { t: "Su densidad permanece siempre constante.", c: false }, { t: "Resiste fuerzas de tracción sin alterar su forma.", c: false }]},
             { q: "¿En qué consiste el enfoque Euleriano (Euler) en cinemática?", opciones: [ { t: "Observar el flujo desde un volumen de control estático.", c: true }, { t: "Seguir la trayectoria de una partícula individual.", c: false }, { t: "Promediar las velocidades en un instante inicial.", c: false }]},
-            { q: "¿Qué principio físico universal es la base de la Ecuación de Continuidad?", opciones: [ { t: "El principio de conservación de la masa.", c: true }, { t: "La conservación de la cantidad de movimiento.", c: false }, { t: "La Segunda Ley de Newton.", c: false }]},
-            { q: "¿Qué se asume bajo la hipótesis de un fluido incompresible?", opciones: [ { t: "Que la densidad permanece constante en todo el flujo.", c: true }, { t: "Que la viscosidad del fluido es cero.", c: false }, { t: "Que la velocidad del flujo no cambia con el tiempo.", c: false }]},
-            { q: "¿Qué concepto se define como una línea tangente al vector velocidad en todo punto?", opciones: [ { t: "Línea de corriente.", c: true }, { t: "Línea de traza.", c: false }, { t: "Trayectoria de la partícula.", c: false }]},
-            { q: "Si el flujo es 'estacionario' o 'permanente', ¿qué ocurre matemáticamente?", opciones: [ { t: "La derivada local respecto al tiempo es cero.", c: true }, { t: "La velocidad del fluido es siempre constante en el espacio.", c: false }, { t: "La derivada convectiva se anula.", c: false }]},
-            { q: "Para un flujo incompresible, si el área del conducto se reduce a la mitad...", opciones: [ { t: "La velocidad se duplica para mantener el caudal.", c: true }, { t: "La velocidad se reduce a la mitad.", c: false }, { t: "La velocidad permanece constante.", c: false }]}
+            { q: "¿Qué principio físico universal es la base de la Ecuación de Continuidad?", opciones: [ { t: "El principio de conservación de la masa.", c: true }, { t: "La conservación de la cantidad de movimiento.", c: false }, { t: "La Segunda Ley de Newton.", c: false }]}
         ];
         let preguntasSeleccionadas = [];
 
-        function mostrar(id) {
-            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
-            document.getElementById(id).classList.add('activa');
-        }
+        function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
 
-        /* --- NARRADOR Y NAVEGACIÓN --- */
         function irANarrador() {
             mostrar('pantalla-narrador');
             const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
@@ -226,11 +234,9 @@
         function irAProblema(t) {
             tAct = t; subFase = 1;
             if (t === 1 && vAct === 1) { 
-                valorBasePa = Math.floor(Math.random() * 900) + 100;
-                mostrar('pantalla-valvula'); generarRetoA();
+                valorBasePa = Math.floor(Math.random() * 900) + 100; mostrar('pantalla-valvula'); generarRetoA();
             } else if (t === 2 && vAct === 1) {
-                preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3);
-                mostrar('pantalla-quiz'); generarRetoB();
+                preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); mostrar('pantalla-quiz'); generarRetoB();
             } else if (t === 3 && vAct === 1) {
                 iniciarRetoC(); 
             } else {
@@ -240,26 +246,21 @@
 
         /* ===== PUNTO A ===== */
         function generarRetoA() {
-            const env = document.getElementById("enunciado");
-            const paso = document.getElementById("paso-info");
-            document.getElementById("inputRes").value = ""; document.getElementById("feed").innerText = "";
-            paso.innerText = `PUNTO A: PASO ${subFase}/3`;
+            const env = document.getElementById("enunciado"); document.getElementById("inputRes").value = ""; document.getElementById("feed").innerText = "";
+            document.getElementById("paso-info").innerText = `PUNTO A: PASO ${subFase}/3`;
             if (subFase === 1) { sol = valorBasePa / 100000; env.innerHTML = `Presión detectada: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`; } 
             else if (subFase === 2) { sol = valorBasePa / 100; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>mbar</b>`; } 
             else { sol = valorBasePa / 1000000; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>N/mm²</b>`; }
         }
 
         function verificarRes() {
-            const res = parseFloat(document.getElementById("inputRes").value);
-            const feed = document.getElementById("feed");
+            const res = parseFloat(document.getElementById("inputRes").value); const feed = document.getElementById("feed");
             if (Math.abs(res - sol) < 0.000001) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ ACCESO CONCEDIDO";
-                setTimeout(() => {
-                    if (tAct === 1 && subFase < 3) { subFase++; generarRetoA(); } else { progreso[vAct][tAct-1] = true; subFase = 1; abrirHabitacion(vAct); }
-                }, 800);
+                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoA(); } else { progreso[vAct][0] = true; abrirHabitacion(vAct); } }, 800);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO: REGENERANDO DATOS...";
-                setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; if(tAct === 1) generarRetoA(); else generarRetoComodin(); }, 1200);
+                setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; generarRetoA(); }, 1200);
             }
         }
 
@@ -267,7 +268,7 @@
         function generarRetoB() {
             const preg = preguntasSeleccionadas[subFase - 1];
             document.getElementById('quiz-paso').innerText = `PUNTO B: PREGUNTA ${subFase}/3`;
-            document.getElementById('quiz-pregunta').innerText = preg.q;
+            document.getElementById('quiz-pregunta').innerHTML = preg.q;
             document.getElementById('quiz-feed').innerText = "";
             const opcionesDiv = document.getElementById('quiz-opciones'); opcionesDiv.innerHTML = "";
             let opcionesMezcladas = [...preg.opciones].sort(() => 0.5 - Math.random());
@@ -282,16 +283,14 @@
             document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
             if (esCorrecta) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ RESPUESTA CORRECTA";
-                setTimeout(() => {
-                    if (subFase < 3) { subFase++; generarRetoB(); } else { progreso[vAct][tAct-1] = true; subFase = 1; abrirHabitacion(vAct); }
-                }, 800);
+                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { progreso[vAct][1] = true; abrirHabitacion(vAct); } }, 800);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR TEÓRICO: REINICIANDO PROTOCOLO...";
                 setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500);
             }
         }
 
-        /* ===== PUNTO C: RULETA ADAPTATIVA ===== */
+        /* ================= PUNTO C: RULETA Y DESAFÍOS ================= */
         function iniciarRetoC() {
             tiradasC = 5; pistasC = 0;
             document.getElementById('tiradas-ui').innerText = tiradasC;
@@ -299,8 +298,7 @@
             
             for(let i=1; i<=5; i++) {
                 let p = document.getElementById(`pista-ui-${i}`);
-                p.innerHTML = `${i}. [ ENCRIPTADO ]`;
-                p.style.color = "#888";
+                p.innerHTML = `${i}. [ ENCRIPTADO ]`; p.style.color = "#888";
             }
             mostrar('pantalla-c');
         }
@@ -308,27 +306,59 @@
         function tirarRuletaC() {
             if(tiradasC <= 0) return;
             
-            // Genera pregunta de conversión de unidades básica
-            let tipo = Math.floor(Math.random() * 4);
-            let val = Math.floor(Math.random() * 9) + 1;
             let env = document.getElementById("enunciado-mini-c");
-            
-            if(tipo === 0) { env.innerHTML = `Pasa <b>${val} m³</b> a <b>Litros</b>`; miniSolC = val * 1000; }
-            else if(tipo === 1) { env.innerHTML = `Pasa <b>${val * 1000} L</b> a <b>m³</b>`; miniSolC = val; }
-            else if(tipo === 2) { env.innerHTML = `Pasa <b>${val} m²</b> a <b>cm²</b>`; miniSolC = val * 10000; }
-            else { env.innerHTML = `Pasa <b>${val} horas</b> a <b>segundos</b>`; miniSolC = val * 3600; }
-
-            document.getElementById("inputResMiniC").value = "";
+            let zInput = document.getElementById("zona-input-mini");
+            let zBotones = document.getElementById("zona-botones-mini");
             document.getElementById("feed-mini-c").innerText = "";
+            
+            // 50% Números / 50% Teoría y Fórmulas
+            let esMate = Math.random() < 0.5;
+            
+            if (esMate) {
+                zInput.style.display = "block";
+                zBotones.style.display = "none";
+                document.getElementById("inputResMiniC").value = "";
+                
+                let tipo = Math.floor(Math.random() * 4);
+                let val = Math.floor(Math.random() * 9) + 1;
+                
+                if(tipo === 0) { env.innerHTML = `Pasa <b>${val} m³</b> a <b>Litros</b>`; miniSolC = val * 1000; }
+                else if(tipo === 1) { env.innerHTML = `Pasa <b>${val * 1000} L</b> a <b>m³</b>`; miniSolC = val; }
+                else if(tipo === 2) { env.innerHTML = `Pasa <b>${val} m²</b> a <b>cm²</b>`; miniSolC = val * 10000; }
+                else { env.innerHTML = `Pasa <b>${val} horas</b> a <b>segundos</b>`; miniSolC = val * 3600; }
+            } else {
+                zInput.style.display = "none";
+                zBotones.style.display = "flex";
+                zBotones.innerHTML = "";
+                
+                // Carga una pregunta aleatoria de fórmulas/teoría
+                let preg = bdMiniTeoria[Math.floor(Math.random() * bdMiniTeoria.length)];
+                env.innerHTML = preg.q;
+                
+                let opcionesMezcladas = [...preg.opciones].sort(() => 0.5 - Math.random());
+                opcionesMezcladas.forEach(opt => {
+                    let btn = document.createElement('button');
+                    btn.className = "btn-opcion";
+                    btn.innerHTML = opt.t;
+                    btn.onclick = () => procesarMiniC(opt.c);
+                    zBotones.appendChild(btn);
+                });
+            }
             mostrar('pantalla-c-mini');
         }
 
-        function verificarMiniC() {
+        function verificarMiniCNumerico() {
             const res = parseFloat(document.getElementById("inputResMiniC").value);
-            const feed = document.getElementById("feed-mini-c");
-            tiradasC--; // Gasta 1 tirada siempre
+            procesarMiniC(Math.abs(res - miniSolC) < 0.000001);
+        }
 
-            if(res === miniSolC) {
+        function procesarMiniC(esCorrecto) {
+            const feed = document.getElementById("feed-mini-c");
+            tiradasC--; 
+            
+            document.querySelectorAll('#zona-botones-mini .btn-opcion').forEach(b => b.disabled = true);
+
+            if(esCorrecto) {
                 pistasC++;
                 feed.style.color = "#39ff14"; feed.innerText = "✓ DESENCRIPTADO (Pista Revelada)";
                 setTimeout(() => {
@@ -362,41 +392,35 @@
                 return;
             }
 
-            // Mostrar pistas ganadas
             document.getElementById("zona-input-c").style.display = "block";
             let resText = "DATOS RECUPERADOS:<br>";
             for(let i=0; i<pistasC; i++) resText += "• " + datosPistasC[i] + "<br>";
             resumenDiv.innerHTML = resText;
 
-            // Pregunta adaptativa según la cantidad de pistas ganadas
             if(pistasC === 1) {
                 env.innerHTML = "NIVEL 1: Sabiendo que Q = 20 m³/s, ¿Qué volumen (m³) pasará en 1 segundo?";
                 finalSolC = 20;
             } else if(pistasC === 2) {
                 env.innerHTML = "NIVEL 2: Calcula la velocidad de entrada V1 (m/s).<br><span style='font-size:20px; color:#888;'>(Q = V1 · A1)</span>";
-                finalSolC = 5; // 20 / 4
+                finalSolC = 5;
             } else if(pistasC === 3) {
                 env.innerHTML = "NIVEL 3: Calcula la velocidad de salida V2 (m/s).<br><span style='font-size:20px; color:#888;'>(Q = V2 · A2)</span>";
-                finalSolC = 10; // 20 / 2
+                finalSolC = 10;
             } else if(pistasC === 4) {
                 env.innerHTML = "NIVEL 4: Calcula el Caudal Másico en la salida (kg/s).<br><span style='font-size:20px; color:#888;'>(m' = ρ · Q)</span>";
-                finalSolC = 20000; // 1000 * 20
+                finalSolC = 20000;
             } else if(pistasC === 5) {
                 env.innerHTML = "NIVEL MAESTRO: Calcula la Masa Total (kg) trasladada durante todo el tiempo t.<br><span style='font-size:20px; color:#888;'>(M = ρ · Q · t)</span>";
-                finalSolC = 200000; // 1000 * 20 * 10
+                finalSolC = 200000;
             }
         }
 
         function verificarFinalC() {
             const res = parseFloat(document.getElementById("inputResFinalC").value);
             const feed = document.getElementById("feed-final-c");
-            
             if(res === finalSolC) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ PUNTO C ESTABILIZADO";
-                setTimeout(() => {
-                    progreso[vAct][2] = true; // El índice 2 es el Punto C
-                    abrirHabitacion(vAct);
-                }, 1200);
+                setTimeout(() => { progreso[vAct][2] = true; abrirHabitacion(vAct); }, 1200);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ CÁLCULO INCORRECTO. REINICIANDO PROTOCOLO...";
                 setTimeout(iniciarRetoC, 2000);
