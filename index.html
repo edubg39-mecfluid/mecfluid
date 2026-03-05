@@ -29,11 +29,9 @@
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
-        /* ================= TOOLTIPS (TUTORIAL TIPO VIDEOJUEGO) ================= */
+        /* ================= TOOLTIPS ================= */
         .tooltip-videojuego { position: absolute; background: rgba(0, 30, 60, 0.8); border: 1px solid #00ffff; color: #39ff14; font-size: 24px; padding: 12px 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); pointer-events: none; z-index: 15; text-shadow: 0 0 5px #39ff14; }
         .tooltip-timer { top: 90px; right: 25px; width: 320px; text-align: right; border-right: 4px solid #39ff14; border-left: none; animation: floatUI 3s infinite ease-in-out; }
-        
-        /* AQUI MODIFICAMOS EL TOOLTIP DEL MAPA PARA CENTRARLO EN PANTALLA */
         .tooltip-mapa { bottom: 40px; left: 50%; width: 600px; text-align: center; border: 2px dashed #00ffff; color: #00ffff; text-shadow: 0 0 5px #00ffff; animation: floatUICenter 3s infinite ease-in-out; }
         
         @keyframes floatUI { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
@@ -80,7 +78,7 @@
         .pieza:hover { transform: scale(1.05); }
         .pieza.seleccionada { background: #00ffff; color: #000; border-color: #fff; box-shadow: 0 0 20px #00ffff; transform: scale(1.05); }
 
-        /* ESTILOS HABITACIÓN 3 (DELTA) - SIMULADOR DE COMPUERTA */
+        /* ESTILOS HABITACIÓN 3 (DELTA) */
         .simulador-container { display: flex; justify-content: center; align-items: center; height: 250px; margin: 20px 0; background: rgba(0,0,0,0.6); border: 2px dashed #888; border-radius: 10px; overflow: hidden; position: relative; }
         .zona-agua { width: 45%; height: 100%; background: rgba(0, 150, 255, 0.4); border-right: 4px solid #00aaff; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;}
         .flechas-agua { color: #00ffff; font-size: 40px; animation: empujeAgua 1s infinite alternate; font-weight: bold; }
@@ -378,6 +376,7 @@
         let nombreEquipo = "";
         let tiempoSegundos = 0;
         let intervaloReloj = null;
+        let relojIniciado = false; // NUEVA VARIABLE PARA CONTROLAR EL INICIO DEL TIEMPO
 
         // VARIABLES GLOBALES (Habitacion 1)
         let vAct = 1; let tAct = 0; let subFase = 1; 
@@ -420,7 +419,6 @@
                 if(i >= txt.length){ 
                     clearInterval(intv); 
                     
-                    // EFECTO APAGÓN CINEMÁTICO
                     setTimeout(() => {
                         caja.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
                         setTimeout(() => {
@@ -459,16 +457,25 @@
             }
             nombreEquipo = inputName.toUpperCase();
             
+            // MOSTRAR HUD PERO SIN ARRANCAR EL TIEMPO
             document.getElementById('hud-cronometro').style.display = "block";
+            document.getElementById('tiempo-ui').innerText = "00:00";
             tiempoSegundos = 0;
+            relojIniciado = false;
+
+            irAMapa();
+        }
+
+        // NUEVA FUNCIÓN PARA ARRANCAR EL RELOJ
+        function arrancarReloj() {
+            if (relojIniciado) return; // Si ya empezó, no lo duplicamos
+            relojIniciado = true;
             intervaloReloj = setInterval(() => {
                 tiempoSegundos++;
                 let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
                 let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
                 document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
             }, 1000);
-
-            irAMapa();
         }
 
         function mostrarVictoria() {
@@ -487,6 +494,10 @@
         
         function abrirHabitacion(n) { 
             if(n>1 && !progreso[n-1].every(x=>x===true)) return; 
+            
+            // EL RELOJ ARRANCA EXACTAMENTE AL HACER CLIC EN LA PRIMERA PRUEBA
+            arrancarReloj();
+
             vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
             else if (n === 3) mostrar('pantalla-habitacion-3');
