@@ -16,9 +16,9 @@
         /* ================= INICIO Y NARRADOR ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         
-        /* === NUEVO: PANEL DE REGISTRO === */
         .panel-registro { background: rgba(0, 20, 40, 0.85); padding: 50px; border: 2px solid #00ffff; border-radius: 12px; text-align: center; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
-        .input-equipo { font-family: 'VT323'; font-size: 40px; width: 350px; background: rgba(0, 51, 102, 0.5); color: #00ffff; border: 2px solid #00ffff; text-align: center; padding: 10px; margin: 20px 0; outline: none; text-transform: uppercase; }
+        .input-equipo { font-family: 'VT323'; font-size: 40px; width: 350px; background: rgba(0, 51, 102, 0.5); color: #00ffff; border: 2px solid #00ffff; text-align: center; padding: 10px; margin: 20px 0; outline: none; text-transform: uppercase; transition: 0.3s;}
+        .input-equipo:focus { box-shadow: 0 0 15px currentColor; }
         .input-equipo::placeholder { color: rgba(0, 255, 255, 0.4); }
 
         #pantalla-narrador { background: url('fondo (2).png') center/cover; transition: all 0.5s ease; }
@@ -119,10 +119,7 @@
         <div class="panel-registro">
             <h1 style="color: #00ffff; font-size: 60px; margin: 0; text-shadow: 0 0 20px #00ffff;">AQUALAB</h1>
             <h2 style="color: #39ff14; font-size: 30px; margin-top: 5px;">SIMULADOR DE FLUIDOS</h2>
-            <p style="font-size: 26px; color: #e6f2ff; margin-top: 30px;">REGISTRO DE EQUIPO DE EMERGENCIA</p>
-            <input type="text" id="input-equipo" class="input-equipo" placeholder="Introducir Nombre..." autocomplete="off">
-            <br>
-            <button class="btn-ui" onclick="iniciarJuego()" style="margin-top: 15px; font-size: 30px;">[ INICIAR PROTOCOLO ]</button>
+            <button class="btn-ui" onclick="irANarrador()" style="margin-top: 30px; font-size: 30px;">[ CONECTAR SISTEMA ]</button>
         </div>
     </div>
 
@@ -138,7 +135,13 @@
     <div id="pantalla-alerta" class="pantalla">
         <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
         <div id="texto-historia" style="font-size: 26px; max-width: 800px; text-align: left; margin: 20px; color:#39ff14;"></div>
-        <button id="btn-start" class="btn-ui" style="display:none;" onclick="irAMapa()">[ ACCEDER AL SECTOR 11 ]</button>
+        
+        <div id="zona-registro-emergencia" style="display:none; text-align: center; margin-top: 20px; background: rgba(0, 0, 0, 0.8); padding: 25px; border: 2px solid #ff073a; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 7, 58, 0.3);">
+            <p style="font-size: 26px; color: #fff; margin-top: 0;">SOLICITANDO UNIDAD TÁCTICA EXTERIOR.<br>INTRODUZCA IDENTIFICACIÓN DE EQUIPO:</p>
+            <input type="text" id="input-equipo" class="input-equipo" placeholder="Vuestro nombre..." autocomplete="off" style="border-color: #ff073a; color: #ff073a;">
+            <br>
+            <button id="btn-start" class="btn-ui" style="background: #ff073a; color: white;" onclick="iniciarMision()">[ AUTORIZAR ACCESO AL SECTOR 11 ]</button>
+        </div>
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
@@ -167,7 +170,6 @@
             <p style="font-size: 24px; color:#ff073a; animation: pulso 1.5s infinite;">Por favor, avisad al instructor para registrar vuestra marca.</p>
         </div>
     </div>
-
 
     <div id="pantalla-habitacion" class="pantalla">
         <h1 class="titulo-mapa" id="titulo-hab">SECTOR ρ: CONTROL</h1>
@@ -414,46 +416,11 @@
         // NAVEGACIÓN PRINCIPAL
         function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
 
-        // === INICIO DEL JUEGO CON REGISTRO ===
-        function iniciarJuego() {
-            const inputName = document.getElementById('input-equipo').value.trim();
-            if (inputName === "") {
-                alert("Por favor, introduce el nombre de tu equipo para acceder al sistema.");
-                return;
-            }
-            nombreEquipo = inputName.toUpperCase();
-            
-            // Iniciar el HUD y el reloj
-            document.getElementById('hud-cronometro').style.display = "block";
-            tiempoSegundos = 0;
-            intervaloReloj = setInterval(() => {
-                tiempoSegundos++;
-                let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
-                let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
-                document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
-            }, 1000);
-
-            irANarrador();
-        }
-
-        function mostrarVictoria() {
-            clearInterval(intervaloReloj); // Parar el tiempo
-            document.getElementById('hud-cronometro').style.display = "none"; // Ocultar el mini-reloj
-            
-            // Pasar datos a la pantalla final
-            document.getElementById('victoria-equipo').innerText = nombreEquipo;
-            let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
-            let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
-            document.getElementById('victoria-tiempo').innerText = `${mins}:${secs}`;
-            
-            mostrar('pantalla-victoria');
-        }
-
         function irANarrador() {
             mostrar('pantalla-narrador');
             document.getElementById('pantalla-narrador').classList.remove('emergencia-activa'); 
 
-            const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
+            const txt = "Saludos. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
             let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
             let intv = setInterval(() => { 
                 caja.innerHTML += txt.charAt(i); i++; 
@@ -469,9 +436,55 @@
 
         function irAAlerta() {
             mostrar('pantalla-alerta');
-            const hTxt = `SISTEMA COMPROMETIDO...\nFallo detectado en las válvulas de refrigeración.\nEquipo [ ${nombreEquipo} ], estabilice los puntos de control ρ, γ, Δ y p.`;
+            
+            // Texto modificado para pedir ayuda externa
+            const hTxt = "SISTEMA COMPROMETIDO...\nFallo crítico detectado en las válvulas de refrigeración.\nPresión inestable. Protocolo de evacuación iniciado.\n\n[ ALERTA ] Se requiere intervención de Unidad de Ingeniería Táctica.";
+            
             let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
-            let intv = setInterval(() => { caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); i++; if(i >= hTxt.length){ clearInterval(intv); document.getElementById('btn-start').style.display="block"; }}, 25);
+            let intv = setInterval(() => { 
+                caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); 
+                i++; 
+                if(i >= hTxt.length){ 
+                    clearInterval(intv); 
+                    // Mostramos la zona de registro al terminar el texto
+                    document.getElementById('zona-registro-emergencia').style.display="block"; 
+                }
+            }, 25);
+        }
+
+        // === INICIO DE MISIÓN CON REGISTRO Y CRONÓMETRO ===
+        function iniciarMision() {
+            const inputName = document.getElementById('input-equipo').value.trim();
+            if (inputName === "") {
+                alert("ACCESO DENEGADO. Introduzca la identificación del equipo.");
+                return;
+            }
+            nombreEquipo = inputName.toUpperCase();
+            
+            // Iniciar el HUD y el reloj AQUÍ
+            document.getElementById('hud-cronometro').style.display = "block";
+            tiempoSegundos = 0;
+            intervaloReloj = setInterval(() => {
+                tiempoSegundos++;
+                let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
+                let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
+                document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
+            }, 1000);
+
+            irAMapa();
+        }
+
+        function mostrarVictoria() {
+            clearInterval(intervaloReloj); // Parar el tiempo
+            document.getElementById('hud-cronometro').style.display = "none"; // Ocultar el mini-reloj
+            
+            // Pasar datos a la pantalla final
+            document.getElementById('victoria-equipo').innerText = nombreEquipo;
+            let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
+            let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
+            document.getElementById('victoria-tiempo').innerText = `${mins}:${secs}`;
+            
+            mostrar('pantalla-victoria');
         }
 
         function irAMapa() { mostrar('pantalla-mapa'); actualizarMapas(); }
@@ -481,7 +494,7 @@
             vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
             else if (n === 3) mostrar('pantalla-habitacion-3');
-            else if (n === 4) mostrarVictoria(); // <-- NODO p LLEVA A VICTORIA (Por ahora)
+            else if (n === 4) mostrarVictoria(); // <-- NODO p LLEVA A VICTORIA
             else mostrar('pantalla-habitacion'); 
             actualizarMapas(); 
         }
