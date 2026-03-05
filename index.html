@@ -22,33 +22,14 @@
         .input-equipo:focus { box-shadow: 0 0 15px currentColor; }
         .input-equipo::placeholder { color: rgba(0, 255, 255, 0.4); }
 
-        #pantalla-narrador { background: url('fondo (2).png') center/cover; transition: all 0.5s ease; }
-        .emergencia-activa { animation: alertaFondoGlobal 1s infinite alternate !important; }
+        #pantalla-narrador { background: url('fondo (2).png') center/cover; transition: background 0.2s ease; }
+        /* Eliminamos la animación de emergencia aquí, ya no la usamos en el narrador, sino el apagón */
 
-        @keyframes alertaFondoGlobal {
-            0% { box-shadow: inset 0 0 100px rgba(255, 7, 58, 0.4); background-color: transparent; }
-            100% { box-shadow: inset 0 0 600px rgba(255, 7, 58, 1), inset 0 0 250px #ff073a; background-color: rgba(255, 7, 58, 0.6); background-blend-mode: color-burn; }
-        }
-
-        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; }
+        #filtro-oscuro { position: absolute; width: 100%; height: 100%; background: rgba(0, 10, 25, 0.7); backdrop-filter: blur(5px); z-index: 1; transition: 0.5s; }
         
-        #caja-narrador { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px; box-sizing: border-box; overflow-y: hidden; }
+        #caja-narrador { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px; box-sizing: border-box; overflow-y: hidden; transition: 0.2s; }
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
-
-        #contenedor-alerta-narrador { position: absolute; top: 40%; margin-top: -1cm; display: none; flex-direction: column; align-items: center; background: transparent; border: none; cursor: pointer; z-index: 100; padding: 20px; animation: destelloEmergenciaAqualab 1s infinite alternate; }
-        #contenedor-alerta-narrador:hover { transform: scale(1.05); }
-
-        .triangulo-warning { font-size: 125px; color: #ff073a; text-shadow: 0 0 30px #ff073a; margin-bottom: -10px; }
-        .texto-glitch-alerta { font-size: 62.5px; color: #ff073a; text-transform: uppercase; letter-spacing: 4px; position: relative; text-shadow: 0 0 20px #ff073a; animation: glitchEffect 3s infinite; }
-        .texto-glitch-alerta::before, .texto-glitch-alerta::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; }
-        .texto-glitch-alerta::before { left: 2px; text-shadow: -2px 0 #00ffff; clip: rect(44px, 450px, 56px, 0); animation: glitchAnim-1 5s infinite linear alternate-reverse; }
-        .texto-glitch-alerta::after { left: -2px; text-shadow: -2px 0 #ff00ff; clip: rect(85px, 450px, 140px, 0); animation: glitchAnim-2 5s infinite linear alternate-reverse; }
-
-        @keyframes destelloEmergenciaAqualab { 0% { transform: scale(1); text-shadow: 0 0 20px #ff073a; } 100% { transform: scale(1.1); text-shadow: 0 0 50px #ff073a, 0 0 100px #ff073a, 0 0 150px #ff073a, 0 0 200px rgba(255, 7, 58, 0.5); } }
-        @keyframes glitchEffect { 0%, 20%, 40%, 60%, 70%, 90% { opacity: 1; transform: none; } 10%, 30%, 50%, 80% { opacity: 0.8; transform: translate(2px, -1px); } 75% { opacity: 0.5; transform: translate(-3px, 1px) skewX(10deg); } 100% { opacity: 1; } }
-        @keyframes glitchAnim-1 { 0% { clip: rect(30px, 9999px, 10px, 0); } 100% { clip: rect(100px, 9999px, 80px, 0); } }
-        @keyframes glitchAnim-2 { 0% { clip: rect(70px, 9999px, 50px, 0); } 100% { clip: rect(10px, 9999px, 60px, 0); } }
 
         /* ================= MAPAS Y PANELES ================= */
         #pantalla-mapa, #pantalla-habitacion, #pantalla-habitacion-2, #pantalla-habitacion-3, #pantalla-victoria { background: #001a33; }
@@ -123,11 +104,7 @@
     <div id="pantalla-narrador" class="pantalla">
         <div id="filtro-oscuro"></div>
         <div id="caja-narrador"><img id="foto-narrador" src="chico111.png"><div id="texto-narrador"></div></div>
-        <button id="contenedor-alerta-narrador" onclick="irAAlerta()">
-            <div class="triangulo-warning">&#9888;</div>
-            <span class="texto-glitch-alerta" data-text="SECTOR 11">SECTOR 11</span>
-        </button>
-    </div>
+        </div>
 
     <div id="pantalla-alerta" class="pantalla">
         <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
@@ -397,7 +374,7 @@
 
         const bdMiniTeoria = [
             { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Re = (ρ &middot; v &middot; D) / μ</span>", opciones: [{t: "Número de Reynolds", c: true}, {t: "Ecuación de Bernoulli", c: false}, {t: "Número de Froude", c: false}] },
-            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley Newton", c: false}] },
+            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton", c: false}] },
             { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
             { q: "Si las líneas de corriente son paralelas y rectas en todo momento, el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
             { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
@@ -415,18 +392,37 @@
 
         function irANarrador() {
             mostrar('pantalla-narrador');
-            document.getElementById('pantalla-narrador').classList.remove('emergencia-activa'); 
+            // Restablecemos estilo por si reinician y el apagón lo dejó negro
+            document.getElementById('pantalla-narrador').style.background = "url('fondo (2).png') center/cover";
+            document.getElementById('caja-narrador').style.opacity = "1";
+            document.getElementById('filtro-oscuro').style.opacity = "1";
 
-            const txt = "Saludos. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
+            const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
             let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
             let intv = setInterval(() => { 
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
+                    
+                    // === EFECTO APAGÓN CINEMÁTICO ===
                     setTimeout(() => {
-                        document.getElementById('contenedor-alerta-narrador').style.display="flex"; 
-                        document.getElementById('pantalla-narrador').classList.add('emergencia-activa');
-                    }, 2500);
+                        // 1. Mensaje de error final
+                        caja.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
+                        
+                        setTimeout(() => {
+                            // 2. Apagón total
+                            document.getElementById('pantalla-narrador').style.background = "#000";
+                            document.getElementById('caja-narrador').style.opacity = "0"; // Ocultamos caja
+                            document.getElementById('filtro-oscuro').style.opacity = "0"; // Ocultamos filtro
+                            
+                            // 3. Espera dramática en negro (3 segundos)
+                            setTimeout(() => {
+                                // 4. Salta la alarma
+                                irAAlerta(); 
+                            }, 3000);
+                            
+                        }, 1500); 
+                    }, 500); 
                 }
             }, 30);
         }
