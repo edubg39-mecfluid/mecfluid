@@ -15,8 +15,9 @@
 
         /* ================= INICIO Y NARRADOR ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
+        .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 100px; cursor: pointer; background: transparent; z-index: 9999; }
+        .boton-inicio:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 30px #00ffff; border-radius: 10px; }
         
-        .panel-registro { background: rgba(0, 20, 40, 0.85); padding: 50px; border: 2px solid #00ffff; border-radius: 12px; text-align: center; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
         .input-equipo { font-family: 'VT323'; font-size: 40px; width: 350px; background: rgba(0, 51, 102, 0.5); color: #00ffff; border: 2px solid #00ffff; text-align: center; padding: 10px; margin: 20px 0; outline: none; text-transform: uppercase; transition: 0.3s;}
         .input-equipo:focus { box-shadow: 0 0 15px currentColor; }
         .input-equipo::placeholder { color: rgba(0, 255, 255, 0.4); }
@@ -116,11 +117,7 @@
     </div>
 
     <div id="pantalla-inicio" class="pantalla activa">
-        <div class="panel-registro">
-            <h1 style="color: #00ffff; font-size: 60px; margin: 0; text-shadow: 0 0 20px #00ffff;">AQUALAB</h1>
-            <h2 style="color: #39ff14; font-size: 30px; margin-top: 5px;">SIMULADOR DE FLUIDOS</h2>
-            <button class="btn-ui" onclick="irANarrador()" style="margin-top: 30px; font-size: 30px;">[ CONECTAR SISTEMA ]</button>
-        </div>
+        <div class="boton-inicio" onclick="irANarrador()" title="Iniciar Sistema"></div>
     </div>
 
     <div id="pantalla-narrador" class="pantalla">
@@ -400,7 +397,7 @@
 
         const bdMiniTeoria = [
             { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Re = (ρ &middot; v &middot; D) / μ</span>", opciones: [{t: "Número de Reynolds", c: true}, {t: "Ecuación de Bernoulli", c: false}, {t: "Número de Froude", c: false}] },
-            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton", c: false}] },
+            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley Newton", c: false}] },
             { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
             { q: "Si las líneas de corriente son paralelas y rectas en todo momento, el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
             { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
@@ -437,7 +434,6 @@
         function irAAlerta() {
             mostrar('pantalla-alerta');
             
-            // Texto modificado para pedir ayuda externa
             const hTxt = "SISTEMA COMPROMETIDO...\nFallo crítico detectado en las válvulas de refrigeración.\nPresión inestable. Protocolo de evacuación iniciado.\n\n[ ALERTA ] Se requiere intervención de Unidad de Ingeniería Táctica.";
             
             let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
@@ -446,7 +442,6 @@
                 i++; 
                 if(i >= hTxt.length){ 
                     clearInterval(intv); 
-                    // Mostramos la zona de registro al terminar el texto
                     document.getElementById('zona-registro-emergencia').style.display="block"; 
                 }
             }, 25);
