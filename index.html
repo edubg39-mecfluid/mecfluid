@@ -29,16 +29,66 @@
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
-        /* ================= TOOLTIPS ================= */
-        .tooltip-videojuego { position: absolute; background: rgba(0, 30, 60, 0.8); border: 1px solid #00ffff; color: #39ff14; font-size: 24px; padding: 12px 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); pointer-events: none; z-index: 15; text-shadow: 0 0 5px #39ff14; }
-        .tooltip-timer { top: 90px; right: 25px; width: 320px; text-align: right; border-right: 4px solid #39ff14; border-left: none; animation: floatUI 3s infinite ease-in-out; }
-        .tooltip-mapa { bottom: 40px; left: 50%; width: 600px; text-align: center; border: 2px dashed #00ffff; color: #00ffff; text-shadow: 0 0 5px #00ffff; animation: floatUICenter 3s infinite ease-in-out; }
-        
-        @keyframes floatUI { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        @keyframes floatUICenter { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
+        /* ================= NUEVO MAPA ESTILO CÓMIC (GENIALLY) ================= */
+        #pantalla-mapa { 
+            background-color: #00c3ff; 
+            background-image: radial-gradient(#009bc9 15%, transparent 16%); 
+            background-size: 20px 20px; 
+            justify-content: flex-start;
+        }
 
-        /* ================= MAPAS Y PANELES ================= */
-        #pantalla-mapa, #pantalla-habitacion, #pantalla-habitacion-2, #pantalla-habitacion-3, #pantalla-victoria { background: #001a33; }
+        .top-bar-comic {
+            width: 100%; height: 80px; background: #222; position: absolute; top: -10px; left: 0;
+            transform: skewY(-1deg); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; box-sizing: border-box; border-bottom: 8px solid #000; z-index: 20;
+        }
+
+        .btn-inicio-top {
+            font-size: 45px; font-weight: bold; color: #fff; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 10px; transform: skewY(1deg); transition: 0.2s;
+        }
+        .btn-inicio-top:hover { color: #f1c40f; }
+
+        .zona-codigo-top {
+            display: flex; align-items: center; gap: 15px; transform: skewY(1deg);
+        }
+        .texto-codigo { font-size: 24px; color: #fff; transform: rotate(-90deg); letter-spacing: 2px; }
+        .candados-container { display: flex; gap: 5px; }
+        .candado-box { width: 45px; height: 55px; background: #555; border: 3px solid #000; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+
+        .contenedor-tarjetas {
+            display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; height: 100%; margin-top: 50px; z-index: 5; flex-wrap: wrap;
+        }
+
+        .tarjeta-tema {
+            width: 240px; height: 400px; background: #fff; border: 6px solid #222; border-radius: 4px; box-shadow: 10px 10px 0px rgba(0,0,0,0.3); position: relative; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; filter: grayscale(100%) brightness(0.7); pointer-events: none; /* Bloqueadas por defecto */
+        }
+        .tarjeta-tema.desbloqueada { filter: grayscale(0%) brightness(1); pointer-events: auto; }
+        .tarjeta-tema.desbloqueada:hover { transform: scale(1.05) rotate(0deg) !important; box-shadow: 15px 15px 0px rgba(0,0,0,0.4); z-index: 10; }
+
+        /* Inclinaciones individuales para dar efecto caótico */
+        #card-1 { transform: rotate(-4deg); }
+        #card-2 { transform: rotate(3deg); margin-top: -30px; }
+        #card-3 { transform: rotate(-2deg); margin-top: 20px; }
+        #card-4 { transform: rotate(5deg); margin-top: -10px; }
+        #card-5 { transform: rotate(-3deg); margin-top: 15px; }
+
+        /* ZONA PARA TUS IMÁGENES FUTURAS */
+        .imagen-tarjeta {
+            width: 100%; height: 75%; background-color: #eee; border-bottom: 6px solid #222; background-size: cover; background-position: center; display:flex; justify-content:center; align-items:center; color:#888; font-size: 20px;
+        }
+        /* Colores temporales de placeholder */
+        #img-card-1 { background-color: #f39c12; }
+        #img-card-2 { background-color: #bdc3c7; }
+        #img-card-3 { background-color: #95a5a6; }
+        #img-card-4 { background-color: #7f8c8d; }
+        #img-card-5 { background-color: #e74c3c; }
+
+        .etiqueta-papel {
+            width: 110%; background: #fff; border: 4px solid #222; position: absolute; bottom: 20px; left: -5%; padding: 10px; text-align: center; color: #b30000; font-size: 22px; font-weight: bold; line-height: 1.1; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); transform: rotate(-2deg); font-family: 'Comic Sans MS', 'VT323', cursive;
+        }
+
+        /* ================= MAPAS INTERNOS Y PANELES ================= */
+        #pantalla-habitacion, #pantalla-habitacion-2, #pantalla-habitacion-3, #pantalla-victoria { background: #001a33; }
         .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
         .contenedor-mapa { position: relative; width: 800px; height: 480px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
         
@@ -68,7 +118,7 @@
         .btn-volver-top { position: absolute; top: 25px; left: 25px; font-family: 'VT323'; font-size: 24px; background: rgba(0, 20, 40, 0.8); color: #00ffff; border: 2px solid #00ffff; padding: 8px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; z-index: 100; transition: 0.3s; backdrop-filter: blur(5px); }
         .btn-volver-top:hover { background: #ff073a; border-color: #ff073a; color: #fff; box-shadow: 0 0 15px #ff073a; }
 
-        /* ESTILOS PUNTO D (PUZLE) */
+        /* RESTO DE ESTILOS (Minijuegos, etc...) mantenidos igual */
         .ecuacion-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 30px 0; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border: 1px solid #00ffff; flex-wrap: wrap; }
         .slot { min-width: 100px; padding: 0 10px; height: 70px; border: 3px dashed #00ffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 255, 0.05); cursor: pointer; transition: 0.3s; }
         .slot:hover { background: rgba(0, 255, 255, 0.2); }
@@ -78,29 +128,25 @@
         .pieza:hover { transform: scale(1.05); }
         .pieza.seleccionada { background: #00ffff; color: #000; border-color: #fff; box-shadow: 0 0 20px #00ffff; transform: scale(1.05); }
 
-        /* ESTILOS HABITACIÓN 3 (DELTA) */
-        .simulador-container { display: flex; justify-content: center; align-items: center; height: 250px; margin: 20px 0; background: rgba(0,0,0,0.6); border: 2px dashed #888; border-radius: 10px; overflow: hidden; position: relative; }
-        .zona-agua { width: 45%; height: 100%; background: rgba(0, 150, 255, 0.4); border-right: 4px solid #00aaff; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;}
-        .flechas-agua { color: #00ffff; font-size: 40px; animation: empujeAgua 1s infinite alternate; font-weight: bold; }
-        .compuerta-fisica { width: 15px; height: 180px; background: #bbb; border-radius: 5px; box-shadow: 0 0 10px #fff; position: absolute; left: 45%; top: 35px; transform-origin: top center; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), background 0.5s; z-index: 2; }
-        .zona-piston { width: 55%; height: 100%; display: flex; align-items: center; position: relative; padding-left: 10px; }
-        .eje-piston { width: 100px; height: 20px; background: #ff073a; border-radius: 3px; box-shadow: 0 0 10px #ff073a; transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1), background 0.5s; transform-origin: left center;}
-        .base-piston { width: 40px; height: 60px; background: #444; border: 2px solid #888; border-radius: 5px; }
-        @keyframes empujeAgua { 0% { transform: translateX(-10px); opacity: 0.5; } 100% { transform: translateX(0); opacity: 1; } }
-
-        /* ESTILOS HAB 2 (TANQUES) */
         .fase-oculta { display: none; }
         .fase-activa { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .tanque-container { width: 120px; height: 250px; border: 4px solid #888; border-top: none; border-radius: 0 0 15px 15px; margin: 0 auto; position: relative; background: rgba(0,0,0,0.5); overflow: hidden; }
         .agua-tanque { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 255, 255, 0.6); box-shadow: 0 0 20px #00ffff; transition: height 0.1s linear; }
         .fuga-tanque { position: absolute; bottom: 10px; right: -8px; width: 16px; height: 16px; background: #ff073a; border-radius: 50%; box-shadow: 0 0 15px #ff073a; animation: pulso 0.5s infinite; }
+
+        .simulador-compuerta { position: relative; width: 100%; height: 220px; background: rgba(0,0,0,0.5); border: 2px solid #888; border-radius: 8px; margin: 20px 0; display: flex; align-items: flex-end; overflow: hidden; }
+        .fluido-izq { width: 45%; height: 180px; background: rgba(180, 180, 180, 0.3); border-top: 2px dashed #bbb; border-right: 2px solid #555; position: relative; display: flex; justify-content: center; align-items: center; color: #bbb; font-size: 24px; }
+        .fluido-der { width: 55%; height: 50px; background: rgba(0, 150, 255, 0.3); border-top: 2px solid #00aaff; transition: height 1s ease-in-out; display: flex; justify-content: center; align-items: center; color: #00ffff; font-size: 24px; }
+        .bisagra-ui { position: absolute; left: 45%; top: 40px; width: 16px; height: 16px; background: #ff073a; border-radius: 50%; transform: translate(-50%, -50%); z-index: 10; box-shadow: 0 0 10px #ff073a; }
+        .compuerta-fisica-inclinada { position: absolute; left: 45%; top: 40px; width: 8px; height: 160px; background: #ddd; transform-origin: top center; transform: rotate(30deg); border-radius: 4px; z-index: 5; transition: transform 0.5s, background 0.5s; }
+        .muro-b { position: absolute; bottom: 0; left: 30%; width: 20px; height: 15px; background: #39ff14; z-index: 6; }
     </style>
 </head>
 <body>
 
-    <div id="hud-cronometro" style="display: none; position: absolute; top: 25px; right: 25px; background: rgba(0, 20, 40, 0.8); border: 2px solid #39ff14; padding: 10px 25px; border-radius: 8px; color: #39ff14; font-size: 35px; font-weight: bold; z-index: 9999; text-shadow: 0 0 15px #39ff14; backdrop-filter: blur(5px);">
-        T - <span id="tiempo-ui">00:00</span>
+    <div id="hud-cronometro" style="display: none; position: absolute; bottom: 25px; left: 25px; background: rgba(255, 255, 255, 0.9); border: 4px solid #222; padding: 10px 25px; border-radius: 8px; color: #222; font-size: 35px; font-weight: bold; z-index: 9999; box-shadow: 4px 4px 0px rgba(0,0,0,0.5);">
+        ⏱️ <span id="tiempo-ui">00:00</span>
     </div>
 
     <div id="pantalla-inicio" class="pantalla activa">
@@ -135,54 +181,82 @@
     </div>
 
     <div id="pantalla-mapa" class="pantalla">
-        <h1 class="titulo-mapa">SECTOR 11</h1>
         
-        <div class="tooltip-videojuego tooltip-timer">
-            [INFO] Este cronómetro recogerá el tiempo que tardas en solucionar el fallo.
+        <div class="top-bar-comic">
+            <div class="btn-inicio-top" onclick="alert('Sistema fijado en progreso. Avanzad.')">
+                <span style="color: #f1c40f; font-size: 50px;">⌂</span> INICIO
+            </div>
+            <div class="zona-codigo-top">
+                <span class="texto-codigo">CÓDIGO</span>
+                <div class="candados-container">
+                    <div class="candado-box" id="lock-1">🔒</div>
+                    <div class="candado-box" id="lock-2">🔒</div>
+                    <div class="candado-box" id="lock-3">🔒</div>
+                    <div class="candado-box" id="lock-4">🔒</div>
+                    <div class="candado-box" id="lock-5">🔒</div>
+                    <div class="candado-box" id="lock-6">🔒</div>
+                </div>
+            </div>
         </div>
 
-        <div class="tooltip-videojuego tooltip-mapa">
-            [INFO] Accede a los sectores en rojo y resuelve los problemas físicos para purgar el sistema y avanzar.
+        <div class="contenedor-tarjetas">
+            
+            <div class="tarjeta-tema desbloqueada" id="card-1" onclick="abrirHabitacion(1)">
+                <div class="imagen-tarjeta" id="img-card-1">[ IMAGEN 1 ]</div>
+                <div class="etiqueta-papel">CONCEPTOS Y<br>PROPIEDADES DE LOS<br>FLUIDOS</div>
+            </div>
+
+            <div class="tarjeta-tema" id="card-2" onclick="abrirHabitacion(2)">
+                <div class="imagen-tarjeta" id="img-card-2">[ IMAGEN 2 ]</div>
+                <div class="etiqueta-papel">DERIVADA TEMPORAL<br>CAMPO FLUIDO</div>
+            </div>
+
+            <div class="tarjeta-tema" id="card-3" onclick="abrirHabitacion(3)">
+                <div class="imagen-tarjeta" id="img-card-3">[ IMAGEN 3 ]</div>
+                <div class="etiqueta-papel">ECUACIÓN DE<br>CONTINUIDAD</div>
+            </div>
+
+            <div class="tarjeta-tema" id="card-4" onclick="abrirHabitacion(4)">
+                <div class="imagen-tarjeta" id="img-card-4">[ IMAGEN 4 ]</div>
+                <div class="etiqueta-papel" style="font-size: 20px;">CANTIDAD DE<br>MOVIMIENTO Y<br>MOMENTO CINÉTICO</div>
+            </div>
+
+            <div class="tarjeta-tema" id="card-5" onclick="abrirHabitacion(5)">
+                <div class="imagen-tarjeta" id="img-card-5">[ IMAGEN 5 ]</div>
+                <div class="etiqueta-papel">ECUACIÓN DE LA<br>ENERGÍA</div>
+            </div>
+
         </div>
 
-        <div class="contenedor-mapa" style="background: url('mapa_neon.png') center/contain no-repeat;">
-            <div class="nodo nodo-rojo" id="main-1" onclick="abrirHabitacion(1)" style="top: 25%; left: 25%;">ρ</div>
-            <div class="nodo nodo-bloqueado" id="main-2" onclick="abrirHabitacion(2)" style="top: 25%; left: 75%;">γ</div>
-            <div class="nodo nodo-bloqueado" id="main-3" onclick="abrirHabitacion(3)" style="top: 75%; left: 25%;">Δ</div>
-            <div class="nodo nodo-bloqueado" id="main-4" onclick="abrirHabitacion(4)" style="top: 75%; left: 75%;">p</div>
-        </div>
     </div>
 
     <div id="pantalla-victoria" class="pantalla">
         <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
-            <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡EMERGENCIA CONTENIDA!</h1>
+            <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
             <h2 style="color:#ffffff; font-size: 40px; margin: 20px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
-            <p style="font-size: 30px; color:#e6f2ff; line-height: 1.4;">
-                Habéis estabilizado los sectores <span style="color:#00ffff;">ρ</span>, <span style="color:#00ffff;">γ</span> y <span style="color:#00ffff;">Δ</span>, evitando un colapso catastrófico en la instalación submarina.
-            </p>
             
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; margin: 30px auto; width: 60%;">
                 <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA OFICIAL</span><br>
                 <span id="victoria-tiempo" style="font-size: 70px; color:#39ff14; font-weight: bold; text-shadow: 0 0 15px #39ff14;">00:00</span>
             </div>
             
-            <p style="font-size: 24px; color:#ff073a; animation: pulso 1.5s infinite;">Por favor, avisad al instructor para registrar vuestra marca.</p>
+            <p style="font-size: 24px; color:#ff073a; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca.</p>
         </div>
     </div>
 
     <div id="pantalla-habitacion" class="pantalla">
-        <h1 class="titulo-mapa" id="titulo-hab">SECTOR ρ: CONTROL</h1>
+        <h1 class="titulo-mapa" id="titulo-hab">MÓDULO 1: CONCEPTOS</h1>
         <div class="contenedor-mapa" style="background: rgba(0, 255, 255, 0.05); border-style: dashed;">
             <div class="nodo nodo-rojo" id="sub-1" style="top: 30%; left: 30%;">Re</div>
             <div class="nodo nodo-rojo" id="sub-2" style="top: 30%; left: 70%;">Pr</div>
             <div class="nodo nodo-rojo" id="sub-3" style="top: 70%; left: 30%;">M</div>
             <div class="nodo nodo-rojo" id="sub-4" style="top: 70%; left: 70%;">Pe</div>
         </div>
-        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
+        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MENÚ ]</button>
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MENÚ ]</button>
         <div class="panel-azul">
             <div id="paso-info" style="color:#00ffff; font-size:22px;">---</div>
             <h2 style="color:#ffffff; margin:10px 0;">SISTEMA DE CALIBRACIÓN</h2>
@@ -195,7 +269,7 @@
     </div>
 
     <div id="pantalla-quiz" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MENÚ ]</button>
         <div class="panel-azul panel-quiz">
             <div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO Pr: PREGUNTA 1/3</div>
             <h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA UD1</h2>
@@ -206,7 +280,7 @@
     </div>
 
     <div id="pantalla-c" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MENÚ ]</button>
         <div class="panel-azul panel-c">
             <h2 style="color:#ffffff; margin:0 0 10px 0;">EXTRACCIÓN DE DATOS M</h2>
             <p style="font-size:26px; margin: 5px 0;">Tiradas restantes: <span id="tiradas-ui" style="color:#ff073a; font-weight:bold; text-shadow: 0 0 10px #ff073a;">5</span></p>
@@ -239,7 +313,7 @@
     </div>
 
     <div id="pantalla-c-final" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MENÚ ]</button>
         <div class="panel-azul panel-c-final">
             <h2 style="color:#ffffff;">EVALUACIÓN FINAL M</h2>
             <div id="resumen-pistas-c" style="text-align: left; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 24px; color:#39ff14;"></div>
@@ -254,7 +328,7 @@
     </div>
 
     <div id="pantalla-d" class="pantalla">
-        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MAPA ]</button>
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ VOLVER AL MENÚ ]</button>
         <div class="panel-azul panel-d">
             <h2 style="color:#ffffff;">RESTAURACIÓN DE CÓDIGO FUENTE</h2>
             
@@ -299,11 +373,11 @@
     </div>
 
     <div id="pantalla-habitacion-2" class="pantalla">
-        <h1 class="titulo-mapa">SECTOR γ: TANQUES DE ALMACENAMIENTO</h1>
+        <h1 class="titulo-mapa">MÓDULO 2: DERIVADA TEMPORAL</h1>
         <div class="contenedor-mapa" style="background: rgba(255, 7, 58, 0.05); border-style: dashed; border-color: #ff073a;">
             <div class="nodo nodo-rojo nodo-gigante" id="sub-2-1" onclick="iniciarMegaRetoHab2()" style="top: 50%; left: 50%;">[ INICIAR ]</div>
         </div>
-        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
+        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MENÚ ]</button>
     </div>
 
     <div id="pantalla-hab2-megareto" class="pantalla">
@@ -343,39 +417,38 @@
     </div>
 
     <div id="pantalla-habitacion-3" class="pantalla">
-        <h1 class="titulo-mapa">SECTOR Δ: ESCLUSAS SUBMARINAS</h1>
+        <h1 class="titulo-mapa">MÓDULO 3: ECUACIÓN DE CONTINUIDAD</h1>
         <div class="contenedor-mapa" style="background: rgba(255, 165, 0, 0.05); border-style: dashed; border-color: #ffa500;">
-            <div class="nodo nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ CALIBRAR COMPUERTA ]</div>
+            <div class="nodo nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ PROBLEMA COMPUERTA ]</div>
         </div>
-        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MAPA GENERAL ]</button>
+        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER AL MENÚ ]</button>
     </div>
 
     <div id="pantalla-hab3-megareto" class="pantalla">
         <button class="btn-volver-top" onclick="abrirHabitacion(3)">[ ◄ ABORTAR MISIÓN ]</button>
         <div class="panel-azul panel-delta">
-            <h2 style="color:#ffffff;">SISTEMA HIDRÁULICO DE EMERGENCIA</h2>
-            <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">
-                Fallo en actuadores principales. Es necesario inyectar presión manual exacta para compensar el empuje hidrostático del agua exterior y no colapsar la compuerta rectangular.
+            <h2 style="color:#ffffff;">SISTEMA DE EQUILIBRIO DE FLUIDOS</h2>
+            <p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px; line-height: 1.3;">
+                Alerta de descompensación en la compuerta central. La compuerta AB tiene una <b>masa homogénea de 180 kg</b>, un <b>ancho de 1.2 m</b>, una bisagra en A y reposa sobre un muro liso en B. Todos los fluidos están a 20°C.
                 <br><br>
                 <span style="color:#00ffff;">DATOS DE INGENIERÍA:</span><br>
-                - Anchura compuerta (b): <b>2 m</b> | Altura compuerta (h): <b>3 m</b><br>
-                - Borde superior sumergido a <b>4 m</b> de profundidad.<br>
-                - Agua externa (<span style="color:#00ffff;">ρ</span>) = 1000 kg/m³ | Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>
-                Calcula la <b>Fuerza Hidrostática Resultante</b> y aplícala al pistón en <b>kN</b> (KiloNewtons).
+                - <b>Longitud compuerta:</b> 1 m | <b>Inclinación:</b> 60° respecto al muro B.<br>
+                - <b>Fluido Izquierdo:</b> Glicerina (Nivel fijo a 2 m de profundidad).<br>
+                - <b>Fluido Derecho:</b> Agua (Nivel variable <span style="color:#39ff14;">h</span>).<br><br>
+                Calcula la <b>altura <span style="color:#39ff14;">h</span> exacta (en metros)</b> del agua para que la fuerza de reacción en el punto B sea exactamente <b>0 N</b> (punto inminente de apertura).
             </p>
 
-            <div class="simulador-container">
-                <div class="zona-agua"><span class="flechas-agua">►►</span></div>
-                <div class="compuerta-fisica" id="compuerta-ui"></div>
-                <div class="zona-piston">
-                    <div class="eje-piston" id="piston-ui"></div>
-                    <div class="base-piston"></div>
-                </div>
+            <div class="simulador-compuerta">
+                <div class="fluido-izq">GLICERINA (2m)</div>
+                <div class="bisagra-ui"></div>
+                <div class="compuerta-fisica-inclinada" id="compuerta-inclinada-ui"></div>
+                <div class="muro-b"></div>
+                <div class="fluido-der" id="agua-nueva-ui">AGUA (h)</div>
             </div>
 
-            <input type="number" id="input-h3-fuerza" placeholder="Fuerza (kN)" style="width: 280px;">
+            <input type="number" id="input-h3-fuerza" placeholder="Altura h (m)" step="0.001" style="width: 280px;">
             <br>
-            <button class="btn-ui" id="btn-delta" onclick="simularFuerzaDelta()">[ APLICAR FUERZA ]</button>
+            <button class="btn-ui" id="btn-delta" onclick="simularFuerzaDelta()">[ CALIBRAR NIVEL DE AGUA ]</button>
             <div id="feed-hab3" style="margin-top:20px; font-size:26px; height:30px;"></div>
         </div>
     </div>
@@ -388,10 +461,11 @@
         let intervaloReloj = null;
         let relojIniciado = false; 
 
-        // VARIABLES GLOBALES (Habitacion 1)
+        // VARIABLES GLOBALES
         let vAct = 1; let tAct = 0; let subFase = 1; 
         let valorBasePa = 0; let sol = 0;
-        let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false] };
+        // Ahora el progreso incluye 5 módulos (las 5 cartas)
+        let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };
 
         let tiradasC = 5; let pistasC = 0; let miniSolC = 0; let finalSolC = 0;
         const datosPistasC = ["Caudal Q = 20 m³/s", "Área de entrada A1 = 4 m²", "Área de salida A2 = 2 m²", "Densidad ρ = 1000 kg/m³", "Tiempo de flujo t = 10 s"];
@@ -414,12 +488,11 @@
         let preguntasSeleccionadas = [];
 
 
-        // ================= SISTEMA DE GUARDADO ================= //
+        // ================= SISTEMA DE GUARDADO (LOCALSTORAGE) =================
         window.onload = () => { 
             console.log("Sistema Cargado"); 
             const guardado = localStorage.getItem('aqualab_save');
             if (guardado) {
-                // Si hay un guardado, mostramos el panel de reanudar
                 const estado = JSON.parse(guardado);
                 document.getElementById('save-equipo').innerText = estado.nombreEquipo;
                 let mins = Math.floor(estado.tiempoSegundos / 60).toString().padStart(2, '0');
@@ -427,18 +500,13 @@
                 document.getElementById('save-tiempo').innerText = `${mins}:${secs}`;
                 
                 document.getElementById('panel-guardado').style.display = "block";
-                document.querySelector('.boton-inicio').style.display = "none"; // Ocultar botón invisible
+                document.querySelector('.boton-inicio').style.display = "none";
             }
         };
 
         function guardarEstado() {
-            if (!nombreEquipo) return; // No guarda si no han puesto nombre aún
-            const estado = {
-                nombreEquipo: nombreEquipo,
-                tiempoSegundos: tiempoSegundos,
-                relojIniciado: relojIniciado,
-                progreso: progreso
-            };
+            if (!nombreEquipo) return;
+            const estado = { nombreEquipo: nombreEquipo, tiempoSegundos: tiempoSegundos, relojIniciado: relojIniciado, progreso: progreso };
             localStorage.setItem('aqualab_save', JSON.stringify(estado));
         }
 
@@ -449,13 +517,12 @@
             relojIniciado = estado.relojIniciado;
             progreso = estado.progreso;
             
-            document.getElementById('hud-cronometro').style.display = "block";
             let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
             document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
             
             if (relojIniciado) {
-                 relojIniciado = false; // Reset temporal para que la función de abajo lo encienda
+                 relojIniciado = false;
                  arrancarReloj();
             }
             irAMapa();
@@ -465,7 +532,7 @@
             localStorage.removeItem('aqualab_save');
             document.getElementById('panel-guardado').style.display = "none";
             document.querySelector('.boton-inicio').style.display = "block";
-            irANarrador(); // Arranca el juego de forma normal
+            irANarrador();
         }
         // ======================================================================
 
@@ -524,7 +591,6 @@
             }
             nombreEquipo = inputName.toUpperCase();
             
-            document.getElementById('hud-cronometro').style.display = "block";
             document.getElementById('tiempo-ui').innerText = "00:00";
             tiempoSegundos = 0;
             relojIniciado = false;
@@ -559,29 +625,60 @@
             mostrar('pantalla-victoria');
         }
 
-        function irAMapa() { mostrar('pantalla-mapa'); actualizarMapas(); }
+        function irAMapa() { 
+            mostrar('pantalla-mapa'); 
+            document.getElementById('hud-cronometro').style.display = "block";
+            actualizarMapas(); 
+        }
         
         function abrirHabitacion(n) { 
-            if(n>1 && !progreso[n-1].every(x=>x===true)) return; 
+            // Control de acceso para que no abran módulos bloqueados
+            if(n>1 && !progreso[n-1].every(x=>x===true)) {
+                alert("Este módulo está bloqueado. Resuelve el módulo anterior para continuar.");
+                return; 
+            }
             
             arrancarReloj(); // Inicia el tiempo si es el primer clic
 
             vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
             else if (n === 3) mostrar('pantalla-habitacion-3');
-            else if (n === 4) mostrarVictoria(); // <-- NODO p LLEVA A VICTORIA
+            else if (n === 4) alert("Módulo 4: En construcción"); // Placeholder
+            else if (n === 5) alert("Módulo 5: En construcción"); // Placeholder
             else mostrar('pantalla-habitacion'); 
+            
+            document.getElementById('hud-cronometro').style.display = "none"; // Ocultamos el crono global en las salas (opcional, si lo quieres mantener, quita esto)
             actualizarMapas(); 
         }
 
+        // Esta función ahora gestiona las 5 cartas estilo Cómic
         function actualizarMapas() {
-            for(let i=1; i<=4; i++){
-                let n = document.getElementById(`main-${i}`);
-                if(!n) continue;
-                if(progreso[i].every(x => x === true)) n.className = "nodo nodo-verde";
-                else if(i === 1 || progreso[i-1].every(x => x === true)) { n.className = "nodo nodo-rojo"; n.onclick = () => abrirHabitacion(i); }
+            // Actualizar Tarjetas
+            for(let i=1; i<=5; i++){
+                let card = document.getElementById(`card-${i}`);
+                if(!card) continue;
+                
+                // Si la anterior está pasada (o es la 1), se desbloquea visualmente
+                if(i === 1 || progreso[i-1].every(x => x === true)) { 
+                    card.className = "tarjeta-tema desbloqueada"; 
+                } else {
+                    card.className = "tarjeta-tema"; 
+                }
+            }
+
+            // Actualizar Candados del header (Desbloqueamos un candado por cada módulo pasado)
+            for(let i=1; i<=5; i++){
+                let lock = document.getElementById(`lock-${i}`);
+                if(lock) {
+                    if(progreso[i].every(x => x === true)) {
+                        lock.innerText = "🔓";
+                        lock.style.background = "#f1c40f"; // Color oro
+                        lock.style.borderColor = "#fff";
+                    }
+                }
             }
             
+            // Actualizar Nodos internos (si entran a la habitación 1, 2, 3)
             for(let i=1; i<=4; i++){
                 let n = document.getElementById(`sub-${i}`);
                 if(n) {
@@ -608,7 +705,7 @@
             guardarEstado(); // Aseguramos guardado en transiciones clave
         }
 
-        // ====== LÓGICA HABITACIÓN 1 (SECTOR ρ) ======
+        // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
         function irAProblema(t) {
             tAct = t; subFase = 1;
             if (t === 1) { valorBasePa = Math.floor(Math.random() * 900) + 100; mostrar('pantalla-valvula'); generarRetoA(); } 
@@ -729,15 +826,15 @@
             const res = document.getElementById("inputPreguntaD").value.toLowerCase();
             const resNorm = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
             if (resNorm.includes("cantidad de movimiento") || resNorm.includes("conservacion del momento") || resNorm.includes("navier stokes") || resNorm.includes("euler")) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡SECTOR ρ ESTABILIZADO POR COMPLETO!";
+                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡MÓDULO 1 ESTABILIZADO POR COMPLETO!";
                 setTimeout(() => {
                     progreso[vAct][3] = true; abrirHabitacion(vAct);
-                    if(progreso[1].every(x => x === true)) { setTimeout(() => { alert("¡ENHORABUENA! LA COMPUERTA DEL SECTOR γ HA SIDO DESBLOQUEADA."); }, 500); }
+                    if(progreso[1].every(x => x === true)) { setTimeout(() => { alert("¡ENHORABUENA! EL MÓDULO 2 HA SIDO DESBLOQUEADO."); }, 500); }
                 }, 2000);
             } else { feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR DE IDENTIFICACIÓN"; setTimeout(() => { feed.innerText = ""; }, 2000); }
         }
 
-        // ====== LÓGICA HABITACIÓN 2 (SECTOR γ) ======
+        // ====== LÓGICA HABITACIÓN 2 (MÓDULO 2) ======
         let faseHab2 = 1; let tankInterval = null; let escanerTimeout = null; let tankH = 25.0; 
         let alturasClave = [20.0, 16.2, 12.8, 11.25, 9.8, 7.2, 5.0]; let alturaActualEscaneada = 0; let vCorrectaF3 = 0;
 
@@ -811,7 +908,7 @@
                 document.querySelector('.fuga-tanque').style.background = "#39ff14"; document.querySelector('.fuga-tanque').style.boxShadow = "0 0 15px #39ff14"; document.querySelector('.fuga-tanque').style.animation = "none";
                 setTimeout(() => {
                     progreso[2] = [true, true, true, true]; // Llena el progreso de Hab2
-                    alert("¡Misión Completada! El Sector γ ha sido salvado. ACCESO AL SECTOR Δ DESBLOQUEADO."); irAMapa();
+                    alert("¡Módulo 2 Completado! ACCESO AL MÓDULO 3 DESBLOQUEADO."); irAMapa();
                 }, 2000);
             } else {
                 feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
@@ -819,16 +916,19 @@
             }
         }
 
-        // ====== LÓGICA HABITACIÓN 3 (SECTOR Δ) ======
-        let fuerzaCorrectaDelta = 330; // kN
-
+        // ====== LÓGICA HABITACIÓN 3 (MÓDULO 3) ======
         function iniciarRetoDelta() {
             document.getElementById('input-h3-fuerza').value = "";
             document.getElementById('feed-hab3').innerText = "";
-            document.getElementById('compuerta-ui').style.transform = "rotate(0deg)";
-            document.getElementById('compuerta-ui').style.background = "#bbb";
-            document.getElementById('piston-ui').style.width = "100px";
-            document.getElementById('piston-ui').style.background = "#ff073a";
+            
+            let compuerta = document.getElementById('compuerta-inclinada-ui');
+            let aguaDer = document.getElementById('agua-nueva-ui');
+            
+            compuerta.style.transform = "rotate(30deg)";
+            compuerta.style.background = "#ddd";
+            compuerta.style.boxShadow = "none";
+            aguaDer.style.height = "50px";
+            
             document.getElementById('btn-delta').disabled = false;
             mostrar('pantalla-hab3-megareto');
         }
@@ -836,45 +936,45 @@
         function simularFuerzaDelta() {
             let valInput = document.getElementById('input-h3-fuerza').value;
             if(!valInput) return;
-            let fuerzaUsr = parseFloat(valInput);
+            let hUsr = parseFloat(valInput.replace(",", "."));
             
-            let compuerta = document.getElementById('compuerta-ui');
-            let piston = document.getElementById('piston-ui');
+            let compuerta = document.getElementById('compuerta-inclinada-ui');
+            let aguaDer = document.getElementById('agua-nueva-ui');
             let feed = document.getElementById('feed-hab3');
             let btn = document.getElementById('btn-delta');
 
             btn.disabled = true;
+            
+            let alturaVisual = hUsr * 40; 
+            if(alturaVisual > 180) alturaVisual = 180;
+            aguaDer.style.height = alturaVisual + "px";
 
-            if (fuerzaUsr < fuerzaCorrectaDelta) {
-                piston.style.width = "40px";
-                compuerta.style.transform = "rotate(-20deg)";
+            // Solución ~2.523 m
+            if (hUsr < 2.5) {
+                compuerta.style.transform = "rotate(45deg)"; 
                 feed.style.color = "#ff073a";
-                feed.innerText = "¡FUERZA INSUFICIENTE! EL AGUA ESTÁ ENTRANDO.";
-                setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 2500);
+                feed.innerText = "¡ALTURA INSUFICIENTE! LA GLICERINA EMPUJA Y ABRE LA COMPUERTA.";
+                setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 3500);
 
-            } else if (fuerzaUsr > fuerzaCorrectaDelta) {
-                piston.style.width = "180px";
-                compuerta.style.transform = "rotate(15deg)";
+            } else if (hUsr > 2.55) {
+                compuerta.style.transform = "rotate(30deg)"; 
                 feed.style.color = "#ffa500";
-                feed.innerText = "¡EXCESO DE PRESIÓN! RIESGO DE RUPTURA ESTRUCTURAL.";
-                setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 2500);
+                feed.innerText = "¡NIVEL DEMASIADO ALTO! LA FUERZA EN B ES MAYOR QUE CERO.";
+                setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 3500);
 
             } else {
-                piston.style.width = "110px";
-                compuerta.style.transform = "rotate(0deg)";
+                compuerta.style.transform = "rotate(30deg)";
                 compuerta.style.background = "#39ff14";
                 compuerta.style.boxShadow = "0 0 20px #39ff14";
-                piston.style.background = "#39ff14";
-                piston.style.boxShadow = "0 0 20px #39ff14";
                 
                 feed.style.color = "#39ff14";
-                feed.innerText = "✓ FUERZA HIDROSTÁTICA COMPENSADA. COMPUERTA SELLADA.";
+                feed.innerText = "✓ EQUILIBRIO PERFECTO. FUERZA EN B = 0. SISTEMA ESTABILIZADO.";
                 
                 setTimeout(() => {
-                    progreso[3] = [true, true, true, true]; // Llena el progreso de Delta
-                    alert("¡Misión Completada! El Sector Δ ha sido estabilizado. ACCESO AL SECTOR FINAL p DESBLOQUEADO.");
+                    progreso[3] = [true, true, true, true]; 
+                    alert("¡Módulo 3 Completado! (Nota: Los módulos 4 y 5 están pendientes de programar).");
                     irAMapa();
-                }, 3000);
+                }, 3500);
             }
         }
     </script>
