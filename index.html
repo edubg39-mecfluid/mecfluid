@@ -79,7 +79,6 @@
         .tarjeta-tema.desbloqueada { filter: grayscale(0%) brightness(1); pointer-events: auto; }
         .tarjeta-tema.desbloqueada:hover { transform: scale(1.05) rotate(0deg) !important; box-shadow: 12px 12px 0px #00ffff; border-color: #00ffff; z-index: 10; }
 
-        /* NUEVO: ESTILO PARA EL CANDADO */
         .candado-icono {
             position: absolute;
             top: 8px;
@@ -88,6 +87,23 @@
             z-index: 15;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             transition: 0.3s;
+        }
+
+        /* NUEVO: ETIQUETA DE ERRORES */
+        .badge-error {
+            position: absolute;
+            bottom: -15px;
+            right: -10px;
+            background: #ff073a;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 7, 58, 0.6);
+            z-index: 20;
+            display: none;
+            border: 2px solid #fff;
         }
 
         #card-1 { transform: rotate(-3deg); }
@@ -260,30 +276,35 @@
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-1">[ IMAGEN 1 ]</div>
                 <div class="etiqueta-papel">CONCEPTOS Y<br>PROPIEDADES DE LOS<br>FLUIDOS</div>
+                <div class="badge-error" id="badge-err-1">Fallos: 0</div>
             </div>
 
             <div class="tarjeta-tema" id="card-2" onclick="abrirHabitacion(2)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-2">[ IMAGEN 2 ]</div>
                 <div class="etiqueta-papel">DERIVADA TEMPORAL<br>CAMPO FLUIDO</div>
+                <div class="badge-error" id="badge-err-2">Fallos: 0</div>
             </div>
 
             <div class="tarjeta-tema" id="card-3" onclick="abrirHabitacion(3)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-3">[ IMAGEN 3 ]</div>
                 <div class="etiqueta-papel">ECUACIÓN DE<br>CONTINUIDAD</div>
+                <div class="badge-error" id="badge-err-3">Fallos: 0</div>
             </div>
 
             <div class="tarjeta-tema" id="card-4" onclick="abrirHabitacion(4)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-4">[ IMAGEN 4 ]</div>
                 <div class="etiqueta-papel" style="font-size: 14px;">CANTIDAD DE<br>MOVIMIENTO Y<br>MOMENTO CINÉTICO</div>
+                <div class="badge-error" id="badge-err-4">Fallos: 0</div>
             </div>
 
             <div class="tarjeta-tema" id="card-5" onclick="abrirHabitacion(5)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-5">[ IMAGEN 5 ]</div>
                 <div class="etiqueta-papel">ECUACIÓN DE LA<br>ENERGÍA</div>
+                <div class="badge-error" id="badge-err-5">Fallos: 0</div>
             </div>
 
         </div>
@@ -305,17 +326,25 @@
             <div class="valvula" id="val-4" style="left: 20%; top: 70%;">Pe</div>
 
         </div>
-        <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER A TARJETAS ]</button>
     </div>
 
     <div id="pantalla-victoria" class="pantalla">
         <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
             <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
             <h2 style="color:#ffffff; font-size: 40px; margin: 20px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
-            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; margin: 30px auto; width: 60%;">
-                <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA OFICIAL</span><br><span id="victoria-tiempo" style="font-size: 70px; color:#39ff14; font-weight: bold; text-shadow: 0 0 15px #39ff14;">00:00</span>
+            
+            <div style="display:flex; justify-content:center; gap: 30px; margin: 30px 0;">
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; width: 40%;">
+                    <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA</span><br>
+                    <span id="victoria-tiempo" style="font-size: 60px; color:#39ff14; font-weight: bold; text-shadow: 0 0 15px #39ff14;">00:00</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #ff073a; width: 40%;">
+                    <span style="font-size: 26px; color:#888;">ERRORES COMETIDOS</span><br>
+                    <span id="victoria-errores" style="font-size: 60px; color:#ff073a; font-weight: bold; text-shadow: 0 0 15px #ff073a;">0</span>
+                </div>
             </div>
-            <p style="font-size: 24px; color:#ff073a; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca.</p>
+            
+            <p style="font-size: 24px; color:#e6f2ff; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca en el servidor.</p>
         </div>
     </div>
 
@@ -331,26 +360,28 @@
 
     <div id="pantalla-d" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR RESTAURACIÓN ]</button><div class="panel-azul panel-d"><h2 style="color:#ffffff;">RESTAURACIÓN DE CÓDIGO FUENTE</h2><div id="fase-puzle-d"><p style="font-size: 26px; color:#e6f2ff; margin: 10px 0;">El sistema ha perdido su <b>Ecuación Diferencial fundamental</b> de fluidos.<br><span style="color:#00ffff;">Haz clic en un término y asígnalo al hueco correcto.</span></p><div class="ecuacion-container"><div class="slot" id="slot-1" onclick="clickSlot(this)"></div><span class="operador"> = </span><div class="slot" id="slot-2" onclick="clickSlot(this)"></div><span class="operador"> - </span><div class="slot" id="slot-3" onclick="clickSlot(this)"></div></div><div class="piezas-container" id="caja-piezas"><div class="pieza" id="p-dt" onclick="seleccionarPieza(this)">ρ(dV/dt)</div><div class="pieza" id="p-pg" onclick="seleccionarPieza(this)">ρg</div><div class="pieza" id="p-gradP" onclick="seleccionarPieza(this)">∇P</div><div class="pieza" id="p-mu" onclick="seleccionarPieza(this)" title="Distractor: Viscosidad">μ∇²V</div><div class="pieza" id="p-div" onclick="seleccionarPieza(this)" title="Distractor: Divergencia">∇·V</div></div><button class="btn-ui" onclick="verificarPuzzleD()">[ COMPILAR ECUACIÓN ]</button></div><div id="fase-pregunta-d" style="display:none;"><p style="font-size: 28px; color:#39ff14; margin: 10px 0; font-weight:bold;">¡SINTAXIS RESTAURADA CON ÉXITO!</p><div style="font-size: 38px; color:#ffffff; background: rgba(0,0,0,0.5); padding: 15px; border-radius:10px; border:2px solid #39ff14; margin:20px 0;">ρ(dV/dt) = ρg - ∇P</div><p style="font-size: 28px; color:#e6f2ff;">¿Qué principio o ecuación representa exactamente esta fórmula diferencial?</p><input type="text" id="inputPreguntaD" placeholder="Escribe aquí el nombre..."><br><button class="btn-ui" onclick="verificarPreguntaD()">[ IDENTIFICAR FÓRMULA ]</button></div><div id="feed-d" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
 
-    <div id="pantalla-habitacion-2" class="pantalla"><h1 class="titulo-mapa">MÓDULO 2: DERIVADA TEMPORAL</h1><div class="contenedor-mapa" style="background: rgba(255, 7, 58, 0.05); border-style: dashed; border-color: #ff073a;"><div class="nodo-rojo nodo-gigante" id="sub-2-1" onclick="iniciarMegaRetoHab2()" style="top: 50%; left: 50%;">[ INICIAR ]</div></div><button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER A TARJETAS ]</button></div>
+    <div id="pantalla-habitacion-2" class="pantalla"><h1 class="titulo-mapa">MÓDULO 2: DERIVADA TEMPORAL</h1><div class="contenedor-mapa" style="background: rgba(255, 7, 58, 0.05); border-style: dashed; border-color: #ff073a;"><div class="nodo-rojo nodo-gigante" id="sub-2-1" onclick="iniciarMegaRetoHab2()" style="top: 50%; left: 50%;">[ INICIAR ]</div></div></div>
 
     <div id="pantalla-hab2-megareto" class="pantalla"><button class="btn-volver-top" onclick="abortarMegaReto()">[ ◄ ABORTAR MISIÓN ]</button><div class="panel-azul" style="width: 750px;"><div id="progreso-hab2" style="font-size: 22px; color: #888; margin-bottom: 10px; letter-spacing: 5px;"><span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- <span id="indicador-f2">[ FASE 2 ]</span> --- <span id="indicador-f3">[ FASE 3 ]</span></div><div id="fase-hab2-1" class="fase-activa"><h2 style="color:#ffffff;">CALIBRACIÓN MANOMÉTRICA</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>Introduce la Presión Manométrica <b>P₁</b> (en Pascales).</p><input type="number" id="input-h2-f1" placeholder="P₁ (Pa)"><br><button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button></div><div id="fase-hab2-2" class="fase-oculta"><h2 style="color:#ffffff;">ESTABILIZACIÓN DE CAUDAL</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>Por continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>Aplica Bernoulli y calcula <b>V₁</b> (m/s).</p><input type="number" id="input-h2-f2" placeholder="V₁ (m/s)"><br><button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button></div><div id="fase-hab2-3" class="fase-oculta"><h2 style="color:#ff073a;">¡ALERTA DE DESBORDAMIENTO!</h2><div style="display:flex; justify-content: center; gap: 40px; align-items: center; margin: 20px 0;"><div class="tanque-container"><div id="agua-visual" class="agua-tanque" style="height: 100%;"></div><div class="fuga-tanque"></div></div><div style="text-align:left; max-width: 350px;"><p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p><p style="font-size: 19px; color:#39ff14; background: rgba(57, 255, 20, 0.1); padding: 10px; border-left: 3px solid #39ff14; margin-bottom: 15px;">[SISTEMA DE AYUDA]: Aplica el <b>Teorema de Torricelli</b>. Recuerda que la gravedad (<b>g</b>) en esta instalación es de <b>10 m/s²</b>.</p><div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span></div><button id="btn-escanear" class="btn-ui" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button><div id="zona-disparo" style="display:none; margin-top: 15px;"><input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;"><button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button></div></div></div></div><div id="feed-hab2" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
 
-    <div id="pantalla-habitacion-3" class="pantalla"><h1 class="titulo-mapa">MÓDULO 3: ECUACIÓN DE CONTINUIDAD</h1><div class="contenedor-mapa" style="background: rgba(255, 165, 0, 0.05); border-style: dashed; border-color: #ffa500;"><div class="nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ PROBLEMA COMPUERTA ]</div></div><button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER A TARJETAS ]</button></div>
+    <div id="pantalla-habitacion-3" class="pantalla"><h1 class="titulo-mapa">MÓDULO 3: ECUACIÓN DE CONTINUIDAD</h1><div class="contenedor-mapa" style="background: rgba(255, 165, 0, 0.05); border-style: dashed; border-color: #ffa500;"><div class="nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ PROBLEMA COMPUERTA ]</div></div></div>
 
     <div id="pantalla-hab3-megareto" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(3)">[ ◄ ABORTAR MISIÓN ]</button><div class="panel-azul panel-delta"><h2 style="color:#ffffff;">SISTEMA DE EQUILIBRIO DE FLUIDOS</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px; line-height: 1.3;">Alerta de descompensación en la compuerta central. La compuerta AB tiene una <b>masa homogénea de 180 kg</b>, un <b>ancho de 1.2 m</b>, una bisagra en A y reposa sobre un muro liso en B. Todos los fluidos están a 20°C.<br><br><span style="color:#00ffff;">DATOS DE INGENIERÍA:</span><br>- <b>Longitud compuerta:</b> 1 m | <b>Inclinación:</b> 60° respecto al muro B.<br>- <b>Fluido Izquierdo:</b> Glicerina (Nivel fijo a 2 m de profundidad).<br>- <b>Fluido Derecho:</b> Agua (Nivel variable <span style="color:#39ff14;">h</span>).<br><br>Calcula la <b>altura <span style="color:#39ff14;">h</span> exacta (en metros)</b> del agua para que la fuerza de reacción en el punto B sea exactamente <b>0 N</b> (punto inminente de apertura).</p><div class="simulador-compuerta"><div class="fluido-izq">GLICERINA (2m)</div><div class="bisagra-ui"></div><div class="compuerta-fisica-inclinada" id="compuerta-inclinada-ui"></div><div class="muro-b"></div><div class="fluido-der" id="agua-nueva-ui">AGUA (h)</div></div><input type="number" id="input-h3-fuerza" placeholder="Altura h (m)" step="0.001" style="width: 280px;"><br><button class="btn-ui" id="btn-delta" onclick="simularFuerzaDelta()">[ CALIBRAR NIVEL DE AGUA ]</button><div id="feed-hab3" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
 
 
     <script>
-        // VARIABLES GLOBALES DE EQUIPO Y TIEMPO
+        // VARIABLES GLOBALES
         let nombreEquipo = "";
         let tiempoSegundos = 0;
         let intervaloReloj = null;
         let relojIniciado = false; 
 
-        // VARIABLES GLOBALES
         let vAct = 1; let tAct = 0; let subFase = 1; 
         let valorBasePa = 0; let sol = 0;
         let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };
+        
+        // NUEVO: SISTEMA DE RASTREO DE ERRORES POR MÓDULO
+        let erroresModulo = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
         let tiradasC = 5; let pistasC = 0; let miniSolC = 0; let finalSolC = 0;
         const datosPistasC = ["Caudal Q = 20 m³/s", "Área de entrada A1 = 4 m²", "Área de salida A2 = 2 m²", "Densidad ρ = 1000 kg/m³", "Tiempo de flujo t = 10 s"];
@@ -373,9 +404,8 @@
         let preguntasSeleccionadas = [];
 
 
-        // ================= SISTEMA DE GUARDADO (LOCALSTORAGE) =================
+        // ================= SISTEMA DE GUARDADO =================
         window.onload = () => { 
-            console.log("Sistema Cargado"); 
             const guardado = localStorage.getItem('aqualab_save');
             if (guardado) {
                 const estado = JSON.parse(guardado);
@@ -391,7 +421,7 @@
 
         function guardarEstado() {
             if (!nombreEquipo) return;
-            const estado = { nombreEquipo: nombreEquipo, tiempoSegundos: tiempoSegundos, relojIniciado: relojIniciado, progreso: progreso };
+            const estado = { nombreEquipo: nombreEquipo, tiempoSegundos: tiempoSegundos, relojIniciado: relojIniciado, progreso: progreso, erroresModulo: erroresModulo };
             localStorage.setItem('aqualab_save', JSON.stringify(estado));
         }
 
@@ -401,15 +431,13 @@
             tiempoSegundos = estado.tiempoSegundos;
             relojIniciado = estado.relojIniciado;
             progreso = estado.progreso;
+            if(estado.erroresModulo) erroresModulo = estado.erroresModulo; // Compatibilidad si se reanuda partida anterior
             
             let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
             document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
             
-            if (relojIniciado) {
-                 relojIniciado = false;
-                 arrancarReloj();
-            }
+            if (relojIniciado) { relojIniciado = false; arrancarReloj(); }
             irAPasillo();
         }
 
@@ -420,6 +448,11 @@
             irANarrador();
         }
 
+        // NUEVO: Función para registrar fallos
+        function registrarError() {
+            erroresModulo[vAct]++;
+            guardarEstado();
+        }
 
         // ================= NAVEGACIÓN =================
         function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
@@ -436,14 +469,12 @@
                 caja.innerHTML += txt.charAt(i); i++; 
                 if(i >= txt.length){ 
                     clearInterval(intv); 
-                    
                     setTimeout(() => {
                         caja.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
                         setTimeout(() => {
                             document.getElementById('pantalla-narrador').style.background = "#000";
                             document.getElementById('caja-narrador').style.opacity = "0"; 
                             document.getElementById('filtro-oscuro').style.opacity = "0"; 
-                            
                             setTimeout(() => { irAAlerta(); }, 3000);
                         }, 1500); 
                     }, 500); 
@@ -453,34 +484,21 @@
 
         function irAAlerta() {
             mostrar('pantalla-alerta');
-            
             const hTxt = "SISTEMA COMPROMETIDO...\nFallo crítico detectado en las válvulas de refrigeración.\nPresión inestable. Protocolo de evacuación iniciado.\n\n[ ALERTA ] Se requiere intervención de Unidad de Ingeniería Táctica.";
-            
             let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
             let intv = setInterval(() => { 
                 caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); 
                 i++; 
-                if(i >= hTxt.length){ 
-                    clearInterval(intv); 
-                    document.getElementById('zona-registro-emergencia').style.display="block"; 
-                }
+                if(i >= hTxt.length){ clearInterval(intv); document.getElementById('zona-registro-emergencia').style.display="block"; }
             }, 25);
         }
 
         function iniciarMision() {
             const inputName = document.getElementById('input-equipo').value.trim();
-            if (inputName === "") {
-                alert("ACCESO DENEGADO. Introduzca la identificación del equipo.");
-                return;
-            }
+            if (inputName === "") { alert("ACCESO DENEGADO. Introduzca la identificación del equipo."); return; }
             nombreEquipo = inputName.toUpperCase();
-            
-            document.getElementById('tiempo-ui').innerText = "00:00";
-            tiempoSegundos = 0;
-            relojIniciado = false;
-
-            guardarEstado(); 
-            irAPasillo();
+            document.getElementById('tiempo-ui').innerText = "00:00"; tiempoSegundos = 0; relojIniciado = false;
+            guardarEstado(); irAPasillo();
         }
 
         function arrancarReloj() {
@@ -504,8 +522,11 @@
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
             document.getElementById('victoria-tiempo').innerText = `${mins}:${secs}`;
             
-            localStorage.removeItem('aqualab_save'); 
+            // Sumar todos los errores
+            let totalErrores = Object.values(erroresModulo).reduce((a, b) => a + b, 0);
+            document.getElementById('victoria-errores').innerText = totalErrores;
             
+            localStorage.removeItem('aqualab_save'); 
             mostrar('pantalla-victoria');
         }
 
@@ -521,14 +542,10 @@
         }
         
         function abrirHabitacion(n) { 
-            if(n>1 && !progreso[n-1].every(x=>x===true)) {
-                alert("Este módulo está bloqueado. Resuelve el módulo anterior para continuar.");
-                return; 
-            }
+            if(n>1 && !progreso[n-1].every(x=>x===true)) { alert("Este módulo está bloqueado. Resuelve el módulo anterior para continuar."); return; }
+            if(progreso[n].every(x=>x===true)) { alert("Este módulo ya está estabilizado y bloqueado de forma segura."); return; } // Bloqueo al completar
             
-            arrancarReloj();
-
-            vAct = n; 
+            arrancarReloj(); vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
             else if (n === 3) mostrar('pantalla-habitacion-3');
             else if (n === 4) alert("Módulo 4: En construcción");
@@ -540,12 +557,12 @@
         }
 
         function actualizarMapas() {
-            // Actualizar tarjetas del Sector 11 (CANDADOS INCLUIDOS)
             for(let i=1; i<=5; i++){
                 let card = document.getElementById(`card-${i}`);
                 if(!card) continue;
                 
                 let candado = card.querySelector('.candado-icono');
+                let badge = card.querySelector('.badge-error'); // NUEVO: Insignia de fallos
 
                 if(i === 1 || progreso[i-1].every(x => x === true)) { 
                     card.className = "tarjeta-tema desbloqueada"; 
@@ -554,47 +571,29 @@
                     card.className = "tarjeta-tema"; 
                     if(candado) candado.innerText = "🔒";
                 }
+
+                // NUEVO: Mostrar insignia solo si el módulo ha sido completado al 100%
+                if(progreso[i].every(x => x === true) && badge) {
+                    badge.style.display = "block";
+                    badge.innerText = `Fallos: ${erroresModulo[i]}`;
+                }
             }
 
-            // ACTUALIZACIÓN LÓGICA LINEAL: SISTEMA DE TUBERÍAS (MÓDULO 1)
             if (vAct === 1) {
-                let p = progreso[1]; // Progreso de las 4 pruebas
-                
+                let p = progreso[1]; 
                 const setV = (num, estado) => {
-                    let val = document.getElementById(`val-${num}`);
-                    if(!val) return;
+                    let val = document.getElementById(`val-${num}`); if(!val) return;
                     val.className = `valvula valvula-${estado}`;
                     if(estado === 'activa') val.onclick = () => irAProblema(num);
                     else val.onclick = null;
                 };
 
-                // Válvula 1
-                if(p[0]) { setV(1, 'superada'); document.getElementById('fluido-1').style.width = '100%'; } 
-                else { setV(1, 'activa'); document.getElementById('fluido-1').style.width = '0%'; }
-                
-                // Válvula 2
-                if(p[0] && !p[1]) { setV(2, 'activa'); } 
-                else if(p[1]) { setV(2, 'superada'); document.getElementById('fluido-2').style.height = '100%'; } 
-                else { setV(2, 'bloqueada'); document.getElementById('fluido-2').style.height = '0%'; }
-                
-                // Válvula 3
-                if(p[1] && !p[2]) { setV(3, 'activa'); } 
-                else if(p[2]) { setV(3, 'superada'); document.getElementById('fluido-3').style.width = '100%'; } 
-                else { setV(3, 'bloqueada'); document.getElementById('fluido-3').style.width = '0%'; }
-                
-                // Válvula 4
-                if(p[2] && !p[3]) { setV(4, 'activa'); } 
-                else if(p[3]) { 
-                    setV(4, 'superada'); 
-                    document.getElementById('fluido-final').style.width = '100%';
-                } 
-                else { 
-                    setV(4, 'bloqueada'); 
-                    document.getElementById('fluido-final').style.width = '0%';
-                }
+                if(p[0]) { setV(1, 'superada'); document.getElementById('fluido-1').style.width = '100%'; } else { setV(1, 'activa'); document.getElementById('fluido-1').style.width = '0%'; }
+                if(p[0] && !p[1]) { setV(2, 'activa'); } else if(p[1]) { setV(2, 'superada'); document.getElementById('fluido-2').style.height = '100%'; } else { setV(2, 'bloqueada'); document.getElementById('fluido-2').style.height = '0%'; }
+                if(p[1] && !p[2]) { setV(3, 'activa'); } else if(p[2]) { setV(3, 'superada'); document.getElementById('fluido-3').style.width = '100%'; } else { setV(3, 'bloqueada'); document.getElementById('fluido-3').style.width = '0%'; }
+                if(p[2] && !p[3]) { setV(4, 'activa'); } else if(p[3]) { setV(4, 'superada'); document.getElementById('fluido-final').style.width = '100%'; } else { setV(4, 'bloqueada'); document.getElementById('fluido-final').style.width = '0%'; }
             }
             
-            // Actualizar Módulos 2 y 3
             if (vAct === 2) {
                 let n2 = document.getElementById('sub-2-1');
                 if(n2) {
@@ -638,7 +637,7 @@
             if (Math.abs(res - sol) < 0.000001) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ ACCESO CONCEDIDO";
                 setTimeout(() => { if (subFase < 3) { subFase++; generarRetoA(); } else { progreso[vAct][0] = true; abrirHabitacion(vAct); } }, 800);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; generarRetoA(); }, 1200); }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; generarRetoA(); }, 1200); }
         }
 
         function generarRetoB() {
@@ -654,7 +653,7 @@
             if (esCorrecta) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
                 setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { progreso[vAct][1] = true; abrirHabitacion(vAct); } }, 800);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
         }
 
         function iniciarRetoC() {
@@ -683,7 +682,7 @@
             if(esCorrecto) {
                 pistasC++; feed.style.color = "#39ff14"; feed.innerText = "✓ DESENCRIPTADO";
                 setTimeout(() => { document.getElementById(`pista-ui-${pistasC}`).innerHTML = `${pistasC}. <span style="color:#39ff14;">${datosPistasC[pistasC-1]}</span>`; document.getElementById('tiradas-ui').innerText = tiradasC; if(tiradasC === 0) document.getElementById('btn-tirar').disabled = true; mostrar('pantalla-c'); }, 1200);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { document.getElementById('tiradas-ui').innerText = tiradasC; if(tiradasC === 0) document.getElementById('btn-tirar').disabled = true; mostrar('pantalla-c'); }, 1200); }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { document.getElementById('tiradas-ui').innerText = tiradasC; if(tiradasC === 0) document.getElementById('btn-tirar').disabled = true; mostrar('pantalla-c'); }, 1200); }
         }
 
         function faseFinalC() {
@@ -701,7 +700,7 @@
         function verificarFinalC() {
             if(parseFloat(document.getElementById("inputResFinalC").value) === finalSolC) {
                 document.getElementById("feed-final-c").style.color = "#39ff14"; document.getElementById("feed-final-c").innerText = "✓ PUNTO M ESTABILIZADO"; setTimeout(() => { progreso[vAct][2] = true; abrirHabitacion(vAct); }, 1200);
-            } else { document.getElementById("feed-final-c").style.color = "#ff073a"; document.getElementById("feed-final-c").innerText = "✗ INCORRECTO. REINICIANDO..."; setTimeout(iniciarRetoC, 2000); }
+            } else { registrarError(); document.getElementById("feed-final-c").style.color = "#ff073a"; document.getElementById("feed-final-c").innerText = "✗ INCORRECTO. REINICIANDO..."; setTimeout(iniciarRetoC, 2000); }
         }
 
         function generarRetoD() {
@@ -725,11 +724,11 @@
         function verificarPuzzleD() {
             const feed = document.getElementById("feed-d");
             const s1 = document.getElementById("slot-1").firstChild?.id; const s2 = document.getElementById("slot-2").firstChild?.id; const s3 = document.getElementById("slot-3").firstChild?.id;
-            if (!s1 || !s2 || !s3) { feed.style.color = "#ff073a"; feed.innerText = "✗ FALTAN TÉRMINOS POR ASIGNAR"; return; }
+            if (!s1 || !s2 || !s3) { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FALTAN TÉRMINOS POR ASIGNAR"; return; }
             if (s1 === "p-dt" && s2 === "p-pg" && s3 === "p-gradP") {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ SINTAXIS MATEMÁTICA CORRECTA";
                 setTimeout(() => { document.getElementById("fase-puzle-d").style.display = "none"; document.getElementById("fase-pregunta-d").style.display = "block"; feed.innerText = ""; }, 1500);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ LA ECUACIÓN DIFERENCIAL ES INCORRECTA"; }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ LA ECUACIÓN DIFERENCIAL ES INCORRECTA"; }
         }
 
         function verificarPreguntaD() {
@@ -746,7 +745,7 @@
                     setTimeout(() => { irAMapa(); }, 1500);
                 }, 1000);
 
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR DE IDENTIFICACIÓN"; setTimeout(() => { feed.innerText = ""; }, 2000); }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR DE IDENTIFICACIÓN"; setTimeout(() => { feed.innerText = ""; }, 2000); }
         }
 
         // ====== LÓGICA HABITACIÓN 2 (MÓDULO 2) ======
@@ -776,7 +775,7 @@
                     document.getElementById('fase-hab2-1').className = "fase-oculta"; document.getElementById('fase-hab2-2').className = "fase-activa";
                     document.getElementById('indicador-f2').style.color = "#00ffff"; feed.innerText = ""; document.getElementById('input-h2-f2').value = "";
                 }, 1500);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO. REVISA EL CÁLCULO."; setTimeout(() => { feed.innerText = ""; document.getElementById('input-h2-f1').value = ""; }, 1500); }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO. REVISA EL CÁLCULO."; setTimeout(() => { feed.innerText = ""; document.getElementById('input-h2-f1').value = ""; }, 1500); }
         }
 
         function validarH2F2() {
@@ -787,7 +786,7 @@
                     document.getElementById('fase-hab2-2').className = "fase-oculta"; document.getElementById('fase-hab2-3').className = "fase-activa";
                     document.getElementById('indicador-f3').style.color = "#00ffff"; feed.innerText = ""; iniciarDrenajeTanque();
                 }, 1500);
-            } else { feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO. REVISA BERNOULLI."; setTimeout(() => { feed.innerText = ""; document.getElementById('input-h2-f2').value = ""; }, 1500); }
+            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO. REVISA BERNOULLI."; setTimeout(() => { feed.innerText = ""; document.getElementById('input-h2-f2').value = ""; }, 1500); }
         }
 
         function iniciarDrenajeTanque() {
@@ -810,6 +809,7 @@
             document.getElementById("zona-disparo").style.display = "block"; document.getElementById("input-h2-f3").value = ""; document.getElementById("feed-hab2").innerText = "";
             clearTimeout(escanerTimeout);
             escanerTimeout = setTimeout(() => {
+                registrarError(); // Ventana perdida es un fallo
                 document.getElementById("feed-hab2").style.color = "#ff073a"; document.getElementById("feed-hab2").innerText = "¡VENTANA PERDIDA! RECALCULANDO...";
                 setTimeout(() => { document.getElementById("feed-hab2").innerText = ""; iniciarDrenajeTanque(); }, 1500);
             }, 12000);
@@ -826,6 +826,7 @@
                     alert("¡Módulo 2 Completado! ACCESO AL MÓDULO 3 DESBLOQUEADO."); irAMapa();
                 }, 2000);
             } else {
+                registrarError(); // Disparo fallido es un fallo
                 feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
                 clearTimeout(escanerTimeout); setTimeout(() => { feed.innerText = ""; iniciarDrenajeTanque(); }, 2000);
             }
@@ -866,12 +867,14 @@
 
             // Solución ~2.523 m
             if (hUsr < 2.5) {
+                registrarError();
                 compuerta.style.transform = "rotate(45deg)"; 
                 feed.style.color = "#ff073a";
                 feed.innerText = "¡ALTURA INSUFICIENTE! LA GLICERINA EMPUJA Y ABRE LA COMPUERTA.";
                 setTimeout(() => { btn.disabled = false; iniciarRetoDelta(); }, 3500);
 
             } else if (hUsr > 2.55) {
+                registrarError();
                 compuerta.style.transform = "rotate(30deg)"; 
                 feed.style.color = "#ffa500";
                 feed.innerText = "¡NIVEL DEMASIADO ALTO! LA FUERZA EN B ES MAYOR QUE CERO.";
@@ -894,4 +897,4 @@
         }
     </script>
 </body>
-                                                     </html>
+    </html>
