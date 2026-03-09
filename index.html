@@ -111,7 +111,7 @@
 
         @keyframes pulso { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
-        /* ========= NUEVO ESTILO DE TUBERÍAS Y VÁLVULAS (MÓDULO 1) ========= */
+        /* ========= TUBERÍAS Y VÁLVULAS (MÓDULO 1) ========= */
         #fondo-mecanico { background: radial-gradient(circle at center, #1a2a3a, #0a101a); border-color: #444; box-shadow: inset 0 0 50px #000; }
         
         .tubo { position: absolute; background: #111; border: 4px solid #333; z-index: 5; box-shadow: inset 0 0 10px #000; overflow: hidden; }
@@ -274,20 +274,6 @@
 
     </div>
 
-    <div id="pantalla-victoria" class="pantalla">
-        <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
-            <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
-            <h2 style="color:#ffffff; font-size: 40px; margin: 20px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
-            
-            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; margin: 30px auto; width: 60%;">
-                <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA OFICIAL</span><br>
-                <span id="victoria-tiempo" style="font-size: 70px; color:#39ff14; font-weight: bold; text-shadow: 0 0 15px #39ff14;">00:00</span>
-            </div>
-            
-            <p style="font-size: 24px; color:#ff073a; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca.</p>
-        </div>
-    </div>
-
     <div id="pantalla-habitacion" class="pantalla">
         <h1 class="titulo-mapa" id="titulo-hab">MÓDULO 1: CIRCUITO DE CONCEPTOS</h1>
         <div class="contenedor-mapa" id="fondo-mecanico">
@@ -304,6 +290,10 @@
                 <div class="fluido" id="fluido-3" style="right: 0; top: 0; height: 100%; width: 0%;"></div>
             </div>
 
+            <div class="tubo tubo-h" style="left: 0%; top: 70%; width: 20%; border-right: none; border-left: 2px dashed #ff073a;">
+                <div class="fluido" id="fluido-final" style="right: 0; top: 0; height: 100%; width: 0%;"></div>
+            </div>
+
             <div class="valvula" id="val-1" style="left: 20%; top: 30%;">Re</div>
             <div class="valvula" id="val-2" style="left: 80%; top: 30%;">Pr</div>
             <div class="valvula" id="val-3" style="left: 80%; top: 70%;">M</div>
@@ -311,6 +301,20 @@
 
         </div>
         <button class="btn-ui" style="margin-top:15px;" onclick="irAMapa()">[ VOLVER A TARJETAS ]</button>
+    </div>
+
+    <div id="pantalla-victoria" class="pantalla">
+        <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
+            <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
+            <h2 style="color:#ffffff; font-size: 40px; margin: 20px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
+            
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; margin: 30px auto; width: 60%;">
+                <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA OFICIAL</span><br>
+                <span id="victoria-tiempo" style="font-size: 70px; color:#39ff14; font-weight: bold; text-shadow: 0 0 15px #39ff14;">00:00</span>
+            </div>
+            
+            <p style="font-size: 24px; color:#ff073a; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca.</p>
+        </div>
     </div>
 
     <div id="pantalla-valvula" class="pantalla">
@@ -749,8 +753,15 @@
                 
                 // Válvula 4 (Solo se activa si se supera la 3)
                 if(p[2] && !p[3]) { setV(4, 'activa'); } 
-                else if(p[3]) { setV(4, 'superada'); } 
-                else { setV(4, 'bloqueada'); }
+                else if(p[3]) { 
+                    setV(4, 'superada'); 
+                    // MODIFICADO: Llena el tramo final estético
+                    document.getElementById('fluido-final').style.width = '100%';
+                } 
+                else { 
+                    setV(4, 'bloqueada'); 
+                    document.getElementById('fluido-final').style.width = '0%';
+                }
             }
             
             // Actualizar Módulos 2 y 3 (Se mantienen intactos)
@@ -896,11 +907,22 @@
             const res = document.getElementById("inputPreguntaD").value.toLowerCase();
             const resNorm = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
             if (resNorm.includes("cantidad de movimiento") || resNorm.includes("conservacion del momento") || resNorm.includes("navier stokes") || resNorm.includes("euler")) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡MÓDULO 1 ESTABILIZADO POR COMPLETO!";
+                feed.style.color = "#39ff14"; feed.innerText = "✓ ¡MÓDULO ESTABILIZADO POR COMPLETO!";
+                
+                progreso[vAct][3] = true; 
+
+                // MODIFICADO: Lógica de finalización automática del Módulo 1
                 setTimeout(() => {
-                    progreso[vAct][3] = true; abrirHabitacion(vAct);
-                    if(progreso[1].every(x => x === true)) { setTimeout(() => { alert("¡ENHORABUENA! EL MÓDULO 2 HA SIDO DESBLOQUEADO."); }, 500); }
-                }, 2000);
+                    // Actualizamos visualmente las válvulas y llenamos la tubería final
+                    actualizarMapas(); 
+                    
+                    // Pequeña pausa extra para que vean el circuito lleno antes de salir
+                    setTimeout(() => {
+                        // Enviamos directamente a la página principal de las habitaciones
+                        irAMapa(); 
+                    }, 1500);
+                }, 1000);
+
             } else { feed.style.color = "#ff073a"; feed.innerText = "✗ ERROR DE IDENTIFICACIÓN"; setTimeout(() => { feed.innerText = ""; }, 2000); }
         }
 
@@ -1049,4 +1071,4 @@
         }
     </script>
 </body>
-            </html>
+    </html>
