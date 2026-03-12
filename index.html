@@ -91,19 +91,8 @@
 
         /* NUEVO: ETIQUETA DE ERRORES */
         .badge-error {
-            position: absolute;
-            bottom: -15px;
-            right: -10px;
-            background: #ff073a;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(255, 7, 58, 0.6);
-            z-index: 20;
-            display: none;
-            border: 2px solid #fff;
+            position: absolute; bottom: -15px; right: -10px; background: #ff073a; color: white; padding: 4px 10px;
+            border-radius: 5px; font-size: 18px; font-weight: bold; box-shadow: 0 0 10px rgba(255, 7, 58, 0.6); z-index: 20; display: none; border: 2px solid #fff;
         }
 
         #card-1 { transform: rotate(-3deg); }
@@ -389,11 +378,14 @@
         let piezaSel = null;
 
         const bdMiniTeoria = [
-            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Re = (ρ &middot; v &middot; D) / μ</span>", opciones: [{t: "Número de Reynolds", c: true}, {t: "Ecuación de Bernoulli", c: false}, {t: "Número de Froude", c: false}] },
+            { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'> (ρ &middot; v &middot; D) / μ</span>", opciones: [{t: "Número de Reynolds", c: true}, {t: "Ecuación de Bernoulli", c: false}, {t: "Número de Froude", c: false}] },
             { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>Q = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton", c: false}] },
             { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
             { q: "Si las líneas de corriente son paralelas y rectas en todo momento, el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
             { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
+            { q: "En el Número de Reyn, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
+            { q: "En el Número de Res, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
+            { q: "En el Número de Reynlds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
         ];
 
         const bdTeoria = [
