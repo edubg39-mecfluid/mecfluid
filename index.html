@@ -29,7 +29,7 @@
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
 
-        /* ================= PASILLO CENTRAL (NEXO) CON REACTOR DINÁMICO ================= */
+        /* ================= PASILLO CENTRAL (NEXO REACTOR) ================= */
         #pantalla-pasillo { 
             /* Se asume que tienes una imagen llamada reactor.jpg en tu carpeta */
             background: url('reactor.jpg') center/cover no-repeat;
@@ -426,7 +426,6 @@
             localStorage.removeItem('aqualab_save');
             document.getElementById('panel-guardado').style.display = "none";
             document.querySelector('.boton-inicio').style.display = "block";
-            irANarrador();
         }
 
         function registrarError() {
