@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQUALAB - Sistema de Control</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     
     <style>
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; color: white; }
@@ -30,43 +29,49 @@
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
 
 
-/* ================= PASILLO CENTRAL (NEXO) ================= */
+        /* ================= PASILLO CENTRAL (NEXO) CON REACTOR DINÁMICO ================= */
         #pantalla-pasillo { 
-            background-color: #000510; justify-content: center;  align-items: center; position: relative; overflow: hidden;
+            /* Se asume que tienes una imagen llamada reactor.jpg en tu carpeta */
+            background: url('reactor.jpg') center/cover no-repeat;
+            background-color: #000510;
+            justify-content: center; align-items: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Núcleo del reactor pulsante */
+        /* Capa 1: Fluido oscilante base */
         #pantalla-pasillo::before {
-            content: ''; position: absolute; top: 50%; left: 50%; width: 70vw; height: 70vw; max-width: 900px; max-height: 900px;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.15) 0%, rgba(0, 100, 255, 0.05) 40%, transparent 70%);
-            border-radius: 50%; transform: translate(-50%, -50%); animation: latido-reactor 4s infinite alternate ease-in-out; z-index: 0; pointer-events: none;
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0, 255, 255, 0.35) 0%, rgba(0, 100, 255, 0.15) 50%, transparent 100%);
+            animation: marea-reactor 4s infinite alternate ease-in-out;
+            pointer-events: none; z-index: 1;
         }
 
-        /* Radar/Escáner rotatorio del fondo */
+        /* Capa 2: Partículas/Burbujas ascendentes */
         #pantalla-pasillo::after {
-            content: ''; position: absolute; top: 50%; left: 50%; width: 150vw; height: 150vw;
-            background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 255, 255, 0.05) 45deg, transparent 90deg, transparent 180deg, rgba(0, 255, 255, 0.05) 225deg, transparent 270deg);
-            transform: translate(-50%, -50%); animation: rotar-radar 20s linear infinite; z-index: 0; pointer-events: none;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 200%;
+            background: radial-gradient(circle, rgba(0,255,255,0.6) 2px, transparent 3px);
+            background-size: 80px 120px;
+            animation: subir-burbujas 15s infinite linear;
+            pointer-events: none; z-index: 1; opacity: 0.4;
         }
 
-        @keyframes latido-reactor {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
-            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; box-shadow: 0 0 150px rgba(0, 255, 255, 0.15); }
+        @keyframes marea-reactor {
+            0% { transform: scaleY(1); opacity: 0.8; }
+            100% { transform: scaleY(1.15); opacity: 1; }
+        }
+        @keyframes subir-burbujas {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
         }
 
-        @keyframes rotar-radar {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
-        /* Aseguramos que las puertas y títulos floten por encima de la animación */
-        .contenedor-puertas { display: flex; gap: 40px; justify-content: center; align-items: center; margin-top: 30px; flex-wrap: wrap; position: relative; z-index: 10; }
+        .contenedor-puertas { display: flex; gap: 40px; justify-content: center; align-items: center; margin-top: 30px; flex-wrap: wrap; z-index: 5; position: relative;}
         
         .puerta-box { 
-            width: 250px; height: 380px; border: 4px solid #444; background: rgba(10, 15, 25, 0.9); border-radius: 8px;
+            width: 250px; height: 380px; border: 4px solid #444; background: rgba(10, 15, 25, 0.85); border-radius: 8px;
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.3s; box-shadow: inset 0 0 30px #000; position: relative; overflow: hidden;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(4px);
         }
         .puerta-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px); pointer-events: none; }
         
@@ -79,6 +84,8 @@
         .subtitulo-puerta { font-size: 22px; color: #00ffff; text-align: center; z-index: 2; padding: 0 10px;}
         .puerta-box.bloqueada .subtitulo-puerta { color: #ff073a; }
         .icono-puerta { font-size: 60px; margin-bottom: 10px; z-index: 2; }
+        .titulo-sector { font-size: 60px; color: #00ffff; margin-top: 0; margin-bottom: 50px; text-transform: uppercase; text-shadow: 0 0 20px #00ffff, 0 0 40px #00aaff; z-index: 20; letter-spacing: 5px; position: relative;}
+
 
         /* ================= MAPA SECTOR 11 ================= */
         #pantalla-mapa { 
@@ -86,10 +93,6 @@
             justify-content: flex-start;
             align-items: center;
             padding-top: 18vh;
-        }
-
-        .titulo-sector {
-            font-size: 60px; color: #00ffff; margin-top: 0; margin-bottom: 50px; text-transform: uppercase; text-shadow: 0 0 20px #00ffff, 0 0 40px #00aaff; z-index: 20; letter-spacing: 5px;
         }
 
         .contenedor-tarjetas {
@@ -103,32 +106,8 @@
         .tarjeta-tema.desbloqueada { filter: grayscale(0%) brightness(1); pointer-events: auto; }
         .tarjeta-tema.desbloqueada:hover { transform: scale(1.05) rotate(0deg) !important; box-shadow: 12px 12px 0px #00ffff; border-color: #00ffff; z-index: 10; }
 
-        .candado-icono {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            font-size: 24px;
-            z-index: 15;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            transition: 0.3s;
-        }
-
-        /* NUEVO: ETIQUETA DE ERRORES */
-        .badge-error {
-            position: absolute;
-            bottom: -15px;
-            right: -10px;
-            background: #ff073a;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(255, 7, 58, 0.6);
-            z-index: 20;
-            display: none;
-            border: 2px solid #fff;
-        }
+        .candado-icono { position: absolute; top: 8px; right: 8px; font-size: 24px; z-index: 15; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); transition: 0.3s; }
+        .badge-error { position: absolute; bottom: -15px; right: -10px; background: #ff073a; color: white; padding: 4px 10px; border-radius: 5px; font-size: 18px; font-weight: bold; box-shadow: 0 0 10px rgba(255, 7, 58, 0.6); z-index: 20; display: none; border: 2px solid #fff; }
 
         #card-1 { transform: rotate(-3deg); }
         #card-2 { transform: rotate(2deg); margin-top: -15px; }
@@ -136,19 +115,14 @@
         #card-4 { transform: rotate(3deg); margin-top: -10px; }
         #card-5 { transform: rotate(-2deg); margin-top: 10px; }
 
-        .imagen-tarjeta {
-            width: 100%; height: 75%; background-color: #eee; border-bottom: 4px solid #222; background-size: cover; background-position: center; display:flex; justify-content:center; align-items:center; color:#888; font-size: 16px;
-        }
+        .imagen-tarjeta { width: 100%; height: 75%; background-color: #eee; border-bottom: 4px solid #222; background-size: cover; background-position: center; display:flex; justify-content:center; align-items:center; color:#888; font-size: 16px; }
         #img-card-1 { background-color: #f39c12; }
         #img-card-2 { background-color: #bdc3c7; }
         #img-card-3 { background-color: #95a5a6; }
         #img-card-4 { background-color: #7f8c8d; }
         #img-card-5 { background-color: #e74c3c; }
 
-        .etiqueta-papel {
-            width: 110%; background: #fff; border: 3px solid #222; position: absolute; bottom: 15px; left: -5%; padding: 6px; text-align: center; color: #b30000; font-size: 16px; 
-            font-weight: bold; line-height: 1.1; box-shadow: 3px 3px 0px rgba(0,0,0,0.3); transform: rotate(-2deg); font-family: 'Comic Sans MS', 'VT323', cursive;
-        }
+        .etiqueta-papel { width: 110%; background: #fff; border: 3px solid #222; position: absolute; bottom: 15px; left: -5%; padding: 6px; text-align: center; color: #b30000; font-size: 16px; font-weight: bold; line-height: 1.1; box-shadow: 3px 3px 0px rgba(0,0,0,0.3); transform: rotate(-2deg); font-family: 'Comic Sans MS', 'VT323', cursive; }
 
 
         /* ================= MAPAS INTERNOS Y PANELES ================= */
@@ -164,7 +138,6 @@
 
         /* ========= TUBERÍAS Y VÁLVULAS (MÓDULO 1) ========= */
         #fondo-mecanico { background: radial-gradient(circle at center, #1a2a3a, #0a101a); border-color: #444; box-shadow: inset 0 0 50px #000; }
-        
         .tubo { position: absolute; background: #111; border: 4px solid #333; z-index: 5; box-shadow: inset 0 0 10px #000; overflow: hidden; }
         .tubo-h { height: 24px; transform: translateY(-50%); }
         .tubo-v { width: 24px; transform: translateX(-50%); }
@@ -215,6 +188,8 @@
         .fase-oculta { display: none; }
         .fase-activa { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Contenedores de tanque / agua */
         .tanque-container { width: 120px; height: 250px; border: 4px solid #888; border-top: none; border-radius: 0 0 15px 15px; margin: 0 auto; position: relative; background: rgba(0,0,0,0.5); overflow: hidden; }
         .agua-tanque { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 255, 255, 0.6); box-shadow: 0 0 20px #00ffff; transition: height 0.1s linear; }
         .fuga-tanque { position: absolute; bottom: 10px; right: -8px; width: 16px; height: 16px; background: #ff073a; border-radius: 50%; box-shadow: 0 0 15px #ff073a; animation: pulso 0.5s infinite; }
@@ -235,13 +210,11 @@
 
     <div id="pantalla-inicio" class="pantalla activa">
         <div class="boton-inicio" onclick="irANarrador()" title="Iniciar Sistema"></div>
-        
         <div id="panel-guardado" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 30, 60, 0.95); padding: 40px; border: 3px solid #00ffff; border-radius: 15px; z-index: 10000; text-align: center; box-shadow: 0 0 50px rgba(0, 255, 255, 0.4); backdrop-filter: blur(10px);">
             <h2 style="color: #ff073a; margin-top: 0; font-size: 45px; text-shadow: 0 0 15px #ff073a;">[ SESIÓN ENCONTRADA ]</h2>
             <p style="font-size: 28px; color: #e6f2ff; margin-bottom: 5px;">Se ha detectado una conexión previa del equipo:</p>
             <p style="font-size: 45px; color:#00ffff; font-weight:bold; margin: 0; text-shadow: 0 0 10px #00ffff;" id="save-equipo"></p>
             <p style="font-size: 24px; color: #888; margin-top: 15px; margin-bottom: 30px;">Tiempo registrado: <span id="save-tiempo" style="color:#39ff14; font-size: 30px;"></span></p>
-            
             <button class="btn-ui" style="font-size: 30px; padding: 15px 40px;" onclick="reanudarMision()">[ REANUDAR CONEXIÓN ]</button><br><br>
             <button class="btn-ui" style="background: transparent; color: #ff073a; border: 2px solid #ff073a; font-size: 20px; padding: 10px 20px;" onclick="borrarGuardadoYEmpezar()">[ BORRAR DATOS E INICIAR NUEVO PROTOCOLO ]</button>
         </div>
@@ -249,13 +222,12 @@
 
     <div id="pantalla-narrador" class="pantalla">
         <div id="filtro-oscuro"></div>
-        <div id="caja-narrador"><img id="foto-narrador" src="chico111.png"><div id="texto-narrador"></div></div>
+        <div id="caja-narrador"><img id="foto-narrador" src="chico111.png" alt="Narrador"><div id="texto-narrador"></div></div>
     </div>
 
     <div id="pantalla-alerta" class="pantalla">
         <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
         <div id="texto-historia" style="font-size: 26px; max-width: 800px; text-align: left; margin: 20px; color:#39ff14;"></div>
-        
         <div id="zona-registro-emergencia" style="display:none; text-align: center; margin-top: 20px; background: rgba(0, 0, 0, 0.8); padding: 25px; border: 2px solid #ff073a; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 7, 58, 0.3);">
             <p style="font-size: 26px; color: #fff; margin-top: 0;">SOLICITANDO UNIDAD TÁCTICA EXTERIOR.<br>INTRODUZCA IDENTIFICACIÓN DE EQUIPO:</p>
             <input type="text" id="input-equipo" class="input-equipo" placeholder="Vuestro nombre..." autocomplete="off" style="border-color: #ff073a; color: #ff073a;">
@@ -266,7 +238,7 @@
 
     <div id="pantalla-pasillo" class="pantalla">
         <h1 class="titulo-sector" style="margin-bottom: 10px;">NEXO CENTRAL</h1>
-        <p style="font-size: 28px; color: #e6f2ff; margin-bottom: 40px; text-shadow: 0 0 10px #00aaff;">Seleccione el sector operativo:</p>
+        <p style="font-size: 28px; color: #e6f2ff; margin-bottom: 40px; text-shadow: 0 0 10px #00aaff; z-index: 5; position: relative;">Seleccione el sector operativo:</p>
         
         <div class="contenedor-puertas">
             <div class="puerta-box activa" onclick="irAMapa()">
@@ -274,13 +246,11 @@
                 <div class="titulo-puerta">SECTOR 11</div>
                 <div class="subtitulo-puerta">PRUEBAS UNIDAD 1</div>
             </div>
-
             <div class="puerta-box bloqueada" onclick="alert('ACCESO DENEGADO: El Sector 12 aún se encuentra en fase de desarrollo.')">
                 <div class="icono-puerta" style="color:#ff073a;">🔒</div>
                 <div class="titulo-puerta">SECTOR 12</div>
                 <div class="subtitulo-puerta">[ BLOQUEADO ]<br>PRUEBAS UNIDAD 2</div>
             </div>
-
             <div class="puerta-box bloqueada" onclick="alert('ACCESO DENEGADO: Debes superar los Sectores anteriores para acceder al Núcleo Central.')">
                 <div class="icono-puerta" style="color:#ff073a;">☢️</div>
                 <div class="titulo-puerta">NÚCLEO</div>
@@ -291,64 +261,53 @@
 
     <div id="pantalla-mapa" class="pantalla">
         <button class="btn-volver-top" onclick="irAPasillo()">[ ◄ VOLVER AL NEXO ]</button>
-        
         <h1 class="titulo-sector">SECTOR 11</h1>
 
         <div class="contenedor-tarjetas">
-            
             <div class="tarjeta-tema desbloqueada" id="card-1" onclick="abrirHabitacion(1)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-1">[ IMAGEN 1 ]</div>
                 <div class="etiqueta-papel">CONCEPTOS Y<br>PROPIEDADES DE LOS<br>FLUIDOS</div>
                 <div class="badge-error" id="badge-err-1">Fallos: 0</div>
             </div>
-
             <div class="tarjeta-tema" id="card-2" onclick="abrirHabitacion(2)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-2">[ IMAGEN 2 ]</div>
                 <div class="etiqueta-papel">DERIVADA TEMPORAL<br>CAMPO FLUIDO</div>
                 <div class="badge-error" id="badge-err-2">Fallos: 0</div>
             </div>
-
             <div class="tarjeta-tema" id="card-3" onclick="abrirHabitacion(3)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-3">[ IMAGEN 3 ]</div>
                 <div class="etiqueta-papel">ECUACIÓN DE<br>CONTINUIDAD</div>
                 <div class="badge-error" id="badge-err-3">Fallos: 0</div>
             </div>
-
             <div class="tarjeta-tema" id="card-4" onclick="abrirHabitacion(4)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-4">[ IMAGEN 4 ]</div>
                 <div class="etiqueta-papel" style="font-size: 14px;">CANTIDAD DE<br>MOVIMIENTO Y<br>MOMENTO CINÉTICO</div>
                 <div class="badge-error" id="badge-err-4">Fallos: 0</div>
             </div>
-
             <div class="tarjeta-tema" id="card-5" onclick="abrirHabitacion(5)">
                 <div class="candado-icono">🔒</div>
                 <div class="imagen-tarjeta" id="img-card-5">[ IMAGEN 5 ]</div>
                 <div class="etiqueta-papel">ECUACIÓN DE LA<br>ENERGÍA</div>
                 <div class="badge-error" id="badge-err-5">Fallos: 0</div>
             </div>
-
         </div>
-
     </div>
 
     <div id="pantalla-habitacion" class="pantalla">
         <h1 class="titulo-mapa" id="titulo-hab">MÓDULO 1: CIRCUITO DE CONCEPTOS</h1>
         <div class="contenedor-mapa" id="fondo-mecanico">
-            
             <div class="tubo tubo-h" style="left: 20%; top: 30%; width: 60%;"><div class="fluido" id="fluido-1" style="left: 0; top: 0; height: 100%; width: 0%;"></div></div>
             <div class="tubo tubo-v" style="left: 80%; top: 30%; height: 40%;"><div class="fluido" id="fluido-2" style="left: 0; top: 0; width: 100%; height: 0%;"></div></div>
             <div class="tubo tubo-h" style="left: 20%; top: 70%; width: 60%;"><div class="fluido" id="fluido-3" style="right: 0; top: 0; height: 100%; width: 0%;"></div></div>
             <div class="tubo tubo-h" style="left: 0%; top: 70%; width: 20%; border-right: none; border-left: 2px dashed #ff073a;"><div class="fluido" id="fluido-final" style="right: 0; top: 0; height: 100%; width: 0%;"></div></div>
-
             <div class="valvula" id="val-1" style="left: 20%; top: 30%;">Re</div>
             <div class="valvula" id="val-2" style="left: 80%; top: 30%;">Pr</div>
             <div class="valvula" id="val-3" style="left: 80%; top: 70%;">M</div>
             <div class="valvula" id="val-4" style="left: 20%; top: 70%;">Pe</div>
-
         </div>
     </div>
 
@@ -356,7 +315,6 @@
         <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
             <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
             <h2 style="color:#ffffff; font-size: 40px; margin: 20px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
-            
             <div style="display:flex; justify-content:center; gap: 30px; margin: 30px 0;">
                 <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; width: 40%;">
                     <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA</span><br>
@@ -367,7 +325,6 @@
                     <span id="victoria-errores" style="font-size: 60px; color:#ff073a; font-weight: bold; text-shadow: 0 0 15px #ff073a;">0</span>
                 </div>
             </div>
-            
             <p style="font-size: 24px; color:#e6f2ff; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca en el servidor.</p>
         </div>
     </div>
@@ -404,7 +361,7 @@
         let valorBasePa = 0; let sol = 0;
         let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };
         
-        // NUEVO: SISTEMA DE RASTREO DE ERRORES POR MÓDULO
+        // RASTREO DE ERRORES POR MÓDULO
         let erroresModulo = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
         let tiradasC = 5; let pistasC = 0; let miniSolC = 0; let finalSolC = 0;
@@ -455,7 +412,7 @@
             tiempoSegundos = estado.tiempoSegundos;
             relojIniciado = estado.relojIniciado;
             progreso = estado.progreso;
-            if(estado.erroresModulo) erroresModulo = estado.erroresModulo; // Compatibilidad si se reanuda partida anterior
+            if(estado.erroresModulo) erroresModulo = estado.erroresModulo; 
             
             let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
@@ -472,7 +429,6 @@
             irANarrador();
         }
 
-        // NUEVO: Función para registrar fallos
         function registrarError() {
             erroresModulo[vAct]++;
             guardarEstado();
@@ -546,7 +502,6 @@
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
             document.getElementById('victoria-tiempo').innerText = `${mins}:${secs}`;
             
-            // Sumar todos los errores
             let totalErrores = Object.values(erroresModulo).reduce((a, b) => a + b, 0);
             document.getElementById('victoria-errores').innerText = totalErrores;
             
@@ -567,7 +522,7 @@
         
         function abrirHabitacion(n) { 
             if(n>1 && !progreso[n-1].every(x=>x===true)) { alert("Este módulo está bloqueado. Resuelve el módulo anterior para continuar."); return; }
-            if(progreso[n].every(x=>x===true)) { alert("Este módulo ya está estabilizado y bloqueado de forma segura."); return; } // Bloqueo al completar
+            if(progreso[n].every(x=>x===true)) { alert("Este módulo ya está estabilizado y bloqueado de forma segura."); return; }
             
             arrancarReloj(); vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
@@ -586,7 +541,7 @@
                 if(!card) continue;
                 
                 let candado = card.querySelector('.candado-icono');
-                let badge = card.querySelector('.badge-error'); // NUEVO: Insignia de fallos
+                let badge = card.querySelector('.badge-error');
 
                 if(i === 1 || progreso[i-1].every(x => x === true)) { 
                     card.className = "tarjeta-tema desbloqueada"; 
@@ -596,7 +551,6 @@
                     if(candado) candado.innerText = "🔒";
                 }
 
-                // NUEVO: Mostrar insignia solo si el módulo ha sido completado al 100%
                 if(progreso[i].every(x => x === true) && badge) {
                     badge.style.display = "block";
                     badge.innerText = `Fallos: ${erroresModulo[i]}`;
@@ -833,7 +787,7 @@
             document.getElementById("zona-disparo").style.display = "block"; document.getElementById("input-h2-f3").value = ""; document.getElementById("feed-hab2").innerText = "";
             clearTimeout(escanerTimeout);
             escanerTimeout = setTimeout(() => {
-                registrarError(); // Ventana perdida es un fallo
+                registrarError(); 
                 document.getElementById("feed-hab2").style.color = "#ff073a"; document.getElementById("feed-hab2").innerText = "¡VENTANA PERDIDA! RECALCULANDO...";
                 setTimeout(() => { document.getElementById("feed-hab2").innerText = ""; iniciarDrenajeTanque(); }, 1500);
             }, 12000);
@@ -850,7 +804,7 @@
                     alert("¡Módulo 2 Completado! ACCESO AL MÓDULO 3 DESBLOQUEADO."); irAMapa();
                 }, 2000);
             } else {
-                registrarError(); // Disparo fallido es un fallo
+                registrarError(); 
                 feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO EN EL PARCHE. REINTENTANDO FASE 3...";
                 clearTimeout(escanerTimeout); setTimeout(() => { feed.innerText = ""; iniciarDrenajeTanque(); }, 2000);
             }
@@ -889,7 +843,6 @@
             if(alturaVisual > 180) alturaVisual = 180;
             aguaDer.style.height = alturaVisual + "px";
 
-            // Solución ~2.523 m
             if (hUsr < 2.5) {
                 registrarError();
                 compuerta.style.transform = "rotate(45deg)"; 
