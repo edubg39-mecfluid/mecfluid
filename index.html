@@ -31,7 +31,6 @@
 
         /* ================= PASILLO CENTRAL (NEXO REACTOR) ================= */
         #pantalla-pasillo { 
-            /* Se asume que tienes una imagen llamada reactor.jpg en tu carpeta */
             background: url('reactor.jpg') center/cover no-repeat;
             background-color: #000510;
             justify-content: center; align-items: center;
@@ -39,7 +38,6 @@
             overflow: hidden;
         }
 
-        /* Capa 1: Fluido oscilante base */
         #pantalla-pasillo::before {
             content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to top, rgba(0, 255, 255, 0.35) 0%, rgba(0, 100, 255, 0.15) 50%, transparent 100%);
@@ -47,7 +45,6 @@
             pointer-events: none; z-index: 1;
         }
 
-        /* Capa 2: Partículas/Burbujas ascendentes */
         #pantalla-pasillo::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 200%;
             background: radial-gradient(circle, rgba(0,255,255,0.6) 2px, transparent 3px);
@@ -56,14 +53,8 @@
             pointer-events: none; z-index: 1; opacity: 0.4;
         }
 
-        @keyframes marea-reactor {
-            0% { transform: scaleY(1); opacity: 0.8; }
-            100% { transform: scaleY(1.15); opacity: 1; }
-        }
-        @keyframes subir-burbujas {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
+        @keyframes marea-reactor { 0% { transform: scaleY(1); opacity: 0.8; } 100% { transform: scaleY(1.15); opacity: 1; } }
+        @keyframes subir-burbujas { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
         .contenedor-puertas { display: flex; gap: 40px; justify-content: center; align-items: center; margin-top: 30px; flex-wrap: wrap; z-index: 5; position: relative;}
         
@@ -88,39 +79,20 @@
 
 
         /* ================= MAPA SECTOR 11 ================= */
-        #pantalla-mapa { 
-            background: linear-gradient(rgba(0, 15, 30, 0.75), rgba(0, 15, 30, 0.75)), url('departamento.jpg') center/cover no-repeat;
-            justify-content: flex-start;
-            align-items: center;
-            padding-top: 18vh;
-        }
+        #pantalla-mapa { background: linear-gradient(rgba(0, 15, 30, 0.75), rgba(0, 15, 30, 0.75)), url('departamento.jpg') center/cover no-repeat; justify-content: flex-start; align-items: center; padding-top: 18vh; }
+        .contenedor-tarjetas { display: flex; justify-content: center; align-items: center; gap: 20px; width: 95%; max-width: 1400px; height: auto; margin-top: 0; z-index: 5; flex-wrap: wrap; }
 
-        .contenedor-tarjetas {
-            display: flex; justify-content: center; align-items: center; gap: 20px; width: 95%; max-width: 1400px; height: auto; margin-top: 0; z-index: 5; flex-wrap: wrap;
-        }
-
-        .tarjeta-tema {
-            width: 180px; height: 300px; background: #fff; border: 4px solid #222; border-radius: 4px; box-shadow: 8px 8px 0px rgba(0,0,0,0.5); position: relative; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; filter: grayscale(100%) brightness(0.7); pointer-events: none; 
-        }
+        .tarjeta-tema { width: 180px; height: 300px; background: #fff; border: 4px solid #222; border-radius: 4px; box-shadow: 8px 8px 0px rgba(0,0,0,0.5); position: relative; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; filter: grayscale(100%) brightness(0.7); pointer-events: none; }
         .tarjeta-tema.desbloqueada { filter: grayscale(0%) brightness(1); pointer-events: auto; }
         .tarjeta-tema.desbloqueada:hover { transform: scale(1.05) rotate(0deg) !important; box-shadow: 12px 12px 0px #00ffff; border-color: #00ffff; z-index: 10; }
 
         .candado-icono { position: absolute; top: 8px; right: 8px; font-size: 24px; z-index: 15; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); transition: 0.3s; }
         .badge-error { position: absolute; bottom: -15px; right: -10px; background: #ff073a; color: white; padding: 4px 10px; border-radius: 5px; font-size: 18px; font-weight: bold; box-shadow: 0 0 10px rgba(255, 7, 58, 0.6); z-index: 20; display: none; border: 2px solid #fff; }
 
-        #card-1 { transform: rotate(-3deg); }
-        #card-2 { transform: rotate(2deg); margin-top: -15px; }
-        #card-3 { transform: rotate(-1deg); margin-top: 10px; }
-        #card-4 { transform: rotate(3deg); margin-top: -10px; }
-        #card-5 { transform: rotate(-2deg); margin-top: 10px; }
+        #card-1 { transform: rotate(-3deg); } #card-2 { transform: rotate(2deg); margin-top: -15px; } #card-3 { transform: rotate(-1deg); margin-top: 10px; } #card-4 { transform: rotate(3deg); margin-top: -10px; } #card-5 { transform: rotate(-2deg); margin-top: 10px; }
 
         .imagen-tarjeta { width: 100%; height: 75%; background-color: #eee; border-bottom: 4px solid #222; background-size: cover; background-position: center; display:flex; justify-content:center; align-items:center; color:#888; font-size: 16px; }
-        #img-card-1 { background-color: #f39c12; }
-        #img-card-2 { background-color: #bdc3c7; }
-        #img-card-3 { background-color: #95a5a6; }
-        #img-card-4 { background-color: #7f8c8d; }
-        #img-card-5 { background-color: #e74c3c; }
+        #img-card-1 { background-color: #f39c12; } #img-card-2 { background-color: #bdc3c7; } #img-card-3 { background-color: #95a5a6; } #img-card-4 { background-color: #7f8c8d; } #img-card-5 { background-color: #e74c3c; }
 
         .etiqueta-papel { width: 110%; background: #fff; border: 3px solid #222; position: absolute; bottom: 15px; left: -5%; padding: 6px; text-align: center; color: #b30000; font-size: 16px; font-weight: bold; line-height: 1.1; box-shadow: 3px 3px 0px rgba(0,0,0,0.3); transform: rotate(-2deg); font-family: 'Comic Sans MS', 'VT323', cursive; }
 
@@ -156,9 +128,8 @@
         @keyframes girar-val { 100% { transform: rotate(360deg); } }
         @keyframes pulso-val { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
-
         /* ================= RESTO DE PANELES ================= */
-        #pantalla-valvula, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final, #pantalla-d, #pantalla-hab2-megareto, #pantalla-hab3-megareto { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
+        #pantalla-capilar, #pantalla-quiz, #pantalla-c, #pantalla-c-mini, #pantalla-c-final, #pantalla-d, #pantalla-hab2-megareto, #pantalla-hab3-megareto { background: linear-gradient(rgba(0,30,60,0.95), rgba(0,10,20,0.95)), url('techlab.jpg') center/cover; }
         .panel-azul { background: rgba(0, 43, 77, 0.95); padding: 35px; border-radius: 20px; border: 3px solid #00ffff; width: 520px; text-align: center; backdrop-filter: blur(10px); z-index: 5;}
         
         .panel-quiz, .panel-c-final, #pantalla-c-mini .panel-azul, .panel-d, .panel-delta { width: 800px; }
@@ -200,6 +171,21 @@
         .bisagra-ui { position: absolute; left: 45%; top: 40px; width: 16px; height: 16px; background: #ff073a; border-radius: 50%; transform: translate(-50%, -50%); z-index: 10; box-shadow: 0 0 10px #ff073a; }
         .compuerta-fisica-inclinada { position: absolute; left: 45%; top: 40px; width: 8px; height: 160px; background: #ddd; transform-origin: top center; transform: rotate(30deg); border-radius: 4px; z-index: 5; transition: transform 0.5s, background 0.5s; }
         .muro-b { position: absolute; bottom: 0; left: 30%; width: 20px; height: 15px; background: #39ff14; z-index: 6; }
+
+
+        /* === NUEVO JUEGO: CAPILARIDAD === */
+        .hud-intentos { position: absolute; top: 20px; right: 20px; font-size: 24px; color: #ff073a; border: 2px solid #ff073a; padding: 5px 15px; border-radius: 5px; background: rgba(255,7,58,0.1); box-shadow: 0 0 10px rgba(255,7,58,0.4); font-weight: bold; z-index: 100;}
+        .datos-caja { background: rgba(0,0,0,0.6); padding: 15px; border: 1px solid #00ffff; display: flex; justify-content: space-around; font-size: 22px; color: #39ff14; border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .simulador-container-cap { position: relative; width: 450px; height: 350px; margin: 20px auto; border-bottom: 6px solid #444; background: rgba(255,255,255,0.02); border-radius: 10px 10px 0 0; }
+        .fluido-base { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; background: rgba(0, 255, 255, 0.4); border-top: 2px solid rgba(0, 255, 255, 0.8); z-index: 2; }
+        #tubo-cristal { position: absolute; bottom: 10px; left: 205px; width: 40px; height: 300px; border-left: 4px solid rgba(255,255,255,0.6); border-right: 4px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); transition: width 0.5s, left 0.5s; z-index: 3; }
+        #fluido-capilar { position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: #00aaff; box-shadow: inset 0 0 10px #00ffff; transition: height 2s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.5s; }
+        .sensor-cap { position: absolute; width: 25px; height: 8px; background: #ff073a; box-shadow: 0 0 15px #ff073a; border-radius: 2px; z-index: 5; transition: bottom 1s ease-in-out, background 0.3s; }
+        .sensor-cap.izq { left: 180px; }
+        .sensor-cap.der { right: 180px; }
+        .linea-objetivo-cap { position: absolute; left: 0; width: 100%; border-top: 2px dashed rgba(255, 7, 58, 0.6); z-index: 1; transition: bottom 1s ease-in-out; }
+        .texto-objetivo-cap { position: absolute; left: 10px; color: #ff073a; font-size: 22px; font-weight: bold; text-shadow: 0 0 5px #000; transition: bottom 1s ease-in-out; }
+
     </style>
 </head>
 <body>
@@ -329,7 +315,34 @@
         </div>
     </div>
 
-    <div id="pantalla-valvula" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR CALIBRACIÓN ]</button><div class="panel-azul"><div id="paso-info" style="color:#00ffff; font-size:22px;">---</div><h2 style="color:#ffffff; margin:10px 0;">SISTEMA DE CALIBRACIÓN</h2><div id="enunciado" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px;"></div><input type="number" id="inputRes" step="any" placeholder="0.00"><br><button class="btn-ui" onclick="verificarRes()">[ VERIFICAR ]</button><div id="feed" style="margin-top:20px; font-size:24px;"></div></div></div>
+    <div id="pantalla-capilar" class="pantalla">
+        <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR CALIBRACIÓN ]</button>
+        <div class="panel-azul" style="width: 850px; position: relative;">
+            <div class="hud-intentos">INTENTOS: <span id="intentos-ui">2</span></div>
+            <h2 style="color:#00ffff; margin-top: 0; font-size: 38px; text-align: left;">PUERTA SECUNDARIA</h2>
+            <p style="font-size: 24px; text-align: left; margin-bottom: 20px; line-height: 1.3;">
+                El sistema electrónico está bloqueado. Para cortocircuitarlo, debes aprovechar la capilaridad. 
+                Inserta el capilar correcto para que el fluido ascienda y toque los terminales situados a <b style="color:#ff073a;">h = <span id="enunciado-h">30</span> mm</b>.
+            </p>
+            <div class="datos-caja">
+                <span>Tensión Sup. (γ): <b>0.0735 N/m</b></span>
+                <span>Densidad (ρ): <b>1000 kg/m³</b></span>
+                <span>Gravedad (g): <b>9.8 m/s²</b></span>
+                <span>Ángulo (θ): <b>0°</b></span>
+            </div>
+            <div class="simulador-container-cap">
+                <div class="fluido-base"></div>
+                <div class="linea-objetivo-cap" id="linea-obj"></div>
+                <div class="texto-objetivo-cap" id="texto-obj">h = 30 mm</div>
+                <div id="sensor-izq" class="sensor-cap izq"></div>
+                <div id="sensor-der" class="sensor-cap der"></div>
+                <div id="tubo-cristal"><div id="fluido-capilar"></div></div>
+            </div>
+            <p style="font-size: 26px; color:#e6f2ff; margin-bottom: 15px;">Selecciona el <b>diámetro (D)</b> del tubo capilar a insertar:</p>
+            <div id="botones-container" style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+            <div id="feed-capilar" style="font-size: 28px; height: 35px; font-weight: bold; color: #888;">Sistema listo. Esperando selección...</div>
+        </div>
+    </div>
 
     <div id="pantalla-quiz" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR COMPROBACIÓN ]</button><div class="panel-azul panel-quiz"><div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO Pr: PREGUNTA 1/3</div><h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA UD1</h2><div id="quiz-pregunta" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px; padding: 0 15px;"></div><div id="quiz-opciones" style="display:flex; flex-direction:column; align-items: center; padding: 0 20px;"></div><div id="quiz-feed" style="margin-top:20px; font-size:24px; height: 30px;"></div></div></div>
 
@@ -358,7 +371,6 @@
         let relojIniciado = false; 
 
         let vAct = 1; let tAct = 0; let subFase = 1; 
-        let valorBasePa = 0; let sol = 0;
         let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };
         
         // RASTREO DE ERRORES POR MÓDULO
@@ -595,28 +607,152 @@
         // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
         function irAProblema(t) {
             tAct = t; subFase = 1;
-            if (t === 1) { valorBasePa = Math.floor(Math.random() * 900) + 100; mostrar('pantalla-valvula'); generarRetoA(); } 
+            if (t === 1) { mostrar('pantalla-capilar'); generarNivelCapilar(); } 
             else if (t === 2) { preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); mostrar('pantalla-quiz'); generarRetoB(); } 
             else if (t === 3) { iniciarRetoC(); } 
             else if (t === 4) { generarRetoD(); mostrar('pantalla-d'); }
         }
 
-        function generarRetoA() {
-            const env = document.getElementById("enunciado"); document.getElementById("inputRes").value = ""; document.getElementById("feed").innerText = "";
-            document.getElementById("paso-info").innerText = `PUNTO Re: PASO ${subFase}/3`;
-            if (subFase === 1) { sol = valorBasePa / 100000; env.innerHTML = `Presión detectada: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>bar</b>`; } 
-            else if (subFase === 2) { sol = valorBasePa / 100; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>mbar</b>`; } 
-            else { sol = valorBasePa / 1000000; env.innerHTML = `Mismo valor: <b>${valorBasePa} Pa</b> <br> Conviértelo a: <b>N/mm²</b>`; }
+        // LÓGICA MINIJUEGO CAPILARIDAD (Válvula 1)
+        const nivelesCapilar = [
+            { h: 30, correcta: 1.0, opciones: [0.5, 1.0, 2.0, 5.0] },
+            { h: 15, correcta: 2.0, opciones: [1.0, 1.5, 2.0, 3.0] },
+            { h: 20, correcta: 1.5, opciones: [0.5, 1.0, 1.5, 2.5] },
+            { h: 10, correcta: 3.0, opciones: [1.5, 2.0, 3.0, 5.0] },
+            { h: 25, correcta: 1.2, opciones: [0.8, 1.2, 2.0, 3.0] }
+        ];
+
+        let capIntentos = 2;
+        let capNivelAct = null;
+
+        function generarNivelCapilar() {
+            capIntentos = 2;
+            document.getElementById('intentos-ui').innerText = capIntentos;
+            
+            capNivelAct = nivelesCapilar[Math.floor(Math.random() * nivelesCapilar.length)];
+            let hObj = capNivelAct.h;
+
+            document.getElementById('enunciado-h').innerText = hObj;
+            document.getElementById('texto-obj').innerText = `h = ${hObj} mm`;
+            document.getElementById('feed-capilar').style.color = "#888";
+            document.getElementById('feed-capilar').innerText = "Sistema listo. Esperando selección...";
+
+            let bottomPx = (hObj * 4) + 30; 
+            document.getElementById('linea-obj').style.bottom = bottomPx + 'px';
+            document.getElementById('texto-obj').style.bottom = (bottomPx + 5) + 'px';
+            document.getElementById('sensor-izq').style.bottom = (bottomPx - 2) + 'px';
+            document.getElementById('sensor-der').style.bottom = (bottomPx - 2) + 'px';
+
+            let contBotones = document.getElementById('botones-container');
+            contBotones.innerHTML = ''; 
+
+            capNivelAct.opciones.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = 'btn-ui btn-capilar';
+                btn.innerText = opt.toFixed(1) + ' mm';
+                let wPx = opt * 10;
+                btn.onclick = () => probarCapilar(opt, wPx);
+                contBotones.appendChild(btn);
+            });
+
+            resetAnimacionCapilar();
         }
 
-        function verificarRes() {
-            const res = parseFloat(document.getElementById("inputRes").value); const feed = document.getElementById("feed");
-            if (Math.abs(res - sol) < 0.000001) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ ACCESO CONCEDIDO";
-                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoA(); } else { progreso[vAct][0] = true; abrirHabitacion(vAct); } }, 800);
-            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FALLO"; setTimeout(() => { subFase = 1; valorBasePa = Math.floor(Math.random() * 900) + 100; generarRetoA(); }, 1200); }
+        function resetAnimacionCapilar() {
+            let fluido = document.getElementById('fluido-capilar');
+            let sIzq = document.getElementById('sensor-izq');
+            let sDer = document.getElementById('sensor-der');
+            let tubo = document.getElementById('tubo-cristal');
+
+            tubo.style.width = "40px"; 
+            tubo.style.left = "205px";
+
+            fluido.style.transition = "none";
+            fluido.style.height = "30px"; 
+            fluido.style.background = "#00aaff";
+            fluido.style.boxShadow = "inset 0 0 10px #00ffff";
+            
+            sIzq.style.background = "#ff073a"; sIzq.style.boxShadow = "0 0 15px #ff073a";
+            sDer.style.background = "#ff073a"; sDer.style.boxShadow = "0 0 15px #ff073a";
+
+            void fluido.offsetWidth; 
         }
 
+        function probarCapilar(diametroMm, uiAnchoPared) {
+            let dMetros = diametroMm / 1000;
+            let hMetros = (4 * 0.0735) / (1000 * 9.8 * dMetros);
+            let hMilimetros = hMetros * 1000; 
+            
+            let alturaPx = hMilimetros * 4; 
+            if(alturaPx > 280) alturaPx = 280;
+
+            let tubo = document.getElementById('tubo-cristal');
+            let fluido = document.getElementById('fluido-capilar');
+            let feed = document.getElementById('feed-capilar');
+            let sIzq = document.getElementById('sensor-izq');
+            let sDer = document.getElementById('sensor-der');
+            
+            document.querySelectorAll('.btn-capilar').forEach(b => b.disabled = true);
+            feed.style.color = "#00ffff";
+            feed.innerText = "Calculando ascenso capilar...";
+
+            tubo.style.width = uiAnchoPared + "px";
+            tubo.style.left = (225 - (uiAnchoPared/2)) + "px"; 
+            
+            fluido.style.transition = "none";
+            fluido.style.height = "30px"; 
+            fluido.style.background = "#00aaff";
+            
+            void fluido.offsetWidth; 
+            
+            fluido.style.transition = "height 2s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.5s";
+            fluido.style.height = (alturaPx + 30) + "px"; 
+
+            setTimeout(() => {
+                if (Math.abs(hMilimetros - capNivelAct.h) < 0.5) {
+                    fluido.style.background = "#39ff14"; 
+                    fluido.style.boxShadow = "0 0 20px #39ff14";
+                    sIzq.style.background = "#39ff14"; sIzq.style.boxShadow = "0 0 20px #39ff14";
+                    sDer.style.background = "#39ff14"; sDer.style.boxShadow = "0 0 20px #39ff14";
+                    
+                    feed.style.color = "#39ff14";
+                    feed.innerText = "✓ ¡CONTACTO ESTABLECIDO! CORTOCIRCUITO COMPLETADO.";
+                    
+                    // Al acertar, actualizamos progreso y volvemos a la habitación
+                    setTimeout(() => { progreso[vAct][0] = true; abrirHabitacion(vAct); }, 1500);
+
+                } else {
+                    capIntentos--;
+                    registrarError(); // Aumenta el contador de fallos global de la Unidad
+                    document.getElementById('intentos-ui').innerText = capIntentos;
+                    
+                    fluido.style.background = "#ff073a";
+                    fluido.style.boxShadow = "0 0 20px #ff073a";
+                    
+                    let msgFallo = hMilimetros > capNivelAct.h ? "DESBORDAMIENTO" : "INSUFICIENTE";
+                    
+                    if (capIntentos > 0) {
+                        feed.style.color = "#ffa500";
+                        feed.innerText = `✗ ${msgFallo} (h = ${hMilimetros.toFixed(1)} mm). INTÉNTALO DE NUEVO.`;
+                        
+                        setTimeout(() => {
+                            resetAnimacionCapilar();
+                            document.querySelectorAll('.btn-capilar').forEach(b => b.disabled = false);
+                            feed.style.color = "#888";
+                            feed.innerText = "Selecciona otro diámetro...";
+                        }, 2500);
+
+                    } else {
+                        feed.style.color = "#ff073a";
+                        feed.innerText = `✗ ${msgFallo}. SISTEMA BLOQUEADO. RECALIBRANDO...`;
+                        
+                        setTimeout(() => { generarNivelCapilar(); }, 3500);
+                    }
+                }
+            }, 2000);
+        }
+
+        // LÓGICA RESTO DE MÓDULOS 
         function generarRetoB() {
             const preg = preguntasSeleccionadas[subFase - 1]; document.getElementById('quiz-paso').innerText = `PUNTO Pr: PREGUNTA ${subFase}/3`;
             document.getElementById('quiz-pregunta').innerHTML = preg.q; document.getElementById('quiz-feed').innerText = "";
