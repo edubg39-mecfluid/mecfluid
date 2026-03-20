@@ -29,14 +29,12 @@
         .bg-caminar { animation: efecto-caminar 15s linear forwards; }
         @keyframes efecto-caminar { 0% { background-size: 100%; background-position: center; } 100% { background-size: 130%; background-position: center 80%; } }
         .flecha-continuar { position: absolute; bottom: 20px; right: 30px; color: #39ff14; text-shadow: 0 0 8px #39ff14, 0 0 15px #39ff14; font-size: 26px; 
-            cursor: pointer; display: none; font-weight: bold; letter-spacing: 2px;}
-        .flechita {
-            display: inline-block; /* Necesario para poder mover elementos de texto */
-            animation: rebote-flecha 1s ease-in-out infinite;
+            cursor: pointer; display: none; /* Se oculta mientras escribe */font-weight: bold; letter-spacing: 2px; animation: rebote-flecha 1.5s ease-in-out infinite; 
         }
+
         @keyframes rebote-flecha {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(5px); } /* Baja 5 píxeles a mitad de la animación */
+            50% { transform: translateY(5px); } /* Baja 5 píxeles suavemente */
         }
          #caja-narrador {cursor: pointer; }
 
