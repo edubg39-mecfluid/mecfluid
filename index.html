@@ -26,7 +26,11 @@
         #caja-narrador { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px; box-sizing: border-box; overflow-y: hidden; transition: 0.2s; }
         #foto-narrador { width: 180px; height: auto; filter: drop-shadow(0 0 15px #00ffff); flex-shrink: 0; }
         #texto-narrador { color: #00ffff; font-size: 32px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; flex: 1; margin: 0; }
-
+        .bg-caminar { animation: efecto-caminar 15s linear forwards; }
+        @keyframes efecto-caminar { 0% { background-size: 100%; background-position: center; } 100% { background-size: 130%; background-position: center 80%; } }
+        .flecha-continuar { position: absolute; bottom: 20px; right: 30px; color: #39ff14; font-size: 30px; animation: parpadeo 1s infinite; cursor: pointer; 
+            display: none; font-weight: bold; }
+         #caja-narrador {cursor: pointer; }
 
         /* ================= PASILLO CENTRAL (NEXO REACTOR) ================= */
         #pantalla-pasillo { 
