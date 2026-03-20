@@ -37,8 +37,6 @@
             transition: opacity 1.5s ease-in-out; 
             z-index: 0;
         }
-
-        /* ANIMACIÓN DE RECORRIDO CONSTANTE (Efecto "Caminar") */
         @keyframes efecto-linear-caminar {
             0% { transform: scale(1); }
             50% { transform: scale(1.03); } 
@@ -48,17 +46,24 @@
         .bg-linear-caminar {
             animation: efecto-linear-caminar 8s ease-in-out infinite;
         }
-
-        /* Alerta de Error Glitch */
         .alerta-emergencia #filtro-oscuro {
-            background: rgba(180, 0, 0, 0.2);
-            animation: glitch-error 0.2s infinite;
+            /* Ejecutar la animación UNA sola vez, duración 6s, mantener estado final transparente */
+            animation: alarma-fading 6s ease-out forwards;
+            z-index: 2; 
         }
 
-        @keyframes glitch-error {
-            0% { background-color: rgba(180, 0, 0, 0.2); }
-            50% { background-color: rgba(255, 0, 0, 0.4); }
-            100% { background-color: rgba(180, 0, 0, 0.2); }
+        @keyframes alarma-fading {
+            0%   { background-color: rgba(255, 0, 0, 0.5); }
+            2.5% { background-color: rgba(255, 0, 0, 0.0); }
+            5%   { background-color: rgba(255, 0, 0, 0.4); }
+            7.5% { background-color: rgba(255, 0, 0, 0.0); }
+            10%  { background-color: rgba(255, 0, 0, 0.3); }
+            15%  { background-color: rgba(255, 0, 0, 0.0); }
+            25%  { background-color: rgba(200, 0, 0, 0.15); }
+            35%  { background-color: rgba(200, 0, 0, 0.0); }
+            45%  { background-color: rgba(150, 0, 0, 0.08); }
+            60%  { background-color: rgba(150, 0, 0, 0.0); }
+            100% { background-color: rgba(0, 0, 0, 0.0); }
         }
         
         #caja-narrador { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%; max-height: 35vh; background: rgba(0, 30, 60, 0.85); border: 2px solid #00ffff; border-radius: 12px; padding: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 30px; box-sizing: border-box; overflow-y: hidden; transition: 0.2s; cursor: pointer; }
