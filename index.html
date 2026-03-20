@@ -454,31 +454,140 @@
         // ================= NAVEGACIÓN =================
         function mostrar(id) { document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa')); document.getElementById(id).classList.add('activa'); }
 
+        let pasoHistoria = 0;
+        let escribiendo = false;
+        let intvNarrador = null;
+
+        const guionAqualab = [
+            { txt: "Saludos, equipo. Bienvenidos a las instalaciones subterráneas de AQUAFLUID. Soy el IA-Asistente asignado a vuestro grupo.", bg: "url('lobby.jpg')", // Pon aquí la imagen de la entrada
+             animBg: false,face: "chico-idle.png" 
+            },
+            { 
+                txt: "Acompañadme, por favor. Vamos a descender por el corredor principal hacia los laboratorios de pruebas. Nuestra red gestiona fluidos a presiones críticas para toda la ciudad.", 
+                bg: "url('pasillo-largo.jpg')", // Pon aquí una imagen de un pasillo 
+                animBg: true, face: "chico-habla.png" 
+            },
+            { 
+                txt: "Ya hemos llegado a la sala de control del Sector 11. Vamos a proceder a la verificación rutinaria de las válvulas de derivación...", 
+                bg: "url('puerta-sector11.jpg')", // Pon una imagen de una sala de control o puerta
+                animBg: false, face: "chico-idle.png" 
+            },
+            { 
+                txt: "Los niveles de presión manométrica son estables, el flujo de agua es constante y... Espera. Un momento.", 
+                bg: "url('puerta-sector11.jpg')", 
+                animBg: false,
+                face: "chico-habla.png" 
+            },
+            { 
+                txt: "¿Qué es esa lectura anómala? ¡Alerta de cavitación detectada! ¡Fallo estructural inminente en las tuberías principales!", 
+                bg: "url('puerta-sector11.jpg')", 
+                animBg: false,
+                face: "chico-sorpresa.png", error: true
+            }
+        ];
+
         function irANarrador() {
             mostrar('pantalla-narrador');
-            document.getElementById('pantalla-narrador').style.background = "url('fondo (2).png') center/cover";
             document.getElementById('caja-narrador').style.opacity = "1";
             document.getElementById('filtro-oscuro').style.opacity = "1";
+            
+            if(!document.getElementById('flecha-sig')) {
+                document.getElementById('caja-narrador').innerHTML += '<div id="flecha-sig" class="flecha-continuar">▼ CLIC PARA CONTINUAR ▼</div>';
+            }
+            
+            document.getElementById('caja-narrador').onclick = avanzarHistoria;
+            pasoHistoria = 0;
+            reproducirPasoHistoria();
+        }
 
-            const txt = "Saludos equipo. Bienvenidos al laboratorio AQUAFLUID. Hoy vamos a proceder a la verificación rutinaria de las válvulas. Los niveles de presión son estables, el flujo de agua es constante y... Espera, ¿qué es esa lectura en el sector 11?";
-            let i = 0; const caja = document.getElementById("texto-narrador"); caja.innerHTML = "";
-            let intv = setInterval(() => { 
-                caja.innerHTML += txt.charAt(i); i++; 
-                if(i >= txt.length){ 
-                    clearInterval(intv); 
-                    setTimeout(() => {
-                        caja.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
+        function reproducirPasoHistoria() {
+            if (pasoHistoria >= guionAqualab.length) return; // Fin de la historia
+            
+            escribiendo = true;
+            document.getElementById('flecha-sig').style.display = "none";
+            
+            const escena = guionAqualab[pasoHistoria];
+            const pantalla = document.getElementById('pantalla-narrador');
+            const foto = document.getElementById('foto-narrador');
+            const cajaText = document.getElementById('texto-narrador');
+            
+            // 1. Aplicar Fondo y animación
+            pantalla.style.background = escena.bg + " center/cover";
+            if (escena.animBg) {
+                pantalla.classList.add('bg-caminar');
+            } else {
+                pantalla.classList.remove('bg-caminar');
+            }
+
+            // 2. Aplicar Cara y Efectos
+            foto.src = escena.face;
+            if (escena.error) {
+                foto.classList.add("narrador-error");
+            } else {
+                foto.classList.remove("narrador-error");
+            }
+
+            // 3. Efecto Máquina de escribir
+            cajaText.innerHTML = "";
+            let i = 0;
+            let toggleHabla = false;
+            clearInterval(intvNarrador);
+
+            intvNarrador = setInterval(() => { 
+                cajaText.innerHTML += escena.txt.charAt(i); 
+                
+                // Mueve la boca si la imagen base es la de hablar
+                if (escena.face === "chico-habla.png" && i % 3 === 0 && escena.txt.charAt(i) !== " ") {
+                    toggleHabla = !toggleHabla;
+                    foto.src = toggleHabla ? "chico-habla.png" : "chico-idle.png";
+                }
+
+                i++; 
+                if (i >= escena.txt.length) { 
+                    clearInterval(intvNarrador); 
+                    escribiendo = false;
+                    
+                    // Si es el último paso (error), no mostramos flecha, saltamos directo a la alarma
+                    if (escena.error) {
+                        foto.src = "chico-sorpresa.png"; // Aseguramos cara de susto al terminar de hablar
+                        document.getElementById('caja-narrador').onclick = null; // Quitamos el clic
                         setTimeout(() => {
-                            document.getElementById('pantalla-narrador').style.background = "#000";
-                            document.getElementById('caja-narrador').style.opacity = "0"; 
-                            document.getElementById('filtro-oscuro').style.opacity = "0"; 
-                            setTimeout(() => { irAAlerta(); }, 3000);
-                        }, 1500); 
-                    }, 500); 
+                            cajaText.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold; font-size:40px;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
+                            setTimeout(() => {
+                                document.getElementById('pantalla-narrador').style.background = "#000";
+                                document.getElementById('caja-narrador').style.opacity = "0"; 
+                                document.getElementById('filtro-oscuro').style.opacity = "0"; 
+                                setTimeout(() => { irAAlerta(); }, 2000);
+                            }, 2000); 
+                        }, 1000);
+                    } else {
+                        // Si es un paso normal, volvemos a cara reposo y mostramos flecha para avanzar
+                        foto.src = escena.face.includes("habla") ? "chico-idle.png" : escena.face;
+                        document.getElementById('flecha-sig').style.display = "block";
+                    }
                 }
             }, 30);
         }
 
+        function avanzarHistoria() {
+            // Si el jugador hace clic MIENTRAS se escribe, completamos el texto de golpe (saltar tipeo)
+            if (escribiendo) {
+                clearInterval(intvNarrador);
+                document.getElementById('texto-narrador').innerHTML = guionAqualab[pasoHistoria].txt;
+                escribiendo = false;
+                
+                if(!guionAqualab[pasoHistoria].error) {
+                    document.getElementById('foto-narrador').src = "chico-idle.png";
+                    document.getElementById('flecha-sig').style.display = "block";
+                }
+            } else {
+                // Si ya había terminado de escribir, pasamos al siguiente acto
+                if (pasoHistoria < guionAqualab.length - 1) {
+                    pasoHistoria++;
+                    reproducirPasoHistoria();
+                }
+            }
+        }
         function irAAlerta() {
             mostrar('pantalla-alerta');
             const hTxt = "SISTEMA COMPROMETIDO...\nFallo crítico detectado en las válvulas de refrigeración.\nPresión inestable. Protocolo de evacuación iniciado.\n\n[ ALERTA ] Se requiere intervención de Unidad de Ingeniería Táctica.";
