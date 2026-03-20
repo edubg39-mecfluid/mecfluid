@@ -271,7 +271,7 @@
         // ================= PRECARGA DE IMÁGENES =================
         const recursosGraficos = [
             "fondo (2).png", "reactor.jpg", "departamento.jpg", "techlab.jpg",
-            "lobby.jpg", "pasillo-largo.jpg", "compuerta11.jpg", "puerta-sector11.jpg",
+            "lobby.png", "pasillo-largo.jpg", "compuerta11.jpg", "puerta-sector11.jpg",
             "chico-idle.png", "chico-habla.png", "chico-sorpresa.png", "chico111.png"
         ];
         recursosGraficos.forEach(ruta => { const img = new Image(); img.src = ruta; });
@@ -548,7 +548,7 @@
         let fondoActual = null; 
 
         const guionAqualab = [
-            { txt: "Saludos, equipo. Bienvenidos a las instalaciones subterráneas de AQUAFLUID. Soy Reyn el asistente asignado a vuestro grupo.", bg: "lobby.jpg", face: "chico-idle.png" },
+            { txt: "Saludos, equipo. Bienvenidos a las instalaciones subterráneas de AQUAFLUID. Soy Reyn el asistente asignado a vuestro grupo.", bg: "lobby.png", face: "chico-idle.png" },
             { txt: "Acompañadme, por favor. Vamos a descender por el corredor principal hacia los laboratorios de pruebas. Nuestra red gestiona fluidos a presiones críticas para toda la ciudad.", bg: "pasillo-largo.jpg", face: "chico-habla.png" },
             { txt: "Ya hemos llegado a la sala de control del Sector 11. Vamos a proceder a la verificación rutinaria de las válvulas...", bg: "compuerta11.jpg", face: "chico-idle.png" },
             { txt: "Los niveles de presión manométrica son estables, el flujo de agua es constante y... Espera. Un momento.", bg: "puerta-sector11.jpg", face: "chico-habla.png" },
