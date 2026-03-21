@@ -165,39 +165,73 @@
             overflow: hidden;
         }
 
+        /* Zonas clickeables muy visibles y parpadeantes */
         .hotspot {
             position: absolute;
             cursor: pointer;
-            border: 2px dashed rgba(0, 255, 255, 0.2); 
-            background: rgba(0, 255, 255, 0.05);
+            border: 3px dashed rgba(0, 255, 255, 0.7); /* Borde cian mucho más fuerte */
+            background: rgba(0, 255, 255, 0.15); /* Fondo ligeramente tintado */
             border-radius: 8px;
             transition: all 0.3s ease-out;
             z-index: 10;
+            animation: latido-hotspot 2s infinite alternate ease-in-out; /* Animación de pulso */
+        }
+
+        /* Animación de brillo para zonas desbloqueadas */
+        @keyframes latido-hotspot {
+            0% { box-shadow: 0 0 5px rgba(0, 255, 255, 0.2), inset 0 0 5px rgba(0, 255, 255, 0.2); }
+            100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), inset 0 0 15px rgba(0, 255, 255, 0.4); }
         }
 
         .hotspot:hover {
-            background: rgba(0, 255, 255, 0.3);
-            border: 2px solid #00ffff;
-            box-shadow: 0 0 20px #00ffff, inset 0 0 20px #00ffff;
+            background: rgba(0, 255, 255, 0.4);
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 30px #00ffff, inset 0 0 30px #00ffff !important;
             transform: scale(1.05); 
+            z-index: 15;
         }
 
+        /* Estados de los Hotspots Bloqueados */
         .hotspot.bloqueado {
-            border-color: rgba(255, 7, 58, 0.2);
-            background: rgba(255, 7, 58, 0.05);
+            border-color: rgba(255, 7, 58, 0.6);
+            background: rgba(255, 7, 58, 0.1);
+            animation: latido-bloqueado 2s infinite alternate ease-in-out;
             cursor: not-allowed;
         }
-        .hotspot.bloqueado:hover {
-            background: rgba(255, 7, 58, 0.3);
-            border-color: #ff073a;
-            box-shadow: 0 0 20px #ff073a, inset 0 0 20px #ff073a;
-        }
         
-        .hotspot.completado {
-            border-color: rgba(57, 255, 20, 0.4);
-            background: rgba(57, 255, 20, 0.1);
+        @keyframes latido-bloqueado {
+            0% { box-shadow: 0 0 5px rgba(255, 7, 58, 0.2), inset 0 0 5px rgba(255, 7, 58, 0.2); }
+            100% { box-shadow: 0 0 20px rgba(255, 7, 58, 0.5), inset 0 0 15px rgba(255, 7, 58, 0.3); }
         }
 
+        .hotspot.bloqueado:hover {
+            background: rgba(255, 7, 58, 0.3);
+            border: 3px solid #ff073a;
+            box-shadow: 0 0 30px #ff073a, inset 0 0 30px #ff073a !important;
+        }
+        
+        /* Estado Completado */
+        .hotspot.completado {
+            border-color: rgba(57, 255, 20, 0.6);
+            background: rgba(57, 255, 20, 0.15);
+            animation: none; /* Deja de palpitar al superarlo */
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+
+        /* Etiqueta indicadora fija (Ej: M1, M2) */
+        .tag-modulo {
+            position: absolute;
+            top: -12px; left: -12px;
+            background: #000; color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 2px 8px; font-size: 22px; font-weight: bold;
+            border-radius: 4px; box-shadow: 0 0 10px #00ffff;
+            pointer-events: none; transition: 0.3s;
+        }
+        .hotspot.bloqueado .tag-modulo { color: #ff073a; border-color: #ff073a; box-shadow: 0 0 10px #ff073a; }
+        .hotspot.completado .tag-modulo { color: #39ff14; border-color: #39ff14; box-shadow: 0 0 10px #39ff14; }
+
+        /* Tooltip estilo aventura gráfica */
         .tooltip-layton {
             position: absolute;
             bottom: 110%; left: 50%;
@@ -220,6 +254,8 @@
 
         .hotspot.bloqueado .tooltip-layton { border-color: #ff073a; }
         .hotspot.completado .tooltip-layton { border-color: #39ff14; }
+
+        /* Mostrar tooltip al pasar el ratón */
         .hotspot:hover .tooltip-layton { opacity: 1; bottom: 120%; }
 
         .badge-error-layton {
@@ -398,31 +434,34 @@
 
     <div id="pantalla-mapa" class="pantalla">
         <button class="btn-volver-top" onclick="irAPasillo()">[ ◄ VOLVER AL NEXO ]</button>
-        <h1 class="titulo-sector" style="position:absolute; top: 20px; text-shadow: 0 0 20px #000; z-index: 20;">SECTOR 11: LABORATORIO</h1>
-
         <div class="escenario-interactivo" id="escenario-sector11">
             
             <div class="hotspot" id="hotspot-1" style="top: 30%; left: 15%; width: 12%; height: 20%;" onclick="abrirHabitacion(1)">
+                <div class="tag-modulo">M1</div>
                 <div class="tooltip-layton">M1: CONCEPTOS BÁSICOS</div>
                 <div class="badge-error-layton" id="badge-err-1">0 Fallos</div>
             </div>
 
             <div class="hotspot bloqueado" id="hotspot-2" style="top: 55%; left: 35%; width: 15%; height: 25%;" onclick="abrirHabitacion(2)">
+                <div class="tag-modulo">M2</div>
                 <div class="tooltip-layton">M2: DERIVADA TEMPORAL <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-2">0 Fallos</div>
             </div>
 
             <div class="hotspot bloqueado" id="hotspot-3" style="top: 25%; left: 60%; width: 10%; height: 18%;" onclick="abrirHabitacion(3)">
+                <div class="tag-modulo">M3</div>
                 <div class="tooltip-layton">M3: CONTINUIDAD <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-3">0 Fallos</div>
             </div>
 
             <div class="hotspot bloqueado" id="hotspot-4" style="top: 60%; left: 75%; width: 14%; height: 22%;" onclick="abrirHabitacion(4)">
+                <div class="tag-modulo">M4</div>
                 <div class="tooltip-layton">M4: CANTIDAD DE MOVIMIENTO <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-4">0 Fallos</div>
             </div>
 
             <div class="hotspot bloqueado" id="hotspot-5" style="top: 15%; left: 80%; width: 12%; height: 15%;" onclick="abrirHabitacion(5)">
+                <div class="tag-modulo">M5</div>
                 <div class="tooltip-layton">M5: ENERGÍA <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-5">0 Fallos</div>
             </div>
