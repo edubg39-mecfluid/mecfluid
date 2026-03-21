@@ -255,8 +255,15 @@
         .hotspot.bloqueado .tooltip-layton { border-color: #ff073a; }
         .hotspot.completado .tooltip-layton { border-color: #39ff14; }
 
-        /* Mostrar tooltip al pasar el ratón */
         .hotspot:hover .tooltip-layton { opacity: 1; bottom: 120%; }
+        .tooltip-layton.tooltip-abajo {
+            bottom: auto !important;
+            top: 110%;
+        }
+        .hotspot:hover .tooltip-layton.tooltip-abajo {
+            bottom: auto !important;
+            top: 120%;
+        }
 
         .badge-error-layton {
             position: absolute; top: -15px; right: -15px;
@@ -450,7 +457,7 @@
 
             <div class="hotspot bloqueado" id="hotspot-3" style="top: 13%; left: 67%; width: 20%; height: 15%;" onclick="abrirHabitacion(3)">
                 <div class="tag-modulo">M3</div>
-                <div class="tooltip-layton">M3: CONTINUIDAD <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
+                <div class="tooltip-layton tooltip-abajo">M3: CONTINUIDAD <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-3">0 Fallos</div>
             </div>
 
