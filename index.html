@@ -144,6 +144,17 @@
         .subtitulo-puerta { font-size: 22px; color: #00ffff; text-align: center; z-index: 2; padding: 0 10px;}
         .puerta-box.bloqueada .subtitulo-puerta { color: #ff073a; }
         .icono-puerta { font-size: 60px; margin-bottom: 10px; z-index: 2; }
+        .puerta-box.bloqueada .subtitulo-puerta { color: #ff073a; }
+        .icono-puerta { font-size: 60px; margin-bottom: 10px; z-index: 2; }
+        .icono-imagen-puerta {width: 140px; height: 100px; object-fit: cover; border: 3px solid #00ffff; border-radius: 8px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); 
+            margin-bottom: 15px; z-index: 2; transition: 0.3s;  }
+        .puerta-box.activa:hover .icono-imagen-puerta {
+            box-shadow: 0 0 35px #00ffff; /* Aumenta el brillo al pasar el ratón */
+            transform: scale(1.05);       /* Hace el icono un pelín más grande al hover */
+        }
+        /* FIN DE TU NUEVO CÓDIGO */
+
+        .titulo-sector { font-size: 60px; color: #00ffff; margin-top: 0; /* ...resto del código */
         .titulo-sector { font-size: 60px; color: #000000; margin-top: 0; margin-bottom: 50px; text-transform: uppercase; text-shadow: 0 0 20px #00ffff, 0 0 40px #00aaff; z-index: 20; letter-spacing: 5px; position: relative;}
 
 
@@ -372,7 +383,7 @@
         const recursosGraficos = [
             "fondo (2).png", "reactor.gif", "departamento.jpg", "techlab.jpg",
             "lobby.png", "pasillo-largo.jpg", "compuerta11.jpg", "puerta-sector11.jpg",
-            "chico-idle.png", "chico-habla.png", "chico-sorpresa.png", "chico111.png"
+            "chico-idle.png", "chico-habla.png", "chico-sorpresa.png", "chico111.png, "presa.gif"
         ];
         recursosGraficos.forEach(ruta => { const img = new Image(); img.src = ruta; });
     </script>
