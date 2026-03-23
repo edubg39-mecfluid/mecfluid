@@ -375,7 +375,7 @@
         const recursosGraficos = [
             "fondo (2).png", "reactor.gif", "departamento.jpg", "techlab.jpg",
             "lobby.png", "pasillo-largo.jpg", "compuerta11.jpg", "puerta-sector11.jpg",
-            "chico-idle.png", "chico-habla.png", "chico-sorpresa.png", "chico111.png", "presa.gif"
+            "chico-idle.png", "chico-habla.png", "chico-sorpresa.png", "chico111.png", "presa.gif","valvula.gif"
         ];
         recursosGraficos.forEach(ruta => { const img = new Image(); img.src = ruta; });
     </script>
@@ -430,7 +430,8 @@
                 <div class="subtitulo-puerta">PRUEBAS UNIDAD 1</div>
             </div>
             <div class="puerta-box bloqueada" onclick="alert('ACCESO DENEGADO: El Sector 12 aún se encuentra en fase de desarrollo.')">
-                <div class="icono-puerta" style="color:#ff073a;">🔒</div>
+                <img src="valvula.gif" alt="Icono Válvula Sector 12" class="icono-imagen-puerta">
+                
                 <div class="titulo-puerta">SECTOR 12</div>
                 <div class="subtitulo-puerta">[ BLOQUEADO ]<br>PRUEBAS UNIDAD 2</div>
             </div>
