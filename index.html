@@ -136,45 +136,16 @@
         
         .puerta-box.activa { border-color: #00ffff; background: rgba(0, 43, 77, 0.9); box-shadow: 0 0 20px rgba(0,255,255,0.3), inset 0 0 40px #00aaff; }
         .puerta-box.activa:hover { transform: translateY(-10px); box-shadow: 0 0 40px #00ffff, inset 0 0 50px #00aaff; }
-        
         .puerta-box.bloqueada { border-color: #ff073a; background: rgba(26, 0, 5, 0.9); cursor: not-allowed; box-shadow: inset 0 0 30px #ff073a; opacity: 0.7; }
-        
-        .titulo-puerta { font-size: 45px; color: #fff; text-align: center; margin-bottom: 15px; z-index: 2; text-shadow: 0 0 10px #000; }
-        .subtitulo-puerta { font-size: 22px; color: #00ffff; text-align: center; z-index: 2; padding: 0 10px;}
+        .titulo-puerta { font-size: 45px; color: #fff; text-align: center; margin-bottom: 15px; position: relative; z-index: 2; text-shadow: 0 0 10px #000; pointer-events: none; }
+        .subtitulo-puerta { font-size: 22px; color: #00ffff; text-align: center; position: relative; z-index: 2; padding: 0 10px; pointer-events: none; }
         .puerta-box.bloqueada .subtitulo-puerta { color: #ff073a; }
         .icono-puerta { font-size: 60px; margin-bottom: 10px; z-index: 2; }
-
-        /* ESTILO PARA EL ICONO GIF DE LA PRESA */
-        .icono-imagen-puerta {
-            width: 140px;          
-            height: 100px;          
-            object-fit: cover;      
-            border: 3px solid #00ffff; 
-            border-radius: 8px;     
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); 
-            margin-bottom: 15px;     
-            z-index: 2;             
-            transition: 0.3s;       
+        .icono-imagen-puerta {position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.35; transition: 0.4s;}
+        .puerta-box.activa:hover .icono-imagen-puerta {opacity: 0.8; transform: scale(1.05);       
         }
-
-        .puerta-box.activa:hover .icono-imagen-puerta {
-            box-shadow: 0 0 35px #00ffff; 
-            transform: scale(1.05);       
-        }
-
-        /* TEXTOS EN NEGRO DEL NEXO */
-        .titulo-sector { 
-            font-size: 60px; 
-            color: #000000; 
-            margin-top: 0; 
-            margin-bottom: 50px; 
-            text-transform: uppercase; 
-            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.8); 
-            z-index: 20; 
-            letter-spacing: 5px; 
-            position: relative;
-            font-weight: bold;
-        }
+        .titulo-sector { font-size: 60px; color: #000000; margin-top: 0; margin-bottom: 50px; text-transform: uppercase; 
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.8); z-index: 20; letter-spacing: 5px; position: relative;font-weight: bold;}
 
 
         /* ================= MAPAS SECTOR 11 (ESTILO LAYTON) ================= */
