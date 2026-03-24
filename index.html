@@ -173,20 +173,18 @@
         .hotspot.bloqueado { border-color: rgba(255, 7, 58, 0.6); background: rgba(255, 7, 58, 0.1); animation: latido-bloqueado 2s infinite alternate ease-in-out; cursor: not-allowed; }
         @keyframes latido-bloqueado { 0% { box-shadow: 0 0 5px rgba(255, 7, 58, 0.2), inset 0 0 5px rgba(255, 7, 58, 0.2); } 100% { box-shadow: 0 0 20px rgba(255, 7, 58, 0.5), inset 0 0 15px rgba(255, 7, 58, 0.3); } }
         .hotspot.bloqueado:hover { background: rgba(255, 7, 58, 0.3); border: 3px solid #ff073a; box-shadow: 0 0 30px #ff073a, inset 0 0 30px #ff073a !important; }
-        .hotspot.completado { border-color: rgba(57, 255, 20, 0.6); background: rgba(57, 255, 20, 0.15); animation: none; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
-
+        .hotspot.completado { border-color: rgba(57, 255, 20, 0.9); background: rgba(57, 255, 20, 0.35); animation: none; box-shadow: 0 0 25px rgba(57, 255, 20, 0.6), inset 0 0 20px rgba(57, 255, 20, 0.4); }
+        .digito-secreto {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; font-weight: bold; color: #39ff14;
+                         text-shadow: 0 0 15px #39ff14, 0 0 30px #000; display: none; align-items: center; justify-content: center; pointer-events: none; z-index: 20;}
         .tag-modulo {
             position: absolute; top: -12px; left: -12px; background: #000; color: #00ffff; border: 2px solid #00ffff;
-            padding: 2px 8px; font-size: 22px; font-weight: bold; border-radius: 4px; box-shadow: 0 0 10px #00ffff; pointer-events: none; transition: 0.3s;
-        }
+            padding: 2px 8px; font-size: 22px; font-weight: bold; border-radius: 4px; box-shadow: 0 0 10px #00ffff; pointer-events: none; transition: 0.3s;}
         .hotspot.bloqueado .tag-modulo { color: #ff073a; border-color: #ff073a; box-shadow: 0 0 10px #ff073a; }
         .hotspot.completado .tag-modulo { color: #39ff14; border-color: #39ff14; box-shadow: 0 0 10px #39ff14; }
-
         .tooltip-layton {
             position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(0, 15, 30, 0.95);
             border: 2px solid #00ffff; color: #fff; padding: 10px 15px; font-size: 24px; border-radius: 5px; white-space: nowrap;
-            pointer-events: none; opacity: 0; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 20; text-align: center; line-height: 1.1;
-        }
+            pointer-events: none; opacity: 0; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 20; text-align: center; line-height: 1.1;}
 
         .hotspot.bloqueado .tooltip-layton { border-color: #ff073a; }
         .hotspot.completado .tooltip-layton { border-color: #39ff14; }
@@ -536,6 +534,7 @@
         let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };
         
         let erroresModulo = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        let codigosSecretos = []; 
 
         let tiradasC = 5; let pistasC = 0; let miniSolC = 0; let finalSolC = 0;
         const datosPistasC = ["Caudal Q = 20 m³/s", "Área de entrada A1 = 4 m²", "Área de salida A2 = 2 m²", "Densidad ρ = 1000 kg/m³", "Tiempo de flujo t = 10 s"];
@@ -575,7 +574,7 @@
 
         function guardarEstado() {
             if (!nombreEquipo) return;
-            const estado = { nombreEquipo: nombreEquipo, tiempoSegundos: tiempoSegundos, relojIniciado: relojIniciado, progreso: progreso, erroresModulo: erroresModulo };
+            const estado = { nombreEquipo: nombreEquipo, tiempoSegundos: tiempoSegundos, relojIniciado: relojIniciado, progreso: progreso, erroresModulo: erroresModulo, codigosSecretos: codigosSecretos };
             localStorage.setItem('aqualab_save', JSON.stringify(estado));
         }
 
@@ -586,7 +585,8 @@
             relojIniciado = estado.relojIniciado;
             progreso = estado.progreso;
             if(estado.erroresModulo) erroresModulo = estado.erroresModulo; 
-            
+            if(estado.codigosSecretos) codigosSecretos = estado.codigosSecretos;
+            else codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 10));
             let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
             document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
@@ -753,6 +753,7 @@
             const inputName = document.getElementById('input-equipo').value.trim();
             if (inputName === "") { alert("ACCESO DENEGADO. Introduzca la identificación del equipo."); return; }
             nombreEquipo = inputName.toUpperCase();
+            codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 10));
             document.getElementById('tiempo-ui').innerText = "00:00"; tiempoSegundos = 0; relojIniciado = false;
             guardarEstado(); irAPasillo();
         }
@@ -829,6 +830,15 @@
                             badge.style.display = "block";
                             badge.innerText = `Fallos: ${erroresModulo[i]}`;
                         }
+                        let digitoDiv = hotspot.querySelector('.digito-secreto');
+                        if (!digitoDiv) {
+                            digitoDiv = document.createElement('div');
+                            digitoDiv.className = 'digito-secreto';
+                            hotspot.appendChild(digitoDiv);
+                        }
+                        digitoDiv.innerText = codigosSecretos[i-1];
+                        digitoDiv.style.display = 'flex';
+                        
                     } else {
                         hotspot.classList.remove('completado');
                         if(tooltip) tooltip.innerHTML = tooltip.innerHTML.replace('<br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span>', '');
@@ -873,7 +883,37 @@
             }
             guardarEstado(); 
         }
+        // FUNCIÓN QUE ARREGLA EL BUG: Evalúa si manda a la habitación o al mapa principal
+        function procesarVictoriaFase(mod, fase) {
+            progreso[mod][fase] = true;
+            guardarEstado();
+            if (progreso[mod].every(x => x === true)) {
+                irAMapa();
+            } else {
+                abrirHabitacion(mod);
+            }
+        }
 
+        // LÓGICA DE APERTURA DEL SECTOR 12
+        function intentarAbrirSector12() {
+            let modulosListos = 0;
+            for(let i=1; i<=5; i++) {
+                if (progreso[i].every(x=>x===true)) modulosListos++;
+            }
+            
+            if (modulosListos < 5) {
+                alert(`ACCESO DENEGADO: Te faltan ${5 - modulosListos} módulos por completar en el Sector 11.`);
+                return;
+            }
+            
+            let codigoIngresado = prompt("TODOS LOS MÓDULOS ESTABILIZADOS.\n\nINTRODUCE EL CÓDIGO DE DESBLOQUEO DE 5 DÍGITOS (De M1 a M5):");
+            if (codigoIngresado === codigosSecretos.join('')) {
+                alert("✓ ¡CÓDIGO ACEPTADO! \n\nDesbloqueando Sector 12... (Próximamente)");
+                // Aquí irá el código que mandará al jugador al nuevo Sector 12
+            } else if (codigoIngresado !== null && codigoIngresado !== "") {
+                alert("✗ CÓDIGO INCORRECTO. Vuelve a revisar los paneles del mapa.");
+            }
+        }
         // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
         function irAProblema(t) {
             tAct = t; subFase = 1;
