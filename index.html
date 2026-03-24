@@ -1055,6 +1055,16 @@
         // ==========================================
         // 3. LÓGICA CAPILARIDAD (M, t=3)
         // ==========================================
+        const nivelesCapilar = [
+            { h: 30, correcta: 1.0, opciones: [0.5, 1.0, 2.0, 5.0] },
+            { h: 15, correcta: 2.0, opciones: [1.0, 1.5, 2.0, 3.0] },
+            { h: 20, correcta: 1.5, opciones: [0.5, 1.0, 1.5, 2.5] },
+            { h: 10, correcta: 3.0, opciones: [1.5, 2.0, 3.0, 5.0] },
+            { h: 25, correcta: 1.2, opciones: [0.8, 1.2, 2.0, 3.0] }
+        ];
+        let capIntentos = 2;
+        let capNivelAct = null;
+
         function generarNivelCapilar() {
             capIntentos = 2;
             document.getElementById('intentos-ui').innerText = capIntentos;
