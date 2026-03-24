@@ -348,7 +348,7 @@
         <div id="capa-fondo-B" class="capa-fondo bg-linear-caminar" style="opacity: 0; z-index: 0;"></div>
         
         <div id="caja-narrador" onclick="avanzarHistoria()">
-            <img id="foto-narrador" src="chico-idle.png" alt="Narrador">
+            <img id="foto-narrador" src="chico111.png" alt="Narrador">
             <div id="texto-narrador"></div>
         </div>
     </div>
@@ -616,9 +616,9 @@
         let fondoActual = null; 
 
         const guionAqualab = [
-            { txt: "Saludos, equipo. Bienvenidos a las instalaciones subterráneas de AQUAFLUID. Soy Reyn el asistente asignado a vuestro grupo.", bg: "lobby.png", face: "chico-idle.png" },
+            { txt: "Saludos, equipo. Bienvenidos a las instalaciones subterráneas de AQUAFLUID. Soy Reyn el asistente asignado a vuestro grupo.", bg: "lobby.png", face: "chico111.png" },
             { txt: "Acompañadme, por favor. Vamos a descender por el corredor principal hacia los laboratorios de pruebas. Nuestra red gestiona fluidos a presiones críticas para toda la ciudad.", bg: "pasillo-largo.jpg", face: "chico-habla.png" },
-            { txt: "Ya hemos llegado a la sala de control del Sector 11. Vamos a proceder a la verificación rutinaria de las válvulas...", bg: "compuerta11.jpg", face: "chico-idle.png" },
+            { txt: "Ya hemos llegado a la sala de control del Sector 11. Vamos a proceder a la verificación rutinaria de las válvulas...", bg: "compuerta11.jpg", face: "chico111.png" },
             { txt: "Los niveles de presión manométrica son estables, el flujo de agua es constante y... Espera. Un momento.", bg: "puerta-sector11.jpg", face: "chico-habla.png" },
             { txt: "¿Qué es esa lectura? ¡Alerta de cavitación detectada! ¡Fallo estructural inminente en las tuberías principales!", bg: "puerta-sector11.jpg", face: "chico-sorpresa.png", error: true }
         ];
@@ -692,7 +692,7 @@
                 
                 if (escena.face === "chico-habla.png" && i % 3 === 0 && escena.txt.charAt(i) !== " ") {
                     toggleHabla = !toggleHabla;
-                    foto.src = toggleHabla ? "chico-habla.png" : "chico-idle.png";
+                    foto.src = toggleHabla ? "chico-habla.png" : "chico111.png";
                 }
 
                 i++; 
@@ -714,7 +714,7 @@
                             }, 2000); 
                         }, 1000);
                     } else {
-                        if (escena.face === "chico-habla.png") { foto.src = "chico-idle.png"; }
+                        if (escena.face === "chico-habla.png") { foto.src = "chico111.png"; }
                         document.getElementById('flecha-sig').style.display = "block";
                     }
                 }
@@ -727,7 +727,7 @@
                 document.getElementById('texto-narrador').innerHTML = guionAqualab[pasoHistoria].txt;
                 escribiendo = false;
                 if(!guionAqualab[pasoHistoria].error) {
-                    if(guionAqualab[pasoHistoria].face === "chico-habla.png") document.getElementById('foto-narrador').src = "chico-idle.png";
+                    if(guionAqualab[pasoHistoria].face === "chico-habla.png") document.getElementById('foto-narrador').src = "chico111.png";
                     document.getElementById('flecha-sig').style.display = "block";
                 }
             } else {
