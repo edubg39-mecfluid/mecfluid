@@ -1057,9 +1057,7 @@
                         document.getElementById('pregunta-sys-2').innerText = "[ CONEXIÓN NARANJA ESTABLECIDA ]";
                         feed.innerText = "¡MÓDULO SUPERADO!";
                         feed.style.color = "#39ff14";
-                        
-                        // Guardar progreso de esta válvula (Re es tAct=1)
-                        setTimeout(() => { progreso[vAct][tAct-1] = true; abrirHabitacion(vAct); }, 1500);
+                        setTimeout(() => { procesarVictoriaFase(vAct, tAct-1); }, 1500);
                     }, 1000);
                 } else {
                     setTimeout(() => { feed.innerText = ""; actualizarUIEnrutador(); }, 800);
@@ -1088,7 +1086,7 @@
             const feed = document.getElementById('quiz-feed'); document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
             if (esCorrecta) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
-                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { progreso[vAct][tAct-1] = true; abrirHabitacion(vAct); } }, 800);
+                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else {procesarVictoriaFase(vAct, tAct-1);); } }, 800);
             } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
         }
 
@@ -1197,8 +1195,7 @@
                     
                     feed.style.color = "#39ff14";
                     feed.innerText = "✓ ¡CONTACTO ESTABLECIDO! CORTOCIRCUITO COMPLETADO.";
-                    
-                    setTimeout(() => { progreso[vAct][tAct-1] = true; abrirHabitacion(vAct); }, 1500);
+                    setTimeout(() => { procesarVictoriaFase(vAct, tAct-1); }, 1500);
 
                 } else {
                     capIntentos--;
@@ -1277,7 +1274,7 @@
 
         function verificarFinalC() {
             if(parseFloat(document.getElementById("inputResFinalC").value) === finalSolC) {
-                document.getElementById("feed-final-c").style.color = "#39ff14"; document.getElementById("feed-final-c").innerText = "✓ PUNTO ESTABILIZADO"; setTimeout(() => { progreso[vAct][tAct-1] = true; abrirHabitacion(vAct); }, 1200);
+                document.getElementById("feed-final-c").style.color = "#39ff14"; document.getElementById("feed-final-c").innerText = "✓ PUNTO ESTABILIZADO"; setTimeout(() => { procesarVictoriaFase(vAct, tAct-1); }, 1200);
             } else { registrarError(); document.getElementById("feed-final-c").style.color = "#ff073a"; document.getElementById("feed-final-c").innerText = "✗ INCORRECTO. REINICIANDO..."; setTimeout(iniciarRetoC, 2000); }
         }
 
