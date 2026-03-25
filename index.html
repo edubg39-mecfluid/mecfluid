@@ -1082,14 +1082,13 @@
             opcionesMezcladas.forEach(opt => { let btn = document.createElement('button'); btn.className = "btn-opcion"; btn.innerText = opt.t; btn.onclick = () => verificarQuiz(opt.c); opcionesDiv.appendChild(btn); });
         }
 
-        function verificarQuiz(esCorrecta) {
+function verificarQuiz(esCorrecta) {
             const feed = document.getElementById('quiz-feed'); document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
             if (esCorrecta) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
-                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else {procesarVictoriaFase(vAct, tAct-1);); } }, 800);
+                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { procesarVictoriaFase(vAct, tAct-1); } }, 800);
             } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
         }
-
         // ==========================================
         // 3. LÓGICA CAPILARIDAD (M, t=3)
         // ==========================================
