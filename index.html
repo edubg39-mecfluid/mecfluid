@@ -7,21 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
     <style>
-/* ================= HUB PRINCIPAL ================= */
+        /* ================= HUB PRINCIPAL CORPORATIVO ================= */
         #pantalla-hub { 
-            background: linear-gradient(135deg, #0a1118 0%, #152733 50%, #1a3242 100%); font-family: 'Montserrat', sans-serif;}
+            background: linear-gradient(135deg, #0a1118 0%, #152733 50%, #1a3242 100%); font-family: 'Montserrat', sans-serif;
+        }
         #fondo-upct-hub {
             position: absolute; top: 0; left: -5%; width: 70%; height: 100%; background-image: url('fondoupct.png'); background-size: contain; background-position: left center; background-repeat: no-repeat;
-            opacity: 0.12; filter: blur(12px) brightness(0) invert(1); z-index: 1; pointer-events: none;}
+            opacity: 0.12; filter: blur(12px) brightness(0) invert(1); z-index: 1; pointer-events: none;
+        }
         #scanlines-hub {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 3px 100%; z-index: 2; pointer-events: none; opacity: 0.3;}
+            background-size: 100% 4px, 3px 100%; z-index: 2; pointer-events: none; opacity: 0.3;
+        }
         .circulo-decorativo-hub { position: absolute; border-radius: 50%; background: linear-gradient(45deg, #0078d4, #00d2ff); filter: blur(100px); z-index: 1; opacity: 0.2; }
         .c1-hub { width: 300px; height: 300px; top: -100px; left: -100px; }
         .c2-hub { width: 400px; height: 400px; bottom: -150px; right: -100px; background: linear-gradient(45deg, #00d2ff, #3a7bd5); }
 
         #interfaz-derecha-hub {
-            position: absolute; z-index: 10; top: 25%; right: 8%; width: auto; display: flex; flex-direction: column; align-items: flex-end; text-align: right;}
+            position: absolute; z-index: 10; top: 25%; right: 8%; width: auto; display: flex; flex-direction: column; align-items: flex-end; text-align: right;
+        }
         .titulo-hub { font-family: 'Cinzel', serif; font-size: 80px; font-weight: 700; letter-spacing: 6px; color: #ffffff; text-shadow: 2px 5px 15px rgba(0,0,0,0.6); margin: 0 0 5px 0; line-height: 1; }
         .subtitulo-hub { font-weight: 300; font-size: 20px; color: #a8b2d1; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 70px 0; }
         .grupo-botones-hub { display: flex; flex-direction: column; gap: 20px; align-items: flex-end; }
@@ -34,19 +38,18 @@
         }
 
         .btn-hub:hover { background: #ffffff; color: #0a1118; transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2); }
-        
         .btn-hub-destacado { border-color: #00ffff; color: #00ffff; background: rgba(0, 255, 255, 0.1); }
         .btn-hub-destacado:hover { background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; }
-        
         .btn-hub-alumnos { border-color: #39ff14; color: #39ff14; background: rgba(57, 255, 20, 0.1); }
         .btn-hub-alumnos:hover { background: #39ff14; color: #000; box-shadow: 0 0 30px #39ff14; }
-        
         .btn-hub-bloqueado { opacity: 0.4; cursor: not-allowed; border-color: rgba(255, 7, 58, 0.2); color: #ff073a; }
         .btn-hub-bloqueado:hover { transform: none; background: rgba(255, 7, 58, 0.1); color: #ff073a; box-shadow: none; }
 
         .footer-hub { position: absolute; bottom: 30px; left: 50px; display: flex; align-items: center; gap: 15px; z-index: 10; font-family: 'Montserrat', sans-serif;}
         .texto-copyright-hub { font-size: 14px; color: rgba(255, 255, 255, 0.5); font-weight: 300; letter-spacing: 1px; text-align: left; }
         .firma-institucional-hub { color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        
+        /* ================= ESTILOS GENERALES DEL JUEGO ================= */
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; color: white; }
         
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
@@ -54,8 +57,7 @@
 
         /* ================= INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
-        .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 100px; cursor: pointer; background: transparent; 
-                       z-index: 9999; border: none; outline: none; -webkit-tap-highlight-color: transparent; }      
+        .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 100px; cursor: pointer; background: rgba(0,0,0,0.01); z-index: 9999; border: none; outline: none; -webkit-tap-highlight-color: transparent; }      
         .input-equipo { font-family: 'VT323'; font-size: 40px; width: 350px; background: rgba(0, 51, 102, 0.5); color: #00ffff; border: 2px solid #00ffff; text-align: center; padding: 10px; margin: 20px 0; outline: none; text-transform: uppercase; transition: 0.3s;}
         .input-equipo:focus { box-shadow: 0 0 15px currentColor; }
         .input-equipo::placeholder { color: rgba(0, 255, 255, 0.4); }
@@ -213,7 +215,7 @@
         .hotspot.bloqueado { border-color: rgba(255, 7, 58, 0.6); background: rgba(255, 7, 58, 0.1); animation: latido-bloqueado 2s infinite alternate ease-in-out; cursor: not-allowed; }
         @keyframes latido-bloqueado { 0% { box-shadow: 0 0 5px rgba(255, 7, 58, 0.2), inset 0 0 5px rgba(255, 7, 58, 0.2); } 100% { box-shadow: 0 0 20px rgba(255, 7, 58, 0.5), inset 0 0 15px rgba(255, 7, 58, 0.3); } }
         .hotspot.bloqueado:hover { background: rgba(255, 7, 58, 0.3); border: 3px solid #ff073a; box-shadow: 0 0 30px #ff073a, inset 0 0 30px #ff073a !important; }
-        .hotspot.completado { border-color: rgba(57, 255, 20, 0.9); background: rgba(57, 255, 20, 0.35); animation: none; box-shadow: 0 0 25px rgba(57, 255, 20, 0.6), inset 0 0 20px rgba(57, 255, 20, 0.4); }
+        .hotspot.completado { border-color: rgba(57, 255, 20, 0.9); background: rgba(57, 255, 20, 0.35); animation: none; box-shadow: 0 0 25px rgba(57, 255, 20, 0.6), inset 0 0 20px rgba(57, 255, 20, 0.4) !important; }
         .digito-secreto {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; font-weight: bold; color: #39ff14;
                          text-shadow: 0 0 15px #39ff14, 0 0 30px #000; display: none; align-items: center; justify-content: center; pointer-events: none; z-index: 20;}
         .tag-modulo {
@@ -333,7 +335,6 @@
         .compuerta-fisica-inclinada { position: absolute; left: 45%; top: 40px; width: 8px; height: 160px; background: #ddd; transform-origin: top center; transform: rotate(30deg); border-radius: 4px; z-index: 5; transition: transform 0.5s, background 0.5s; }
         .muro-b { position: absolute; bottom: 0; left: 30%; width: 20px; height: 15px; background: #39ff14; z-index: 6; }
 
-
         /* === JUEGO: CAPILARIDAD === */
         .hud-intentos { position: absolute; top: 15px; right: 20px; font-size: 22px; color: #ff073a; border: 2px solid #ff073a; padding: 3px 12px; border-radius: 5px; background: rgba(255,7,58,0.1); box-shadow: 0 0 10px rgba(255,7,58,0.4); font-weight: bold; z-index: 100;}
         .datos-caja { background: rgba(0,0,0,0.6); padding: 10px; border: 1px solid #00ffff; display: flex; justify-content: space-around; font-size: 20px; color: #39ff14; border-radius: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
@@ -349,9 +350,22 @@
         .linea-objetivo-cap { position: absolute; left: 0; width: 100%; border-top: 2px dashed rgba(255, 7, 58, 0.6); z-index: 1; transition: bottom 1s ease-in-out; }
         .texto-objetivo-cap { position: absolute; left: 10px; color: #ff073a; font-size: 20px; font-weight: bold; text-shadow: 0 0 5px #000; transition: bottom 1s ease-in-out; }
 
+        /* ================= PARCHE PARA TABLETS Y MÓVILES ================= */
+        @media (hover: none) {
+            .hotspot:hover { transform: none; box-shadow: 0 0 5px rgba(0, 255, 255, 0.2), inset 0 0 5px rgba(0, 255, 255, 0.2) !important; border: 3px dashed rgba(0, 255, 255, 0.7); background: rgba(0, 255, 255, 0.15); }
+            .hotspot.completado:hover { border-color: rgba(57, 255, 20, 0.9); background: rgba(57, 255, 20, 0.35); box-shadow: 0 0 25px rgba(57, 255, 20, 0.6), inset 0 0 20px rgba(57, 255, 20, 0.4) !important;}
+            .hotspot.bloqueado:hover { border-color: rgba(255, 7, 58, 0.6); background: rgba(255, 7, 58, 0.1); box-shadow: 0 0 5px rgba(255, 7, 58, 0.2), inset 0 0 5px rgba(255, 7, 58, 0.2) !important; }
+            .puerta-box.activa:hover { transform: none; box-shadow: 0 0 20px rgba(0,255,255,0.3), inset 0 0 40px #00aaff; }
+            .btn-opcion:hover { background: #002b4d; color: #e6f2ff; box-shadow: none; }
+            .btn-ui:hover { background: #00ffff; box-shadow: none; }
+            .celda:hover { border-color: #444; color: #777; background: rgba(0, 0, 0, 0.6); }
+            .pieza:hover { transform: none; }
+            .hotspot .tooltip-layton { display: none; }
+            .btn-hub:hover { background: transparent; color: #b0c4de; transform: none; box-shadow: none;}
+        }
     </style>
 </head>
-<body>
+<body ontouchstart="">
 
     <script>
         // ================= PRECARGA DE IMÁGENES =================
@@ -362,75 +376,8 @@
         ];
         recursosGraficos.forEach(ruta => { const img = new Image(); img.src = ruta; });
     </script>
+
     <div id="pantalla-hub" class="pantalla activa">
-        <img src="https://www.upct.es/estilos/img/logo_upct.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/e2/Logo_UPCT.png'" alt="Fondo UPCT" class="bg-logo-hub">
-
-        <div class="contenedor-derecha-hub">
-            <h1 class="titulo-hub">AQUALAB</h1>
-            <h2 class="subtitulo-hub">Ingeniería de Fluidos</h2>
-
-            <div class="menu-lista-hub">
-                <button class="btn-hub" onclick="mostrar('pantalla-inicio')">Entrar al Escape Room</button>
-                <button class="btn-hub" onclick="mostrar('pantalla-alumnos')">Proyectos de Alumnos</button>
-                <button class="btn-hub btn-hub-bloqueado" onclick="alert('Acceso restringido')">Panel Docente</button>
-            </div>
-        </div>
-
-        <div class="copyright-hub">
-            <span class="firma-hub">UNIVERSIDAD POLITÉCNICA DE CARTAGENA</span><br>
-            © 2026 Departamento de Ingeniería de Fluidos. Todos los derechos reservados.
-        </div>
-    </div>
-
-    <div id="pantalla-alumnos" class="pantalla" style="background: #000; justify-content: center; align-items: center;">
-        <button class="btn-volver-top" onclick="mostrar('pantalla-hub')">[ ◄ VOLVER AL HUB ]</button>
-        <h1 style="color: #39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; text-align: center;">ÁREA DE INGENIERÍA EXTERNA</h1>
-        <p style="font-size: 30px; color: #e6f2ff; max-width: 800px; text-align: center;">Aquí se integrarán los simuladores desarrollados por los equipos de la academia.</p>
-        <div style="border: 2px dashed #39ff14; background: rgba(57, 255, 20, 0.1); padding: 50px; margin-top: 30px; color: #39ff14; font-size: 28px; border-radius: 10px; text-align: center;">
-            CARGANDO BASE DE DATOS...<br><br>
-            <span style="color: #ff073a;">[ 0 PROYECTOS ENCONTRADOS ]</span>
-        </div>
-    </div>
-<div id="pantalla-hub" class="pantalla activa">
-        <img src="https://www.upct.es/estilos/img/logo_upct.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/e2/Logo_UPCT.png'" alt="Fondo UPCT" class="bg-logo-hub">
-
-        <div class="contenedor-derecha-hub">
-            <h1 class="titulo-hub">AQUALAB</h1>
-            <h2 class="subtitulo-hub">Ingeniería de Fluidos</h2>
-
-            <div class="menu-lista-hub">
-                <button class="btn-hub" onclick="mostrar('pantalla-inicio')">Entrar al Escape Room</button>
-                <button class="btn-hub" onclick="mostrar('pantalla-alumnos')">Proyectos de Alumnos</button>
-                <button class="btn-hub btn-hub-bloqueado" onclick="alert('Acceso restringido')">Panel Docente</button>
-            </div>
-        </div>
-
-        <div class="footer-izq-hub" onclick="alert('Conectando a los servidores centrales de la UPCT...')">
-            <div class="icono-boton-hub">▲</div>
-            <div class="texto-conexion-hub">Iniciar sesión en servidores UPCT</div>
-        </div>
-
-        <div class="copyright-hub">
-            <span class="firma-hub">UNIVERSIDAD POLITÉCNICA DE CARTAGENA</span><br>
-            © 2026 Departamento de Ingeniería. Todos los derechos reservados.
-        </div>
-    </div>
-
-    <div id="pantalla-alumnos" class="pantalla" style="background: #000; justify-content: center; align-items: center;">
-        <button class="btn-volver-top" onclick="mostrar('pantalla-hub')">[ ◄ VOLVER AL HUB ]</button>
-        <h1 style="color: #39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; text-align: center;">ÁREA DE INGENIERÍA EXTERNA</h1>
-        <p style="font-size: 30px; color: #e6f2ff; max-width: 800px; text-align: center;">Aquí se integrarán los simuladores desarrollados por los equipos de la academia.</p>
-        <div style="border: 2px dashed #39ff14; background: rgba(57, 255, 20, 0.1); padding: 50px; margin-top: 30px; color: #39ff14; font-size: 28px; border-radius: 10px; text-align: center;">
-            CARGANDO BASE DE DATOS...<br><br>
-            <span style="color: #ff073a;">[ 0 PROYECTOS ENCONTRADOS ]</span>
-        </div>
-    </div>
-    
-    <div id="hud-cronometro" style="display: none; position: absolute; top: 25px; right: 25px; background: rgba(0, 20, 40, 0.8); border: 2px solid #39ff14; padding: 10px 25px; border-radius: 8px; color: #39ff14; font-size: 35px; font-weight: bold; z-index: 9999; box-shadow: 0 0 15px #39ff14; backdrop-filter: blur(5px);">
-        T - <span id="tiempo-ui">00:00</span>
-    </div>
-
-<div id="pantalla-hub" class="pantalla activa">
         <div id="fondo-upct-hub"></div>
         <div id="scanlines-hub"></div>
         <div class="circulo-decorativo-hub c1-hub"></div>
@@ -474,6 +421,24 @@
             <span style="color: #ff073a;">[ 0 PROYECTOS ENCONTRADOS ]</span>
         </div>
     </div>
+    
+    <div id="hud-cronometro" style="display: none; position: absolute; top: 25px; right: 25px; background: rgba(0, 20, 40, 0.8); border: 2px solid #39ff14; padding: 10px 25px; border-radius: 8px; color: #39ff14; font-size: 35px; font-weight: bold; z-index: 9999; box-shadow: 0 0 15px #39ff14; backdrop-filter: blur(5px);">
+        T - <span id="tiempo-ui">00:00</span>
+    </div>
+
+    <div id="pantalla-inicio" class="pantalla">
+        <button class="btn-volver-top" style="z-index: 10001;" onclick="mostrar('pantalla-hub')">[ ◄ VOLVER AL HUB ]</button>
+        <button class="boton-inicio" onclick="irANarrador()"></button>
+        
+        <div id="panel-guardado" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 30, 60, 0.95); border: 2px solid #00ffff; padding: 40px; border-radius: 15px; text-align: center; z-index: 10000; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);">
+            <h2 style="color: #00ffff; font-size: 40px; margin-top: 0;">PARTIDA DETECTADA</h2>
+            <p style="font-size: 28px; color: #e6f2ff;">Equipo: <span id="save-equipo" style="color: #39ff14; font-weight: bold;"></span></p>
+            <p style="font-size: 28px; color: #e6f2ff;">Tiempo: <span id="save-tiempo" style="color: #39ff14; font-weight: bold;"></span></p>
+            <button class="btn-ui" onclick="reanudarMision()" style="margin: 10px;">[ REANUDAR MISIÓN ]</button><br>
+            <button class="btn-ui" onclick="borrarGuardadoYEmpezar()" style="margin: 10px; background: #ff073a; border: none; color: white;">[ BORRAR DATOS Y REINICIAR ]</button>
+        </div>
+    </div>
+
     <div id="pantalla-narrador" class="pantalla">
         <div id="filtro-oscuro"></div>
         
@@ -1018,7 +983,7 @@
             }
             guardarEstado(); 
         }
-        // FUNCIÓN QUE ARREGLA EL BUG: Evalúa si manda a la habitación o al mapa principal
+
         function procesarVictoriaFase(mod, fase) {
             progreso[mod][fase] = true;
             guardarEstado();
@@ -1029,7 +994,6 @@
             }
         }
 
-        // LÓGICA DE APERTURA DEL SECTOR 12
         function intentarAbrirSector12() {
             let modulosListos = 0;
             for(let i=1; i<=5; i++) {
@@ -1044,11 +1008,11 @@
             let codigoIngresado = prompt("TODOS LOS MÓDULOS ESTABILIZADOS.\n\nINTRODUCE EL CÓDIGO DE DESBLOQUEO DE 5 DÍGITOS (De M1 a M5):");
             if (codigoIngresado === codigosSecretos.join('')) {
                 alert("✓ ¡CÓDIGO ACEPTADO! \n\nDesbloqueando Sector 12... (Próximamente)");
-                // Aquí irá el código que mandará al jugador al nuevo Sector 12
             } else if (codigoIngresado !== null && codigoIngresado !== "") {
                 alert("✗ CÓDIGO INCORRECTO. Vuelve a revisar los paneles del mapa.");
             }
         }
+
         // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
         function irAProblema(t) {
             tAct = t; subFase = 1;
@@ -1217,13 +1181,14 @@
             opcionesMezcladas.forEach(opt => { let btn = document.createElement('button'); btn.className = "btn-opcion"; btn.innerText = opt.t; btn.onclick = () => verificarQuiz(opt.c); opcionesDiv.appendChild(btn); });
         }
 
-function verificarQuiz(esCorrecta) {
+        function verificarQuiz(esCorrecta) {
             const feed = document.getElementById('quiz-feed'); document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
             if (esCorrecta) {
                 feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
                 setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { procesarVictoriaFase(vAct, tAct-1); } }, 800);
             } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
         }
+
         // ==========================================
         // 3. LÓGICA CAPILARIDAD (M, t=3)
         // ==========================================
@@ -1412,9 +1377,6 @@ function verificarQuiz(esCorrecta) {
             } else { registrarError(); document.getElementById("feed-final-c").style.color = "#ff073a"; document.getElementById("feed-final-c").innerText = "✗ INCORRECTO. REINICIANDO..."; setTimeout(iniciarRetoC, 2000); }
         }
 
-        // ==========================================
-        // * NOTA: EL PUZLE D (Ecuación Diferencial) HA SIDO ELIMINADO DE LA ROTACIÓN PRINCIPAL
-        // PERO EL CÓDIGO SE MANTIENE ABAJO POR SI QUIERES REUTILIZARLO EN EL MÓDULO 4 O 5.
         // ==========================================
         function generarRetoD() {
             document.getElementById("fase-puzle-d").style.display = "block"; document.getElementById("fase-pregunta-d").style.display = "none"; document.getElementById("feed-d").innerText = ""; document.getElementById("inputPreguntaD").value = "";
