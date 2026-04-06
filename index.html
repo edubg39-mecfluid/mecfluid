@@ -7,23 +7,46 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        /* ================= HUB PRINCIPAL ================= */
-        #pantalla-hub { background: linear-gradient(135deg, #0a1118 0%, #152733 50%, #1a3242 100%); font-family: 'Montserrat', sans-serif;}
-        .bg-logo-hub { position: absolute; top: 50%; left: -5%; transform: translateY(-50%); height: 110%; opacity: 0.03; filter: brightness(0) invert(1); pointer-events: none; z-index: 1; }
-        .contenedor-derecha-hub { position: absolute; top: 18%; right: 8%; display: flex; flex-direction: column; align-items: flex-end; z-index: 10; width: 700px; }
-        .titulo-hub { font-family: 'Cinzel', serif; font-size: 80px; font-weight: 700; letter-spacing: 6px; color: #ffffff; text-shadow: 2px 5px 15px rgba(0,0,0,0.6); margin-bottom: 5px; text-align: right; line-height: 1;}
-        .subtitulo-hub { font-weight: 300; font-size: 20px; color: #a8b2d1; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 70px; text-align: right;}
-        .menu-lista-hub { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; width: 100%; }
-        .btn-hub { font-family: 'Montserrat', sans-serif; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 80%, transparent 100%); border: none; color: #b0c4de; font-size: 22px; font-weight: 400; cursor: pointer; padding: 12px 30px 12px 100px; transition: all 0.3s ease; text-align: right; width: 100%; outline: none;}
-        .btn-hub:hover { color: #ffffff; font-weight: 500; background: linear-gradient(90deg, transparent 0%, rgba(0, 120, 212, 0.4) 60%, rgba(0, 150, 255, 0.7) 100%); text-shadow: 0 0 10px rgba(255,255,255,0.8); }
-        .btn-hub-bloqueado { color: #555; cursor: not-allowed; }
-        .btn-hub-bloqueado:hover { background: transparent; color: #555; text-shadow: none; }
-        .footer-izq-hub { position: absolute; bottom: 40px; left: 50px; display: flex; align-items: center; gap: 15px; z-index: 10; cursor: pointer; transition: 0.2s; }
-        .footer-izq-hub:hover { opacity: 0.8; }
-        .icono-boton-hub { width: 32px; height: 32px; background: rgba(255,255,255,0.1); border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; box-shadow: 0 0 10px rgba(255,255,255,0.2); color: #fff;}
-        .texto-conexion-hub { font-size: 15px; color: #e6f2ff; font-weight: 300; letter-spacing: 1px; }
-        .copyright-hub { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #666; text-align: center; z-index: 10; line-height: 1.6; }
-        .firma-hub { color: #888; font-weight: bold; }
+/* ================= HUB PRINCIPAL ================= */
+        #pantalla-hub { 
+            background: linear-gradient(135deg, #0a1118 0%, #152733 50%, #1a3242 100%); font-family: 'Montserrat', sans-serif;}
+        #fondo-upct-hub {
+            position: absolute; top: 0; left: -5%; width: 70%; height: 100%; background-image: url('fondoupct.png'); background-size: contain; background-position: left center; background-repeat: no-repeat;
+            opacity: 0.12; filter: blur(12px) brightness(0) invert(1); z-index: 1; pointer-events: none;}
+        #scanlines-hub {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%; z-index: 2; pointer-events: none; opacity: 0.3;}
+        .circulo-decorativo-hub { position: absolute; border-radius: 50%; background: linear-gradient(45deg, #0078d4, #00d2ff); filter: blur(100px); z-index: 1; opacity: 0.2; }
+        .c1-hub { width: 300px; height: 300px; top: -100px; left: -100px; }
+        .c2-hub { width: 400px; height: 400px; bottom: -150px; right: -100px; background: linear-gradient(45deg, #00d2ff, #3a7bd5); }
+
+        #interfaz-derecha-hub {
+            position: absolute; z-index: 10; top: 25%; right: 8%; width: auto; display: flex; flex-direction: column; align-items: flex-end; text-align: right;}
+        .titulo-hub { font-family: 'Cinzel', serif; font-size: 80px; font-weight: 700; letter-spacing: 6px; color: #ffffff; text-shadow: 2px 5px 15px rgba(0,0,0,0.6); margin: 0 0 5px 0; line-height: 1; }
+        .subtitulo-hub { font-weight: 300; font-size: 20px; color: #a8b2d1; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 70px 0; }
+        .grupo-botones-hub { display: flex; flex-direction: column; gap: 20px; align-items: flex-end; }
+        .btn-hub {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: 18px 40px; font-size: 18px;
+            font-family: 'Montserrat', sans-serif; font-weight: 600; border-radius: 8px; cursor: pointer;
+            transition: all 0.3s ease; width: auto; letter-spacing: 1px; text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); text-align: right; outline: none;
+        }
+
+        .btn-hub:hover { background: #ffffff; color: #0a1118; transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2); }
+        
+        .btn-hub-destacado { border-color: #00ffff; color: #00ffff; background: rgba(0, 255, 255, 0.1); }
+        .btn-hub-destacado:hover { background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; }
+        
+        .btn-hub-alumnos { border-color: #39ff14; color: #39ff14; background: rgba(57, 255, 20, 0.1); }
+        .btn-hub-alumnos:hover { background: #39ff14; color: #000; box-shadow: 0 0 30px #39ff14; }
+        
+        .btn-hub-bloqueado { opacity: 0.4; cursor: not-allowed; border-color: rgba(255, 7, 58, 0.2); color: #ff073a; }
+        .btn-hub-bloqueado:hover { transform: none; background: rgba(255, 7, 58, 0.1); color: #ff073a; box-shadow: none; }
+
+        .footer-hub { position: absolute; bottom: 30px; left: 50px; display: flex; align-items: center; gap: 15px; z-index: 10; font-family: 'Montserrat', sans-serif;}
+        .texto-copyright-hub { font-size: 14px; color: rgba(255, 255, 255, 0.5); font-weight: 300; letter-spacing: 1px; text-align: left; }
+        .firma-institucional-hub { color: rgba(255, 255, 255, 0.8); font-weight: bold; }
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; color: white; }
         
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
