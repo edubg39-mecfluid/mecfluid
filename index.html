@@ -33,7 +33,7 @@
         .firma-hub { color: #888; font-weight: bold; }
         
         /* ================= ESTILOS GENERALES DEL JUEGO ================= */
-        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'VT323', monospace; background-color: #050505; color: white; }
+        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'Montserrat', sans-serif;; background-color: #050505; color: white; }
         
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
         .pantalla.activa { display: flex; z-index: 10; }
@@ -41,7 +41,7 @@
         /* ================= INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
         .boton-inicio { position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 100px; cursor: pointer; background: rgba(0,0,0,0.01); z-index: 9999; border: none; outline: none; -webkit-tap-highlight-color: transparent; }      
-        .input-equipo { font-family: 'VT323'; font-size: 40px; width: 350px; background: rgba(0, 51, 102, 0.5); color: #00ffff; border: 2px solid #00ffff; text-align: center; padding: 10px; margin: 20px 0; outline: none; text-transform: uppercase; transition: 0.3s;}
+        .input-equipo { font-family: 'Montserrat', sans-serif; font-size: 40px; width: 350px; background: rgba(0, 51, 102, 0.5); color: #00ffff; border: 2px solid #00ffff; text-align: center; padding: 10px; margin: 20px 0; outline: none; text-transform: uppercase; transition: 0.3s;}
         .input-equipo:focus { box-shadow: 0 0 15px currentColor; }
         .input-equipo::placeholder { color: rgba(0, 255, 255, 0.4); }
 
@@ -260,17 +260,17 @@
         .panel-quiz, .panel-c-final, #pantalla-c-mini .panel-azul, .panel-d, .panel-delta { width: 800px; }
         .panel-c { width: 600px; }
         
-        input { font-family: 'VT323'; font-size: 35px; width: 240px; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
+        input { font-family: 'Montserrat', sans-serif; font-size: 35px; width: 240px; background: #003366; color: #ffffff; border: 2px solid #00ffff; text-align: center; margin: 15px 0; outline: none; }
         
-        .btn-ui { font-family: 'VT323'; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.2s; }
+        .btn-ui { font-family: 'Montserrat', sans-serif; font-size: 26px; background: #00ffff; color: #000; border: none; padding: 10px 40px; cursor: pointer; font-weight: bold; border-radius: 5px; transition: 0.2s; }
         .btn-ui:hover { background: #fff; box-shadow: 0 0 15px #fff; }
         .btn-ui:disabled { background: #555; color: #222; cursor: not-allowed; box-shadow: none; }
         
-        .btn-opcion { font-family: 'VT323'; font-size: 24px; background: #002b4d; color: #e6f2ff; border: 2px solid #00ffff; padding: 12px; margin: 8px 0; cursor: pointer; border-radius: 5px; text-align: left; transition: 0.3s; width: 100%; line-height: 1.2; }
+        .btn-opcion { font-family: 'Montserrat', sans-serif; font-size: 24px; background: #002b4d; color: #e6f2ff; border: 2px solid #00ffff; padding: 12px; margin: 8px 0; cursor: pointer; border-radius: 5px; text-align: left; transition: 0.3s; width: 100%; line-height: 1.2; }
         .btn-opcion:hover { background: #00ffff; color: #000; box-shadow: 0 0 15px #00ffff; }
         .btn-opcion:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .btn-volver-top { position: absolute; top: 25px; left: 25px; font-family: 'VT323'; font-size: 24px; background: rgba(0, 20, 40, 0.8); color: #00ffff; border: 2px solid #00ffff; padding: 8px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; z-index: 100; transition: 0.3s; backdrop-filter: blur(5px); }
+        .btn-volver-top { position: absolute; top: 25px; left: 25px; font-family: 'Montserrat', sans-serif; font-size: 24px; background: rgba(0, 20, 40, 0.8); color: #00ffff; border: 2px solid #00ffff; padding: 8px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; z-index: 100; transition: 0.3s; backdrop-filter: blur(5px); }
         .btn-volver-top:hover { background: #ff073a; border-color: #ff073a; color: #fff; box-shadow: 0 0 15px #ff073a; }
 
         .ecuacion-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 30px 0; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border: 1px solid #00ffff; flex-wrap: wrap; }
@@ -383,7 +383,7 @@
         </div>
     </div>
 
-    <div id="pantalla-alumnos" class="pantalla" style="background: #000; justify-content: center; align-items: center; font-family: 'VT323', monospace;">
+    <div id="pantalla-alumnos" class="pantalla" style="background: #000; justify-content: center; align-items: center;font-family: 'Montserrat', sans-serif;">
         <button class="btn-volver-top" onclick="mostrar('pantalla-hub')" style="z-index: 10001;">[ ◄ VOLVER AL HUB ]</button>
         <h1 style="color: #39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; text-align: center; margin-top: 0;">ÁREA DE INGENIERÍA EXTERNA</h1>
         <p style="font-size: 30px; color: #e6f2ff; max-width: 800px; text-align: center;">Aquí se integrarán los simuladores desarrollados por los equipos de la academia.</p>
