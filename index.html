@@ -2013,18 +2013,29 @@
         });
 
         function votarProyecto(idProyecto) {
-            let votadoRecientemente = localStorage.getItem('votado_' + idProyecto);
-            if (votadoRecientemente) {
-                alert("Ya has votado por este proyecto desde este dispositivo.");
-                return;
-            }
-            localStorage.setItem('votado_' + idProyecto, 'true');
             const refVotos = database.ref('votos_proyectos/' + idProyecto);
-            refVotos.transaction((votosActuales) => {
-                return (votosActuales || 0) + 1;
-            });
-        }
+            let yaVotado = localStorage.getItem('votado_' + idProyecto);
+            
+            if (yaVotado) {
+                localStorage.removeItem('votado_' + idProyecto); 
+                refVotos.transaction((votosActuales) => {
+                    let nuevosVotos = (votosActuales || 0) - 1;
+                    return nuevosVotos < 0 ? 0 : nuevosVotos;
+                });
+                let btn = document.querySelector('#' + idProyecto + ' .btn-votar');
+                if(btn) btn.classList.remove('votado');
 
+            } else {
+                localStorage.setItem('votado_' + idProyecto, 'true');
+                refVotos.transaction((votosActuales) => {
+                    return (votosActuales || 0) + 1;
+                });
+
+                let btn = document.querySelector('#' + idProyecto + ' .btn-votar');
+                if(btn) btn.classList.add('votado');
+            }
+        }
+        
         function actualizarVotosVisuales(votosNube) {
             document.querySelectorAll('.icono-proyecto').forEach(caja => {
                 let id = caja.id;
