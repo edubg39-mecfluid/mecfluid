@@ -436,18 +436,18 @@
             <h2 class="subtitulo-hub" style="text-align: center; margin-bottom: 0; width: 100%;">PROYECTOS EXTERNOS</h2>
         </div>
         
-        <div class="contenedor-grid-proyectos">
+<div class="contenedor-grid-proyectos">
             
-            <div class="icono-proyecto" onclick="abrirProyecto('prototipo-cables.html')">
+            <div class="icono-proyecto" onclick="mostrar('pantalla-proyecto-cables')">
                 <div class="imagen-icono" style="background-image: url('valvula.gif');"></div>
-                <div class="titulo-icono">Nombre-Proyecto</div>
-                <div class="equipo-icono">Nombre-Grupo</div>
+                <div class="titulo-icono">Calibración</div>
+                <div class="equipo-icono">Alpha-Fluids</div>
             </div>
 
-            <div class="icono-proyecto" onclick="abrirProyecto('prototipo-manual.html')">
+            <div class="icono-proyecto" onclick="mostrar('pantalla-proyecto-purga')">
                 <div class="imagen-icono" style="background-image: url('presa.gif');"></div>
-                <div class="titulo-icono">Nombre-Proyecto</div>
-                <div class="equipo-icono">Nombre-Grupo</div>
+                <div class="titulo-icono">Panel Purga</div>
+                <div class="equipo-icono">HidroTech</div>
             </div>
 
             <div class="icono-proyecto bloqueado">
@@ -470,35 +470,7 @@
 
         </div>
     </div>
-        
-<div class="estante-proyectos">
-            
-            <div class="tarjeta-proyecto" onclick="abrirProyecto('prototipo-cables.html')">
-                <div class="miniatura-proyecto" style="background-image: url('valvula.gif');"></div>
-                <div class="info-proyecto">
-                    <div class="nombre-proyecto">Calibración Sensores</div>
-                    <div class="equipo-proyecto">Equipo: Alpha-Fluids</div>
-                </div>
-            </div>
 
-            <div class="tarjeta-proyecto" onclick="abrirProyecto('prototipo-manual.html')">
-                <div class="miniatura-proyecto" style="background-image: url('presa.gif');"></div>
-                <div class="info-proyecto">
-                    <div class="nombre-proyecto">Panel de Purga</div>
-                    <div class="equipo-proyecto">Equipo: HidroTech</div>
-                </div>
-            </div>
-
-            <div class="tarjeta-proyecto bloqueado">
-                <div class="miniatura-proyecto" style="background: #111; display:flex; justify-content:center; align-items:center; color:#ff073a; font-size: 50px;">[ ? ]</div>
-                <div class="info-proyecto">
-                    <div class="nombre-proyecto" style="color: #555;">[ SLOT VACÍO ]</div>
-                    <div class="equipo-proyecto" style="color: #ff073a;">Datos corruptos</div>
-                </div>
-            </div>
-
-        </div>
-    </div>
     <div id="pantalla-visor-proyecto" class="pantalla" style="background: #000;">
         <button class="btn-volver-top" onclick="cerrarProyecto()" style="z-index: 10001; background: rgba(0,0,0,0.8);">[ ◄ CERRAR PROYECTO ]</button>
         
@@ -704,6 +676,126 @@
     <div id="pantalla-habitacion-3" class="pantalla"><h1 class="titulo-mapa">MÓDULO 3: ECUACIÓN DE CONTINUIDAD</h1><div class="contenedor-mapa" style="background: rgba(255, 165, 0, 0.05); border-style: dashed; border-color: #ffa500;"><div class="nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ PROBLEMA COMPUERTA ]</div></div></div>
 
     <div id="pantalla-hab3-megareto" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(3)">[ ◄ ABORTAR MISIÓN ]</button><div class="panel-azul panel-delta"><h2 style="color:#ffffff;">SISTEMA DE EQUILIBRIO DE FLUIDOS</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px; line-height: 1.3;">Alerta de descompensación en la compuerta central. La compuerta AB tiene una <b>masa homogénea de 180 kg</b>, un <b>ancho de 1.2 m</b>, una bisagra en A y reposa sobre un muro liso en B. Todos los fluidos están a 20°C.<br><br><span style="color:#00ffff;">DATOS DE INGENIERÍA:</span><br>- <b>Longitud compuerta:</b> 1 m | <b>Inclinación:</b> 60° respecto al muro B.<br>- <b>Fluido Izquierdo:</b> Glicerina (Nivel fijo a 2 m de profundidad).<br>- <b>Fluido Derecho:</b> Agua (Nivel variable <span style="color:#39ff14;">h</span>).<br><br>Calcula la <b>altura <span style="color:#39ff14;">h</span> exacta (en metros)</b> del agua para que la fuerza de reacción en el punto B sea exactamente <b>0 N</b> (punto inminente de apertura).</p><div class="simulador-compuerta"><div class="fluido-izq">GLICERINA (2m)</div><div class="bisagra-ui"></div><div class="compuerta-fisica-inclinada" id="compuerta-inclinada-ui"></div><div class="muro-b"></div><div class="fluido-der" id="agua-nueva-ui">AGUA (h)</div></div><input type="number" id="input-h3-fuerza" placeholder="Altura h (m)" step="0.001" style="width: 280px;"><br><button class="btn-ui" id="btn-delta" onclick="simularFuerzaDelta()">[ CALIBRAR NIVEL DE AGUA ]</button><div id="feed-hab3" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
+    
+    <div id="pantalla-proyecto-cables" class="pantalla" style="background-color: #050505;">
+        <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
+        <style>
+            #pantalla-proyecto-cables .panel-cables { background: #0a1118; border: 2px solid #0078d4; border-radius: 12px; padding: 40px; box-shadow: 0 0 30px rgba(0, 120, 212, 0.2); position: relative; width: 700px; height: 400px; display: flex; justify-content: space-between; }
+            #pantalla-proyecto-cables .columna { display: flex; flex-direction: column; justify-content: space-between; height: 100%; width: 250px; z-index: 10; }
+            #pantalla-proyecto-cables .fila-cable { display: flex; align-items: center; gap: 15px; height: 50px; }
+            #pantalla-proyecto-cables .col-derecha .fila-cable { flex-direction: row-reverse; }
+            #pantalla-proyecto-cables .etiqueta-cable { background: #152733; padding: 10px 15px; border-radius: 6px; font-size: 14px; font-weight: 600; border: 1px solid #2a4252; width: 100%; text-align: center; color: white;}
+            #pantalla-proyecto-cables .conector { width: 24px; height: 24px; border-radius: 50%; border: 3px solid #fff; background: #222; cursor: pointer; position: relative; transition: 0.2s; }
+            #pantalla-proyecto-cables .conector:hover { transform: scale(1.2); }
+            
+            #pantalla-proyecto-cables .c-izq[data-color="c1"] { border-color: #ff0055; box-shadow: 0 0 10px #ff0055; }
+            #pantalla-proyecto-cables .c-izq[data-color="c2"] { border-color: #00aaff; box-shadow: 0 0 10px #00aaff; }
+            #pantalla-proyecto-cables .c-izq[data-color="c3"] { border-color: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+            #pantalla-proyecto-cables .c-izq[data-color="c4"] { border-color: #00ffaa; box-shadow: 0 0 10px #00ffaa; }
+            
+            #pantalla-proyecto-cables .c-der { border-color: #555; background: #111; }
+            #pantalla-proyecto-cables .c-der.conectado { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
+            #pantalla-proyecto-cables #capa-cables { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+        </style>
+
+        <div class="panel-cables" id="panel-juego-cables">
+            <h2 style="position: absolute; top: -60px; width: 100%; text-align: center; color: #00ffff; letter-spacing: 2px;">CALIBRACIÓN DE SENSORES</h2>
+            <svg id="capa-cables"></svg>
+
+            <div class="columna col-izq">
+                <div class="fila-cable"><div class="etiqueta-cable">VISCOSIDAD</div><div class="conector c-izq" data-id="izq1" data-match="der3" data-color="c1"></div></div>
+                <div class="fila-cable"><div class="etiqueta-cable">DENSIDAD</div><div class="conector c-izq" data-id="izq2" data-match="der1" data-color="c2"></div></div>
+                <div class="fila-cable"><div class="etiqueta-cable">CAUDAL</div><div class="conector c-izq" data-id="izq3" data-match="der4" data-color="c3"></div></div>
+                <div class="fila-cable"><div class="etiqueta-cable">PRESIÓN</div><div class="conector c-izq" data-id="izq4" data-match="der2" data-color="c4"></div></div>
+            </div>
+
+            <div class="columna col-derecha">
+                <div class="fila-cable"><div class="etiqueta-cable">Masa / Volumen</div><div class="conector c-der" data-id="der1"></div></div>
+                <div class="fila-cable"><div class="etiqueta-cable">Fuerza / Área</div><div class="conector c-der" data-id="der2"></div></div>
+                <div class="fila-cable"><div class="etiqueta-cable">Resistencia Interna</div><div class="conector c-der" data-id="der3"></div></div>
+                <div class="fila-cable"><div class="etiqueta-cable">Volumen / Tiempo</div><div class="conector c-der" data-id="der4"></div></div>
+            </div>
+        </div>
+        <div id="feedback-cables" style="margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px;"></div>
+
+        <script>
+            // IMPORTANTE: Envolvemos TODO el JS del alumno en una función anónima (IIFE)
+            // Esto evita que sus variables choquen con las variables de tu juego general.
+            (() => {
+                const panel = document.getElementById('panel-juego-cables');
+                const svg = document.getElementById('capa-cables');
+                let arrastrando = false;
+                let cableActual = null;
+                let origenActual = null;
+
+                const colores = { 'c1': '#ff0055', 'c2': '#00aaff', 'c3': '#ffaa00', 'c4': '#00ffaa' };
+                let conexiones = { izq1: false, izq2: false, izq3: false, izq4: false };
+
+                function obtenerCentro(elemento) {
+                    const rect = elemento.getBoundingClientRect();
+                    const panelRect = panel.getBoundingClientRect();
+                    return { x: rect.left - panelRect.left + (rect.width / 2), y: rect.top - panelRect.top + (rect.height / 2) };
+                }
+
+                document.querySelectorAll('#pantalla-proyecto-cables .c-izq').forEach(conector => {
+                    conector.addEventListener('mousedown', (e) => {
+                        arrastrando = true; origenActual = conector;
+                        let lineaExistente = document.getElementById('linea-' + origenActual.dataset.id);
+                        if (lineaExistente) lineaExistente.remove();
+                        conexiones[origenActual.dataset.id] = false;
+
+                        cableActual = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        cableActual.setAttribute('id', 'linea-' + origenActual.dataset.id);
+                        const centro = obtenerCentro(conector);
+                        cableActual.setAttribute('x1', centro.x); cableActual.setAttribute('y1', centro.y);
+                        cableActual.setAttribute('x2', centro.x); cableActual.setAttribute('y2', centro.y);
+                        cableActual.setAttribute('stroke', colores[origenActual.dataset.color]);
+                        cableActual.setAttribute('stroke-width', '8'); cableActual.setAttribute('stroke-linecap', 'round');
+                        svg.appendChild(cableActual);
+                    });
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!arrastrando || !cableActual) return;
+                    const panelRect = panel.getBoundingClientRect();
+                    cableActual.setAttribute('x2', e.clientX - panelRect.left);
+                    cableActual.setAttribute('y2', e.clientY - panelRect.top);
+                });
+
+                document.addEventListener('mouseup', (e) => {
+                    if (!arrastrando) return;
+                    arrastrando = false;
+                    let soltadoEnConector = null;
+                    
+                    cableActual.style.display = 'none';
+                    const elementoDebajo = document.elementFromPoint(e.clientX, e.clientY);
+                    cableActual.style.display = 'block';
+
+                    if (elementoDebajo && elementoDebajo.classList.contains('c-der')) soltadoEnConector = elementoDebajo;
+
+                    if (soltadoEnConector) {
+                        if (soltadoEnConector.dataset.id === origenActual.dataset.match) {
+                            const centroDestino = obtenerCentro(soltadoEnConector);
+                            cableActual.setAttribute('x2', centroDestino.x); cableActual.setAttribute('y2', centroDestino.y);
+                            soltadoEnConector.classList.add('conectado'); 
+                            conexiones[origenActual.dataset.id] = true;
+                            
+                            if (Object.values(conexiones).every(estado => estado === true)) {
+                                const f = document.getElementById('feedback-cables');
+                                f.style.color = '#39ff14'; f.style.textShadow = '0 0 10px #39ff14';
+                                f.innerText = "[ CALIBRACIÓN COMPLETADA CON ÉXITO ]";
+                            }
+                        } else { cableActual.remove(); }
+                    } else { cableActual.remove(); }
+
+                    cableActual = null; origenActual = null;
+                });
+            })();
+        </script>
+        </div>
+    <div id="pantalla-proyecto-purga" class="pantalla" style="background-color: #222;">
+        <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
+        </div>
 
     <script>
         // VARIABLES GLOBALES
