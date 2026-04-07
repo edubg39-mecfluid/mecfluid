@@ -1971,5 +1971,83 @@
             }
         }
     </script>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC07sKXX10FdBHN4SRToS5eavbokL2qqKI",
+            authDomain: "aqualab-49c28.firebaseapp.com",
+            databaseURL: "https://aqualab-49c28-default-rtdb.europe-west1.firebasedatabase.app", // MUY IMPORTANTE ESTA LÍNEA
+            projectId: "aqualab-49c28",
+            storageBucket: "aqualab-49c28.firebasestorage.app",
+            messagingSenderId: "935943026789",
+            appId: "1:935943026789:web:8eddab3d61454bbf1e2e8c",
+            measurementId: "G-WEP096Y063"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        database.ref('votos_proyectos').on('value', (snapshot) => {
+            const votosEnLaNube = snapshot.val() || {};
+            actualizarVotosVisuales(votosEnLaNube);
+            ordenarProyectosPorVotos();
+        });
+
+        function votarProyecto(idProyecto) {
+            let votadoRecientemente = localStorage.getItem('votado_' + idProyecto);
+            if (votadoRecientemente) {
+                alert("Ya has votado por este proyecto desde este dispositivo.");
+                return;
+            }
+            localStorage.setItem('votado_' + idProyecto, 'true');
+            const refVotos = database.ref('votos_proyectos/' + idProyecto);
+            refVotos.transaction((votosActuales) => {
+                return (votosActuales || 0) + 1;
+            });
+        }
+
+        function actualizarVotosVisuales(votosNube) {
+            document.querySelectorAll('.icono-proyecto').forEach(caja => {
+                let id = caja.id;
+                if (id) {
+                    let contador = caja.querySelector('.contador-votos');
+                    let btn = caja.querySelector('.btn-votar');
+                    
+                    let totalVotos = votosNube[id] || 0;
+                    if (contador) contador.innerText = totalVotos;
+                    
+                    // Si este ordenador ya votó, pintamos el botón de rojo
+                    if(localStorage.getItem('votado_' + id) && btn) {
+                        btn.classList.add('votado');
+                    }
+
+                    // Guardamos el dato en el HTML para poder ordenarlo
+                    caja.dataset.votos = totalVotos;
+                }
+            });
+        }
+
+        function ordenarProyectosPorVotos() {
+            const contenedor = document.querySelector('.contenedor-grid-proyectos');
+            if(!contenedor) return;
+
+            const proyectos = Array.from(contenedor.querySelectorAll('.icono-proyecto:not(.bloqueado)'));
+            
+            proyectos.sort((a, b) => {
+                let votosA = parseInt(a.dataset.votos) || 0;
+                let votosB = parseInt(b.dataset.votos) || 0;
+                return votosB - votosA;
+            });
+            
+            proyectos.forEach(p => contenedor.appendChild(p));
+            
+            // Los bloqueados siempre al final
+            const bloqueados = Array.from(contenedor.querySelectorAll('.icono-proyecto.bloqueado'));
+            bloqueados.forEach(p => contenedor.appendChild(p));
+        }
+    </script>
 </body>
 </html>
