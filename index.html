@@ -725,9 +725,7 @@
         <div id="feedback-cables" style="margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px;"></div>
 
         <script>
-            // IMPORTANTE: Envolvemos TODO el JS del alumno en una función anónima (IIFE)
-            // Esto evita que sus variables choquen con las variables de tu juego general.
-            (() => {
+
                 const panel = document.getElementById('panel-juego-cables');
                 const svg = document.getElementById('capa-cables');
                 let arrastrando = false;
@@ -800,10 +798,203 @@
         </script>
         </div>
     
-    <div id="pantalla-proyecto-purga" class="pantalla" style="background-color: #222;">
+<div id="pantalla-proyecto-purga" class="pantalla" style="background-color: #050505;">
         <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
+
+        <style>
+            #pantalla-proyecto-purga .purga-container {
+                width: 800px; padding: 40px; background: rgba(10, 15, 25, 0.9); 
+                border: 3px solid #ff073a; border-radius: 15px; text-align: center; 
+                box-shadow: 0 0 40px rgba(255, 7, 58, 0.3); transition: 0.3s;
+            }
+            #pantalla-proyecto-purga .fase-activa { display: block; animation: fadeIn 0.5s; }
+            #pantalla-proyecto-purga .fase-oculta { display: none; }
+            
+            /* CSS Cables */
+            .caja-cables { display: flex; justify-content: center; gap: 50px; margin: 30px 0; }
+            .cable-bomba { width: 35px; height: 160px; cursor: pointer; border-radius: 20px; transition: 0.2s; border: 3px solid #fff; box-shadow: inset 0 0 10px #000; }
+            .cable-bomba:hover { transform: scale(1.1); box-shadow: 0 0 25px currentColor; }
+            .cable-rojo { background: #ff073a; color: #ff073a; }
+            .cable-azul { background: #00ffff; color: #00ffff; }
+            .cable-verde { background: #39ff14; color: #39ff14; }
+            .cable-cortado { opacity: 0.2; pointer-events: none; height: 70px; margin-top: 45px; transform: none !important; box-shadow: none !important; border-top: 4px dashed #333; }
+            
+            #timer-bomba { font-size: 100px; font-family: 'VT323', monospace; color: #ff073a; text-shadow: 0 0 25px #ff073a; margin: 0; line-height: 1; transition: 0.3s;}
+            .instrucciones-box { background: rgba(0, 255, 255, 0.05); border: 2px dashed #00ffff; padding: 20px; margin: 20px 0; color: #00ffff; font-size: 22px; text-align: left;}
+        </style>
+
+        <div class="purga-container" id="purga-contenedor-main">
+            <h1 style="color: #ff073a; font-size: 45px; margin-top: 0; text-shadow: 0 0 15px #ff073a; font-family: 'Cinzel', serif;">SISTEMA DE PURGA: EMERGENCIA</h1>
+            
+            <div id="purga-fase-1" class="fase-activa">
+                <p style="font-size: 24px; color: #e6f2ff; margin-bottom: 30px;">El sistema está bloqueado. Para acceder al manual de desactivación, introduzca la clave de seguridad técnica.</p>
+                <div style="background: rgba(0,0,0,0.6); padding: 25px; border: 2px solid #00ffff; border-radius: 8px; margin-bottom: 25px;">
+                    <p style="font-size: 26px; color: #00ffff; margin: 0; font-weight: bold;">¿Qué magnitud física relaciona directamente la Fuerza aplicada sobre una Superficie?</p>
+                </div>
+                <input type="text" id="input-pregunta-purga" placeholder="Introduce la magnitud..." style="width: 350px; text-transform: uppercase;">
+                <br><br>
+                <button class="btn-ui" onclick="purga_verificarPregunta()">[ DESENCRIPTAR MANUAL ]</button>
+                <div id="feed-purga-pregunta" style="margin-top: 20px; font-size: 24px; height: 30px; font-weight: bold;"></div>
+            </div>
+
+            <div id="purga-fase-2" class="fase-oculta">
+                <div id="timer-bomba">01:00</div>
+                
+                <div class="instrucciones-box">
+                    <b>MANUAL TÁCTICO DE PURGA:</b><br><br>
+                    <span style="color:#e6f2ff;">1. El núcleo es inestable. No toques la alimentación principal (<b>Rojo</b>).<br>
+                    2. Detén primero el sistema de refrigeración secundario (<b>Azul</b>).<br>
+                    3. Por último, estabiliza el circuito cerrando la toma de tierra (<b>Verde</b>).</span>
+                </div>
+
+                <div class="caja-cables">
+                    <div id="btn-cable-rojo" class="cable-bomba cable-rojo" onclick="purga_cortarCable('rojo')"></div>
+                    <div id="btn-cable-azul" class="cable-bomba cable-azul" onclick="purga_cortarCable('azul')"></div>
+                    <div id="btn-cable-verde" class="cable-bomba cable-verde" onclick="purga_cortarCable('verde')"></div>
+                </div>
+                <div id="feed-purga-bomba" style="font-size: 26px; font-weight: bold; height: 30px;"></div>
+            </div>
         </div>
-<div id="pantalla-nuevo-test" class="pantalla" style="background-color: #050505;">
+
+        <script>
+            // Aislamos el código para evitar conflictos, pero hacemos las funciones accesibles globalmente
+            (() => {
+                let purgaInterval = null;
+                let tiempoPurga = 60;
+                let estadoCables = { azul: false, verde: false };
+                let juegoActivo = false;
+
+                // Función de Fase 1
+                window.purga_verificarPregunta = function() {
+                    // Normalizamos quitando acentos por si escriben "PRESIÓN" o "PRESION"
+                    const resOriginal = document.getElementById("input-pregunta-purga").value.trim().toUpperCase();
+                    const res = resOriginal.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const feed = document.getElementById("feed-purga-pregunta");
+                    
+                    if (res === "PRESION") {
+                        feed.style.color = "#39ff14";
+                        feed.innerText = "✓ ACCESO CONCEDIDO";
+                        setTimeout(() => {
+                            document.getElementById("purga-fase-1").className = "fase-oculta";
+                            document.getElementById("purga-fase-2").className = "fase-activa";
+                            iniciarBomba();
+                        }, 1200);
+                    } else {
+                        feed.style.color = "#ff073a";
+                        feed.innerText = "✗ RESPUESTA INCORRECTA";
+                        setTimeout(() => feed.innerText = "", 2000);
+                    }
+                };
+
+                // Función para arrancar Fase 2
+                function iniciarBomba() {
+                    tiempoPurga = 60;
+                    juegoActivo = true;
+                    estadoCables = { azul: false, verde: false };
+                    
+                    // Restauramos colores por si vienen de un reinicio
+                    const contenedor = document.getElementById("purga-contenedor-main");
+                    contenedor.style.borderColor = "#ff073a";
+                    contenedor.style.boxShadow = "0 0 40px rgba(255, 7, 58, 0.3)";
+                    
+                    let timerUI = document.getElementById("timer-bomba");
+                    timerUI.style.color = "#ff073a";
+                    timerUI.style.textShadow = "0 0 25px #ff073a";
+                    
+                    // Restauramos cables
+                    document.getElementById("btn-cable-rojo").className = "cable-bomba cable-rojo";
+                    document.getElementById("btn-cable-azul").className = "cable-bomba cable-azul";
+                    document.getElementById("btn-cable-verde").className = "cable-bomba cable-verde";
+                    document.getElementById("feed-purga-bomba").innerText = "";
+                    
+                    clearInterval(purgaInterval);
+                    purgaInterval = setInterval(() => {
+                        if (!juegoActivo) return;
+                        tiempoPurga--;
+                        let secs = tiempoPurga.toString().padStart(2, '0');
+                        timerUI.innerText = `00:${secs}`;
+                        
+                        if (tiempoPurga <= 0) {
+                            explotarBomba("¡TIEMPO AGOTADO!");
+                        }
+                    }, 1000);
+                }
+
+                // Lógica de corte de cables
+                window.purga_cortarCable = function(color) {
+                    if (!juegoActivo) return;
+                    let cable = document.getElementById(`btn-cable-${color}`);
+                    let feed = document.getElementById("feed-purga-bomba");
+
+                    if (color === 'rojo') {
+                        cable.classList.add("cable-cortado");
+                        explotarBomba("¡CORTASTE EL CABLE EQUIVOCADO!");
+                    } 
+                    else if (color === 'azul') {
+                        cable.classList.add("cable-cortado");
+                        estadoCables.azul = true;
+                        feed.style.color = "#00ffff";
+                        feed.innerText = "Refrigeración desconectada. Falta estabilizar.";
+                    } 
+                    else if (color === 'verde') {
+                        if (!estadoCables.azul) {
+                            cable.classList.add("cable-cortado");
+                            explotarBomba("¡ERROR DE SECUENCIA! NÚCLEO SOBRECARGADO.");
+                        } else {
+                            cable.classList.add("cable-cortado");
+                            estadoCables.verde = true;
+                            desactivarBombaExito();
+                        }
+                    }
+                };
+
+                // Pantalla de Game Over
+                function explotarBomba(razon) {
+                    juegoActivo = false;
+                    clearInterval(purgaInterval);
+                    let feed = document.getElementById("feed-purga-bomba");
+                    let timer = document.getElementById("timer-bomba");
+                    let contenedor = document.getElementById("purga-contenedor-main");
+                    
+                    timer.innerText = "ERROR";
+                    timer.style.animation = "temblor-error 0.1s infinite";
+                    contenedor.style.borderColor = "#ff073a";
+                    contenedor.style.boxShadow = "0 0 80px #ff073a";
+                    
+                    feed.style.color = "#ff073a";
+                    feed.innerText = razon + " REINICIANDO SISTEMA...";
+                    
+                    // Reiniciamos al principio después de la explosión
+                    setTimeout(() => {
+                        timer.style.animation = "none";
+                        document.getElementById("input-pregunta-purga").value = "";
+                        document.getElementById("feed-purga-pregunta").innerText = "";
+                        document.getElementById("purga-fase-2").className = "fase-oculta";
+                        document.getElementById("purga-fase-1").className = "fase-activa";
+                    }, 4000);
+                }
+
+                // Pantalla de Victoria
+                function desactivarBombaExito() {
+                    juegoActivo = false;
+                    clearInterval(purgaInterval);
+                    let feed = document.getElementById("feed-purga-bomba");
+                    let timer = document.getElementById("timer-bomba");
+                    let contenedor = document.getElementById("purga-contenedor-main");
+                    
+                    timer.style.color = "#39ff14";
+                    timer.style.textShadow = "0 0 30px #39ff14";
+                    contenedor.style.borderColor = "#39ff14";
+                    contenedor.style.boxShadow = "0 0 60px #39ff14";
+                    
+                    feed.style.color = "#39ff14";
+                    feed.innerText = "✓ PURGA COMPLETADA. SISTEMA ESTABLE.";
+                }
+            })();
+        </script>
+    </div>
+    
+    <div id="pantalla-nuevo-test" class="pantalla" style="background-color: #050505;">
         <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
         
         <style>
@@ -811,7 +1002,7 @@
         </style>
 
         <div class="mi-contenedor-test">
-            <h2 style="color: #00ffff;">NUEVO TEST DE EVALUACIÓN</h2>
+            <h2 style="color: #00ffff;">PRUEBA TEST</h2>
             <div id="zona-preguntas-test"></div>
         </div>
 
