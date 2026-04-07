@@ -439,27 +439,33 @@
 <div class="contenedor-grid-proyectos">
             
             <div class="icono-proyecto" onclick="mostrar('pantalla-proyecto-cables')">
-                <div class="imagen-icono" style="background-image: url('valvula.gif');"></div>
+                <div class="imagen-icono" style="background-image: url('reactor.gif');"></div>
                 <div class="titulo-icono">NOMBRE PROYECTO</div>
                 <div class="equipo-icono">ALUMNO 1; ALUMNO 2; ALUMNO 3; ALUMNO 4</div>
             </div>
 
             <div class="icono-proyecto" onclick="mostrar('pantalla-proyecto-purga')">
-                <div class="imagen-icono" style="background-image: url('presa.gif');"></div>
+                <div class="imagen-icono" style="background-image: url('reactor.gif');"></div>
                 <div class="titulo-icono">NOMBRE PROYECTO</div>
                 <div class="equipo-icono">ALUMNO 1; ALUMNO 2; ALUMNO 3; ALUMNO 4</div>
             </div>
-
+    
+            <div class="icono-proyecto" onclick="mostrar('pantalla-nuevo-test')">
+                <div class="imagen-icono" style="background-image: url('reactor.gif');"></div>
+                <div class="titulo-icono">NOMBRE PROYECTO</div>
+                <div class="equipo-icono">TU EQUIPO</div>
+            </div>
+    
             <div class="icono-proyecto bloqueado">
                 <div class="imagen-icono" style="display:flex; justify-content:center; align-items:center; font-size: 60px; color: #ff073a;">?</div>
                 <div class="titulo-icono" style="color: #777;">ARCHIVO VACÍO</div>
-                <div class="equipo-icono" style="color: #ff073a;">NOMBRE PROYECTO</div>
+                <div class="equipo-icono" style="color: #ff073a;">NOMBRE EQUIPO</div>
             </div>
 
              <div class="icono-proyecto bloqueado">
                 <div class="imagen-icono" style="display:flex; justify-content:center; align-items:center; font-size: 60px; color: #555;">+</div>
                 <div class="titulo-icono" style="color: #777;">ARCHIVO VACÍO</div>
-                <div class="equipo-icono" style="color: #555;">NOMBRE PROYECTO</div>
+                <div class="equipo-icono" style="color: #555;">NOMBRE EQUIPO</div>
             </div>
             
              <div class="icono-proyecto bloqueado">
@@ -793,10 +799,31 @@
             })();
         </script>
         </div>
+    
     <div id="pantalla-proyecto-purga" class="pantalla" style="background-color: #222;">
         <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
         </div>
+<div id="pantalla-nuevo-test" class="pantalla" style="background-color: #050505;">
+        <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
+        
+        <style>
+            #pantalla-nuevo-test .mi-contenedor-test {width: 80%; margin: auto; color: white; text-align: center;padding-top: 80px;}
+        </style>
 
+        <div class="mi-contenedor-test">
+            <h2 style="color: #00ffff;">NUEVO TEST DE EVALUACIÓN</h2>
+            <div id="zona-preguntas-test"></div>
+        </div>
+
+        <script>
+            // AQUÍ VA EL JAVASCRIPT DE TU TEST DENTRO DE ESTA FUNCIÓN
+            (() => {
+                // Pega aquí toda la lógica, arrays de preguntas y funciones de tu test.
+                
+            })();
+        </script>
+    </div>
+    
     <script>
         // VARIABLES GLOBALES
         let nombreEquipo = "";
