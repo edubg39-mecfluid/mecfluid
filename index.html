@@ -332,21 +332,19 @@
         .sensor-cap.der { right: 180px; }
         .linea-objetivo-cap { position: absolute; left: 0; width: 100%; border-top: 2px dashed rgba(255, 7, 58, 0.6); z-index: 1; transition: bottom 1s ease-in-out; }
         .texto-objetivo-cap { position: absolute; left: 10px; color: #ff073a; font-size: 20px; font-weight: bold; text-shadow: 0 0 5px #000; transition: bottom 1s ease-in-out; }
+        
         /* ================= ESTANTE DE PROYECTOS ================= */
-        #pantalla-alumnos {background: linear-gradient(to bottom, #000510 0%, #001a33 100%); justify-content: flex-start; padding-top: 50px;}
-        .estante-proyectos {display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; width: 85%; max-width: 1200px; margin: 0 auto; padding: 30px;
-            background: rgba(0, 43, 77, 0.4); border: 2px solid #00ffff; border-radius: 15px; box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.1); overflow-y: auto; max-height: 60vh;}
-        .tarjeta-proyecto {background: rgba(0, 0, 0, 0.7); border: 2px solid #39ff14; border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column;}
-        .tarjeta-proyecto:hover {transform: translateY(-8px);box-shadow: 0 10px 25px rgba(57, 255, 20, 0.4); border-color: #fff;}
-        .miniatura-proyecto {height: 160px; background-size: cover; background-position: center; border-bottom: 2px solid #39ff14; opacity: 0.7; transition: 0.3s;}
-        .tarjeta-proyecto:hover .miniatura-proyecto {opacity: 1;}
-        .info-proyecto {padding: 15px; text-align: center;}
-        .nombre-proyecto {color: #00ffff; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;}
-        .equipo-proyecto {color: #e6f2ff; font-size: 16px;}
-        .tarjeta-proyecto.bloqueado {border-color: #555; cursor: not-allowed; opacity: 0.6;}
-        .tarjeta-proyecto.bloqueado:hover {transform: none; box-shadow: none; border-color: #ff073a;}
-        .tarjeta-proyecto.bloqueado .miniatura-proyecto {border-bottom-color: #555;}
-        .tarjeta-proyecto.bloqueado:hover .miniatura-proyecto {border-bottom-color: #ff073a;}
+        #pantalla-alumnos {background: linear-gradient(135deg, #0a1118 0%, #152733 50%, #1a3242 100%); justify-content: flex-start; padding-top: 60px;}
+        .contenedor-grid-proyectos {display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 30px; width: 85%; max-width: 1000px; margin: 40px auto; justify-items: center; overflow-y: auto; max-height: 65vh; padding: 20px;}
+        .icono-proyecto {width: 180px; height: 180px; background: rgba(0, 20, 40, 0.6); border: 3px solid #00ffff; border-radius: 30px;  display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1), 0 5px 15px rgba(0,0,0,0.5); position: relative; }
+        .icono-proyecto:hover { transform: translateY(-8px) scale(1.05); background: rgba(0, 43, 77, 0.9); box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.3), 0 10px 25px rgba(0, 255, 255, 0.4); border-color: #fff;}
+        .imagen-icono { width: 70px; height: 70px; background-size: contain; background-position: center; background-repeat: no-repeat; margin-bottom: 15px; filter: drop-shadow(0 0 5px #00ffff); transition: 0.3s;}
+        .icono-proyecto:hover .imagen-icono { transform: scale(1.1); filter: drop-shadow(0 0 15px #00ffff);}
+        .titulo-icono {color: #ffffff; font-size: 15px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1px; padding: 0 10px; line-height: 1.2;}
+        .equipo-icono {color: #00ffff; font-size: 11px; margin-top: 8px; letter-spacing: 2px; text-transform: uppercase;}
+        .icono-proyecto.bloqueado { border-color: #444; background: rgba(10, 10, 10, 0.5); box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); cursor: not-allowed; opacity: 0.7;}
+        .icono-proyecto.bloqueado:hover {transform: none; border-color: #ff073a; box-shadow: 0 0 15px rgba(255, 7, 58, 0.3);}
+        .icono-proyecto.bloqueado .imagen-icono {filter: none;}
         
                 /* ================= ZONA DE PARCHES ================= */
         /* ================= PARCHE PARA TABLETS Y MÓVILES ================= */
@@ -432,8 +430,46 @@
 
 <div id="pantalla-alumnos" class="pantalla">
         <button class="btn-volver-top" onclick="mostrar('pantalla-hub')" style="z-index: 10001;">[ ◄ VOLVER AL HUB ]</button>
-        <h1 class="titulo-sector" style="color: #39ff14; text-shadow: 0 0 20px #39ff14; margin-top: 40px; font-size: 50px;">BASE DE DATOS: INGENIERÍA EXTERNA</h1>
-        <p style="font-size: 22px; color: #e6f2ff; max-width: 800px; text-align: center; margin-bottom: 30px;">Simuladores y proyectos en la red desarrollados por los equipos de la academia.</p>
+        
+        <div style="text-align: center; margin-top: 20px; width: 100%;">
+            <h1 class="titulo-hub" style="font-size: 60px; text-align: center; margin-bottom: 5px; width: 100%;">BASE DE DATOS</h1>
+            <h2 class="subtitulo-hub" style="text-align: center; margin-bottom: 0; width: 100%;">PROYECTOS EXTERNOS</h2>
+        </div>
+        
+        <div class="contenedor-grid-proyectos">
+            
+            <div class="icono-proyecto" onclick="abrirProyecto('prototipo-cables.html')">
+                <div class="imagen-icono" style="background-image: url('valvula.gif');"></div>
+                <div class="titulo-icono">Calibración</div>
+                <div class="equipo-icono">Alpha-Fluids</div>
+            </div>
+
+            <div class="icono-proyecto" onclick="abrirProyecto('prototipo-manual.html')">
+                <div class="imagen-icono" style="background-image: url('presa.gif');"></div>
+                <div class="titulo-icono">Purga Presa</div>
+                <div class="equipo-icono">HidroTech</div>
+            </div>
+
+            <div class="icono-proyecto bloqueado">
+                <div class="imagen-icono" style="display:flex; justify-content:center; align-items:center; font-size: 60px; color: #ff073a;">?</div>
+                <div class="titulo-icono" style="color: #777;">DATOS ROTOS</div>
+                <div class="equipo-icono" style="color: #ff073a;">Sector 03</div>
+            </div>
+
+             <div class="icono-proyecto bloqueado">
+                <div class="imagen-icono" style="display:flex; justify-content:center; align-items:center; font-size: 60px; color: #555;">+</div>
+                <div class="titulo-icono" style="color: #777;">SLOT VACÍO</div>
+                <div class="equipo-icono" style="color: #555;">ESPERANDO...</div>
+            </div>
+            
+             <div class="icono-proyecto bloqueado">
+                <div class="imagen-icono" style="display:flex; justify-content:center; align-items:center; font-size: 60px; color: #555;">+</div>
+                <div class="titulo-icono" style="color: #777;">SLOT VACÍO</div>
+                <div class="equipo-icono" style="color: #555;">ESPERANDO...</div>
+            </div>
+
+        </div>
+    </div>
         
 <div class="estante-proyectos">
             
