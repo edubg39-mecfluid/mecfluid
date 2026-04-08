@@ -657,7 +657,7 @@
                 <div class="nodo-pizarra" id="nodo-Re" style="top: 85%; left: 4%;" onclick="enfocarPrueba('Re')">Re</div>
                 <div class="nodo-pizarra" id="nodo-Pr" style="top: 45%; left: 50%;" onclick="enfocarPrueba('Pr')">Pr</div>
                 <div class="nodo-pizarra" id="nodo-Pe" style="top: 60%; left: 5%;" onclick="enfocarPrueba('Pe')">Pe</div>
-                <div class="nodo-pizarra" id="nodo-M"  style="top: 55%; left: 78%;" onclick="enfocarPrueba('M')">M</div>
+                <div class="nodo-pizarra" id="nodo-M"  style="top: 55%; left: 75%;" onclick="enfocarPrueba('M')">M</div>
             </div>
 
             <div id="panel-prueba-flotante">
@@ -945,16 +945,13 @@
         </div>
 
         <script>
-            // Aislamos el código para evitar conflictos, pero hacemos las funciones accesibles globalmente
             (() => {
                 let purgaInterval = null;
                 let tiempoPurga = 60;
                 let estadoCables = { azul: false, verde: false };
                 let juegoActivo = false;
 
-                // Función de Fase 1
                 window.purga_verificarPregunta = function() {
-                    // Normalizamos quitando acentos por si escriben "PRESIÓN" o "PRESION"
                     const resOriginal = document.getElementById("input-pregunta-purga").value.trim().toUpperCase();
                     const res = resOriginal.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     const feed = document.getElementById("feed-purga-pregunta");
