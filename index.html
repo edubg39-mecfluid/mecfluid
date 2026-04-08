@@ -423,7 +423,7 @@
             <h2 class="subtitulo-hub">Ingeniería de Fluidos</h2>
 
             <div class="menu-lista-hub">
-                <button class="btn-hub" onclick="mostrar('pantalla-inicio')">Entrar al Escape Room</button>
+                <button class="btn-hub" onclick="entrarJuego()">Entrar al Escape Room</button>
                 <button class="btn-hub" onclick="mostrar('pantalla-alumnos')">Proyectos de Alumnos</button>
                 <button class="btn-hub btn-hub-bloqueado" onclick="alert('Acceso restringido')">Panel Docente</button>
             </div>
@@ -1146,6 +1146,12 @@
             { txt: "Los niveles de presión manométrica son estables, el flujo de agua es constante y... Espera. Un momento.", bg: "puerta-sector11.jpg", face: "chico-habla.png" },
             { txt: "¿Qué es esa lectura? ¡Alerta de cavitación detectada! ¡Fallo estructural inminente en las tuberías principales!", bg: "puerta-sector11.jpg", face: "chico-sorpresa.png", error: true }
         ];
+        function entrarJuego() {
+            let elemento = document.documentElement;
+            if (elemento.requestFullscreen) {elemento.requestFullscreen().catch(err => console.log("Pantalla completa bloqueada por el navegador"));} 
+            else if (elemento.webkitRequestFullscreen) { /* Safari */elemento.webkitRequestFullscreen();} 
+            else if (elemento.msRequestFullscreen) { /* IE11 */elemento.msRequestFullscreen();}
+            mostrar('pantalla-inicio');}
         
         function abrirProyecto(urlArchivo) {document.getElementById('iframe-proyecto').src = urlArchivo; mostrar('pantalla-visor-proyecto');}
         
