@@ -718,6 +718,7 @@
             #pantalla-proyecto-cables .c-der { border-color: #555; background: #111; }
             #pantalla-proyecto-cables .c-der.conectado { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
             #pantalla-proyecto-cables #capa-cables { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+            #pantalla-proyecto-cables .c-izq.seleccionado {transform: scale(1.5); background: #ffffff; border-width: 5px; animation: latido-hotspot 1s infinite alternate;}
         </style>
 
         <div class="panel-cables" id="panel-juego-cables">
@@ -759,7 +760,9 @@
                 document.querySelectorAll('#pantalla-proyecto-cables .c-izq').forEach(conector => {
                     conector.addEventListener('click', (e) => {
                         e.stopPropagation();
-
+                        document.querySelectorAll('#pantalla-proyecto-cables .c-izq').forEach(c => c.classList.remove('seleccionado'));
+                        conector.classList.add('seleccionado');
+                        
                         let lineaExistente = document.getElementById('linea-' + conector.dataset.id);
                         if (lineaExistente) lineaExistente.remove();
                         conexiones[conector.dataset.id] = false;
@@ -801,7 +804,7 @@
                             cableActual.setAttribute('y2', centroDestino.y);
                             conectorDer.classList.add('conectado'); 
                             conexiones[origenActual.dataset.id] = true;
-
+                            
                             if (Object.values(conexiones).every(estado => estado === true)) {
                                 const f = document.getElementById('feedback-cables');
                                 f.style.color = '#39ff14'; f.style.textShadow = '0 0 10px #39ff14';
@@ -810,6 +813,8 @@
                         } else {
                             cableActual.remove();
                         }
+
+                        origenActual.classList.remove('seleccionado');
                         cableActual = null; 
                         origenActual = null;
                     });
@@ -818,6 +823,7 @@
                 panel.addEventListener('click', () => {
                     if (cableActual) {
                         cableActual.remove();
+                        if (origenActual) origenActual.classList.remove('seleccionado');
                         cableActual = null;
                         origenActual = null;
                     }
