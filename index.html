@@ -740,13 +740,12 @@
         </div>
         <div id="feedback-cables" style="margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px;"></div>
 
-        <script>
-
+<script>
+            (() => {
                 const panel = document.getElementById('panel-juego-cables');
                 const svg = document.getElementById('capa-cables');
-                let arrastrando = false;
-                let cableActual = null;
                 let origenActual = null;
+                let cableActual = null;
 
                 const colores = { 'c1': '#ff0055', 'c2': '#00aaff', 'c3': '#ffaa00', 'c4': '#00ffaa' };
                 let conexiones = { izq1: false, izq2: false, izq3: false, izq4: false };
@@ -758,57 +757,70 @@
                 }
 
                 document.querySelectorAll('#pantalla-proyecto-cables .c-izq').forEach(conector => {
-                    conector.addEventListener('mousedown', (e) => {
-                        arrastrando = true; origenActual = conector;
-                        let lineaExistente = document.getElementById('linea-' + origenActual.dataset.id);
-                        if (lineaExistente) lineaExistente.remove();
-                        conexiones[origenActual.dataset.id] = false;
+                    conector.addEventListener('click', (e) => {
+                        e.stopPropagation();
 
+                        let lineaExistente = document.getElementById('linea-' + conector.dataset.id);
+                        if (lineaExistente) lineaExistente.remove();
+                        conexiones[conector.dataset.id] = false;
+
+                        if (cableActual) cableActual.remove();
+
+                        origenActual = conector;
                         cableActual = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                         cableActual.setAttribute('id', 'linea-' + origenActual.dataset.id);
+                        
                         const centro = obtenerCentro(conector);
-                        cableActual.setAttribute('x1', centro.x); cableActual.setAttribute('y1', centro.y);
-                        cableActual.setAttribute('x2', centro.x); cableActual.setAttribute('y2', centro.y);
+                        cableActual.setAttribute('x1', centro.x); 
+                        cableActual.setAttribute('y1', centro.y);
+                        cableActual.setAttribute('x2', centro.x); 
+                        cableActual.setAttribute('y2', centro.y);
+                        
                         cableActual.setAttribute('stroke', colores[origenActual.dataset.color]);
-                        cableActual.setAttribute('stroke-width', '8'); cableActual.setAttribute('stroke-linecap', 'round');
+                        cableActual.setAttribute('stroke-width', '8'); 
+                        cableActual.setAttribute('stroke-linecap', 'round');
                         svg.appendChild(cableActual);
                     });
                 });
 
-                document.addEventListener('mousemove', (e) => {
-                    if (!arrastrando || !cableActual) return;
+                panel.addEventListener('mousemove', (e) => {
+                    if (!cableActual || !origenActual) return;
                     const panelRect = panel.getBoundingClientRect();
                     cableActual.setAttribute('x2', e.clientX - panelRect.left);
                     cableActual.setAttribute('y2', e.clientY - panelRect.top);
                 });
 
-                document.addEventListener('mouseup', (e) => {
-                    if (!arrastrando) return;
-                    arrastrando = false;
-                    let soltadoEnConector = null;
-                    
-                    cableActual.style.display = 'none';
-                    const elementoDebajo = document.elementFromPoint(e.clientX, e.clientY);
-                    cableActual.style.display = 'block';
+                document.querySelectorAll('#pantalla-proyecto-cables .c-der').forEach(conectorDer => {
+                    conectorDer.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (!origenActual || !cableActual) return;
 
-                    if (elementoDebajo && elementoDebajo.classList.contains('c-der')) soltadoEnConector = elementoDebajo;
-
-                    if (soltadoEnConector) {
-                        if (soltadoEnConector.dataset.id === origenActual.dataset.match) {
-                            const centroDestino = obtenerCentro(soltadoEnConector);
-                            cableActual.setAttribute('x2', centroDestino.x); cableActual.setAttribute('y2', centroDestino.y);
-                            soltadoEnConector.classList.add('conectado'); 
+                        if (conectorDer.dataset.id === origenActual.dataset.match) {
+                            const centroDestino = obtenerCentro(conectorDer);
+                            cableActual.setAttribute('x2', centroDestino.x); 
+                            cableActual.setAttribute('y2', centroDestino.y);
+                            conectorDer.classList.add('conectado'); 
                             conexiones[origenActual.dataset.id] = true;
-                            
+
                             if (Object.values(conexiones).every(estado => estado === true)) {
                                 const f = document.getElementById('feedback-cables');
                                 f.style.color = '#39ff14'; f.style.textShadow = '0 0 10px #39ff14';
                                 f.innerText = "[ CALIBRACIÓN COMPLETADA CON ÉXITO ]";
                             }
-                        } else { cableActual.remove(); }
-                    } else { cableActual.remove(); }
+                        } else {
+                            cableActual.remove();
+                        }
+                        cableActual = null; 
+                        origenActual = null;
+                    });
+                });
 
-                    cableActual = null; origenActual = null;
+                panel.addEventListener('click', () => {
+                    if (cableActual) {
+                        cableActual.remove();
+                        cableActual = null;
+                        origenActual = null;
+                    }
                 });
             })();
         </script>
