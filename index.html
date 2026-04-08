@@ -835,26 +835,20 @@
 <div id="pantalla-proyecto-purga" class="pantalla" style="background-color: #050505;">
         <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
 
-        <style>
-            #pantalla-proyecto-purga .purga-container {
-                width: 900px; padding: 60px; background: rgba(10, 15, 25, 0.9); 
-                border: 3px solid #ff073a; border-radius: 15px; text-align: center; 
-                box-shadow: 0 0 40px rgba(255, 7, 58, 0.3); transition: 0.3s;
-            }
+<style>
+            #pantalla-proyecto-purga .purga-container {width: 85%; max-width: 650px; padding: 25px 30px; background: rgba(10, 15, 25, 0.9); border: 3px solid #ff073a; border-radius: 15px; text-align: center; box-shadow: 0 0 40px rgba(255, 7, 58, 0.3); transition: 0.3s; margin: auto; }
+            #pantalla-proyecto-purga h1 {font-size: 32px !important; margin-bottom: 15px;}
             #pantalla-proyecto-purga .fase-activa { display: block; animation: fadeIn 0.5s; }
             #pantalla-proyecto-purga .fase-oculta { display: none; }
-            
-            /* CSS Cables */
-            .caja-cables { display: flex; justify-content: center; gap: 50px; margin: 30px 0; }
-            .cable-bomba { width: 35px; height: 160px; cursor: pointer; border-radius: 20px; transition: 0.2s; border: 3px solid #fff; box-shadow: inset 0 0 10px #000; }
+            .caja-cables { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+            .cable-bomba { width: 30px; height: 130px; cursor: pointer; border-radius: 20px; transition: 0.2s; border: 3px solid #fff; box-shadow: inset 0 0 10px #000; }
             .cable-bomba:hover { transform: scale(1.1); box-shadow: 0 0 25px currentColor; }
             .cable-rojo { background: #ff073a; color: #ff073a; }
             .cable-azul { background: #00ffff; color: #00ffff; }
             .cable-verde { background: #39ff14; color: #39ff14; }
-            .cable-cortado { opacity: 0.2; pointer-events: none; height: 70px; margin-top: 45px; transform: none !important; box-shadow: none !important; border-top: 4px dashed #333; }
-            
-            #timer-bomba { font-size: 100px; font-family: 'VT323', monospace; color: #ff073a; text-shadow: 0 0 25px #ff073a; margin: 0; line-height: 1; transition: 0.3s;}
-            .instrucciones-box { background: rgba(0, 255, 255, 0.05); border: 2px dashed #00ffff; padding: 20px; margin: 20px 0; color: #00ffff; font-size: 22px; text-align: left;}
+            .cable-cortado { opacity: 0.2; pointer-events: none; height: 60px; margin-top: 35px; transform: none !important; box-shadow: none !important; border-top: 4px dashed #333;}
+            #timer-bomba { font-size: 70px; font-family: 'VT323', monospace; color: #ff073a; text-shadow: 0 0 20px #ff073a; margin: 0; line-height: 1; transition: 0.3s;}
+            .instrucciones-box { background: rgba(0, 255, 255, 0.05); border: 2px dashed #00ffff; padding: 15px; margin: 15px 0; color: #00ffff; font-size: 18px; text-align: left; line-height: 1.4;}
         </style>
 
         <div class="purga-container" id="purga-contenedor-main">
