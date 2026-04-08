@@ -32,10 +32,15 @@
         .copyright-hub { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #666; text-align: center; z-index: 10; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
         .firma-hub { color: #888; font-weight: bold; }
         
-        /* ================= ESTILOS GENERALES DEL JUEGO ================= */
+/* ================= ESTILOS GENERALES DEL JUEGO ================= */
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: 'Montserrat', sans-serif;; background-color: #050505; color: white;}
+        @keyframes fadePantalla { 
+            0% { opacity: 0; transform: scale(0.97); filter: blur(2px); } 
+            100% { opacity: 1; transform: scale(1); filter: blur(0px); } 
+        }
+
         .pantalla { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
-        .pantalla.activa { display: flex; z-index: 10; }
+        .pantalla.activa { display: flex; z-index: 10; animation: fadePantalla 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         
         /* ================= INICIO ================= */
         #pantalla-inicio { background: url('fondo (2).png') center/cover; }
@@ -397,6 +402,33 @@
         .pantalla {width: 100vw !important; height: 100vh !important; box-sizing: border-box !important;}
         #pantalla-mapa {display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; min-height: 100vh !important; width: 100vw !important;}
         #contenedor-puertas, .contenedor-puertas {display: flex !important; justify-content: center !important; align-items: center !important; flex-wrap: wrap !important; width: 100% !important; flex-grow: 1 !important;}
+        
+        /* ================= PIZARRA INMERSIVA (M1) ================= */
+        #contenedor-pizarra {
+            position: relative; width: 100vw; height: 100vh; overflow: hidden; background: #111;
+        }
+        .lienzo-pizarra {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('techlab.jpg') center/cover;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), filter 1s ease;
+            transform-origin: center center; display: flex; justify-content: center; align-items: center;
+        }
+        .lienzo-pizarra.zoomed { filter: blur(4px) brightness(0.5); }
+        .nodo-pizarra {
+            position: absolute; width: 80px; height: 80px; border: 3px solid #00ffff; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 30px; font-weight: bold;
+            color: #00ffff; background: rgba(0, 43, 77, 0.8); cursor: pointer; transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); z-index: 5;
+        }
+        .nodo-pizarra:hover { transform: scale(1.1); background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; }
+        .nodo-pizarra.completado { border-color: #39ff14; color: #39ff14; box-shadow: 0 0 15px #39ff14; text-decoration: line-through; pointer-events: none; }
+        #panel-prueba-flotante {
+            position: absolute; right: -600px; top: 50%; transform: translateY(-50%);
+            width: 500px; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff;
+            border-radius: 15px; padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+            transition: right 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 20;
+        }
+        #panel-prueba-flotante.visible { right: 50px; }
     </style>
 </head>
 <body ontouchstart="">
@@ -598,17 +630,29 @@
         </div>
     </div>
 
-    <div id="pantalla-habitacion" class="pantalla">
-        <h1 class="titulo-mapa" id="titulo-hab">MÓDULO 1: CIRCUITO DE CONCEPTOS</h1>
-        <div class="contenedor-mapa" id="fondo-mecanico">
-            <div class="tubo tubo-h" style="left: 20%; top: 30%; width: 60%;"><div class="fluido" id="fluido-1" style="left: 0; top: 0; height: 100%; width: 0%;"></div></div>
-            <div class="tubo tubo-v" style="left: 80%; top: 30%; height: 40%;"><div class="fluido" id="fluido-2" style="left: 0; top: 0; width: 100%; height: 0%;"></div></div>
-            <div class="tubo tubo-h" style="left: 20%; top: 70%; width: 60%;"><div class="fluido" id="fluido-3" style="right: 0; top: 0; height: 100%; width: 0%;"></div></div>
-            <div class="tubo tubo-h" style="left: 0%; top: 70%; width: 20%; border-right: none; border-left: 2px dashed #ff073a;"><div class="fluido" id="fluido-final" style="right: 0; top: 0; height: 100%; width: 0%;"></div></div>
-            <div class="valvula" id="val-1" style="left: 20%; top: 30%;">Re</div>
-            <div class="valvula" id="val-2" style="left: 80%; top: 30%;">Pr</div>
-            <div class="valvula" id="val-3" style="left: 80%; top: 70%;">M</div>
-            <div class="valvula" id="val-4" style="left: 20%; top: 70%;">Pe</div>
+<div id="pantalla-habitacion" class="pantalla">
+        <button class="btn-volver-top" onclick="irAMapa()" style="z-index: 10001;">[ ◄ VOLVER AL NEXO ]</button>
+        
+        <div id="contenedor-pizarra">
+            <h1 style="position:absolute; top: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.2); font-size: 80px; z-index: 0; pointer-events:none; font-family: 'Cinzel', serif;">PIZARRA DE INGENIERÍA</h1>
+            
+            <div id="lienzo" class="lienzo-pizarra">
+                <div class="nodo-pizarra" id="nodo-Re" style="top: 30%; left: 25%;" onclick="enfocarPrueba('Re')">Re</div>
+                <div class="nodo-pizarra" id="nodo-Pr" style="top: 60%; left: 40%;" onclick="enfocarPrueba('Pr')">Pr</div>
+                <div class="nodo-pizarra" id="nodo-Pe" style="top: 25%; left: 70%;" onclick="enfocarPrueba('Pe')">Pe</div>
+                <div class="nodo-pizarra" id="nodo-M"  style="top: 70%; left: 75%;" onclick="enfocarPrueba('M')">M</div>
+            </div>
+
+            <div id="panel-prueba-flotante">
+                <h2 id="titulo-prueba-pizarra" style="color:#00ffff; margin-top:0;">NOMBRE PRUEBA</h2>
+                <p id="desc-prueba-pizarra" style="color:#e6f2ff; font-size: 18px;">Descripción...</p>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button id="btn-iniciar-prueba" class="btn-ui">[ ENTRAR AL SISTEMA ]</button>
+                    <br><br>
+                    <button class="btn-opcion" style="text-align:center; background: transparent; border-color: #555; color: #aaa;" onclick="resetZoomPizarra()">[ CERRAR VISTA ]</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1329,7 +1373,45 @@
             document.getElementById('hud-cronometro').style.display = "block";
             actualizarMapas(); 
         }
-        
+        // ================= LÓGICA DE PIZARRA M1 =================
+        const posicionesZoom = {
+            'Re': { scale: 2.5, x: '25%', y: '20%' },
+            'Pr': { scale: 2.5, x: '10%', y: '-10%' },
+            'Pe': { scale: 2.5, x: '-20%', y: '25%' },
+            'M':  { scale: 2.5, x: '-25%', y: '-20%' }
+        };
+
+        const datosPruebasM1 = {
+            'Re': { titulo: 'ESTABILIZACIÓN: Re', desc: 'Prueba de Enrutamiento de Unidades. Ajusta el circuito cian y naranja.', num: 1 },
+            'Pr': { titulo: 'VERIFICACIÓN: Pr', desc: 'Test teórico de conceptos base de fluidos.', num: 2 },
+            'M':  { titulo: 'CAPILARIDAD: M', desc: 'Cortocircuita el sistema usando ascenso capilar.', num: 3 },
+            'Pe': { titulo: 'DESENCRIPTACIÓN: Pe', desc: 'Extrae los datos ocultos de flujo y área.', num: 4 }
+        };
+
+        function enfocarPrueba(idPrueba) {
+            const lienzo = document.getElementById('lienzo');
+            const panelFlotante = document.getElementById('panel-prueba-flotante');
+            const zoom = posicionesZoom[idPrueba];
+            lienzo.style.transform = `scale(${zoom.scale}) translate(${zoom.x}, ${zoom.y})`;
+            lienzo.classList.add('zoomed');
+            document.getElementById('titulo-prueba-pizarra').innerText = datosPruebasM1[idPrueba].titulo;
+            document.getElementById('desc-prueba-pizarra').innerText = datosPruebasM1[idPrueba].desc;
+            document.getElementById('btn-iniciar-prueba').onclick = () => {
+                resetZoomPizarra(); // Quitamos el zoom por si vuelven atrás
+                irAProblema(datosPruebasM1[idPrueba].num);
+            };
+
+            panelFlotante.classList.add('visible');
+        }
+
+        function resetZoomPizarra() {
+            const lienzo = document.getElementById('lienzo');
+            const panelFlotante = document.getElementById('panel-prueba-flotante');
+            
+            lienzo.style.transform = 'scale(1) translate(0, 0)';
+            lienzo.classList.remove('zoomed');
+            panelFlotante.classList.remove('visible');
+        }
         function abrirHabitacion(n) { 
             if(n>1 && !progreso[n-1].every(x=>x===true)) { alert("Este módulo está bloqueado. Resuelve el módulo anterior para continuar."); return; }
             if(progreso[n].every(x=>x===true)) { alert("Este módulo ya está estabilizado y bloqueado de forma segura."); return; }
