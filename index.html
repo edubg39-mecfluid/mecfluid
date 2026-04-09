@@ -1519,7 +1519,14 @@ function enfocarPrueba(idPrueba) {
         function procesarVictoriaFase(mod, fase) {
             progreso[mod][fase] = true;
             guardarEstado();
-            if (progreso[mod].every(x => x === true)) {
+            if (mod === 1 && progreso[1].every(x => x === true)) {
+                abrirHabitacion(1); 
+                setTimeout(() => {
+                    alert("MÓDULO 1 ESTABILIZADO Volviendo al Nexo Central.");
+                    irAMapa(); 
+                }, 2000);
+            } 
+            else if (progreso[mod].every(x => x === true)) {
                 irAMapa();
             } else {
                 abrirHabitacion(mod);
