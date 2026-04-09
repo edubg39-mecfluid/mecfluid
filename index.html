@@ -577,7 +577,7 @@
         <h1 style="color:#ff073a; font-size: 50px;">ALERTA DE SISTEMA</h1>
         <div id="texto-historia" style="font-size: 26px; max-width: 800px; text-align: left; margin: 20px; color:#39ff14;"></div>
         <div id="zona-registro-emergencia" style="display:none; text-align: center; margin-top: 20px; background: rgba(0, 0, 0, 0.8); padding: 25px; border: 2px solid #ff073a; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 7, 58, 0.3);">
-            <p style="font-size: 26px; color: #fff; margin-top: 0;">SOLICITANDO UNIDAD TÁCTICA EXTERIOR.<br>INTRODUZCA IDENTIFICACIÓN DE EQUIPO:</p>
+            <p style="font-size: 26px; color: #fff; margin-top: 0;">SOLICITANDO UNIDAD INTERVENCIÓN EXTERIOR.<br>INTRODUZCA IDENTIFICACIÓN DE EQUIPO:</p>
             <input type="text" id="input-equipo" class="input-equipo" placeholder="Vuestro nombre..." autocomplete="off" style="border-color: #ff073a; color: #ff073a;">
             <br>
             <button id="btn-start" class="btn-ui" style="background: #ff073a; color: white;" onclick="iniciarMision()">[ AUTORIZAR ACCESO ]</button>
@@ -1333,7 +1333,7 @@
 
         function irAAlerta() {
             mostrar('pantalla-alerta');
-            const hTxt = "SISTEMA COMPROMETIDO...\nFallo crítico detectado en las válvulas de refrigeración.\nPresión inestable. Protocolo de evacuación iniciado.\n\n[ ALERTA ] Se requiere intervención de Unidad de Ingeniería Táctica.";
+            const hTxt = "SISTEMA COMPROMETIDO...\nFallo crítico detectado en las válvulas de refrigeración.\nPresión inestable. Protocolo de evacuación iniciado.\n\n[ ALERTA ] Se requiere intervención de Unidad de Ingeniería.";
             let i = 0; const caja = document.getElementById("texto-historia"); caja.innerHTML = "";
             let intv = setInterval(() => { 
                 caja.innerHTML += hTxt.charAt(i) === "\n" ? "<br>" : hTxt.charAt(i); 
