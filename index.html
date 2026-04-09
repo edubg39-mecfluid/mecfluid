@@ -1100,17 +1100,15 @@
     
     <script>
         // VARIABLES GLOBALES
+        function mostrarAlerta(mensaje, titulo = "SISTEMA") { document.getElementById("modal-titulo").innerText = titulo; document.getElementById("modal-mensaje").innerHTML = mensaje.replace(/\n/g, '<br>'); document.getElementById("modal-alerta").style.display = "flex";}
         let nombreEquipo = "";
         let tiempoSegundos = 0;
         let intervaloReloj = null;
         let relojIniciado = false; 
-
         let vAct = 1; let tAct = 0; let subFase = 1; 
-        let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };
-        
+        let progreso = { 1: [false,false,false,false], 2: [false,false,false,false], 3: [false,false,false,false], 4: [false,false,false,false], 5: [false,false,false,false] };  
         let erroresModulo = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let codigosSecretos = []; 
-
         let tiradasC = 5; let pistasC = 0; let miniSolC = 0; let finalSolC = 0;
         const datosPistasC = ["Caudal Q = 20 m³/s", "Área de entrada A1 = 4 m²", "Área de salida A2 = 2 m²", "Densidad ρ = 1000 kg/m³", "Tiempo de flujo t = 10 s"];
         
@@ -2208,5 +2206,23 @@ function tirarRuletaC() {
             bloqueados.forEach(p => contenedor.appendChild(p));
         }
     </script>
+    <div id="modal-alerta" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 100000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+    <div style="background: rgba(0, 30, 60, 0.95); border: 2px solid #00ffff; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); max-width: 600px; width: 80%;">
+        <h2 style="color: #00ffff; font-size: 32px; margin-top: 0; font-family: 'Cinzel', serif;" id="modal-titulo">SISTEMA</h2>
+        <p style="font-size: 24px; color: #e6f2ff; font-family: 'Montserrat', sans-serif;" id="modal-mensaje">Mensaje</p>
+        <button class="btn-ui" onclick="document.getElementById('modal-alerta').style.display='none'" style="margin-top: 20px;">[ ACEPTAR ]</button>
+    </div>
+</div>
+
+<div id="modal-prompt" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 100000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+    <div style="background: rgba(0, 30, 60, 0.95); border: 2px solid #ff073a; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 0 30px rgba(255, 7, 58, 0.3); max-width: 600px; width: 80%;">
+        <h2 style="color: #ff073a; font-size: 32px; margin-top: 0; font-family: 'Cinzel', serif;">INGRESO DE CÓDIGO</h2>
+        <p style="font-size: 24px; color: #e6f2ff; font-family: 'Montserrat', sans-serif;" id="modal-prompt-mensaje">Mensaje</p>
+        <input type="text" id="modal-prompt-input" style="width: 80%; font-size: 30px; margin: 20px 0; text-align: center; border-color: #ff073a; color: #ff073a; background: #001a33;">
+        <br>
+        <button class="btn-ui" id="modal-prompt-btn" style="background: #ff073a; color: white;">[ VERIFICAR ]</button>
+        <button class="btn-ui" onclick="document.getElementById('modal-prompt').style.display='none'" style="background: #333; color: white; margin-left: 10px;">[ CANCELAR ]</button>
+    </div>
+</div>
 </body>
 </html>
