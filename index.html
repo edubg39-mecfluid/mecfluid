@@ -1447,29 +1447,19 @@ function enfocarPrueba(idPrueba) {
             function actualizarMapas() {
             if (vAct === 1) {
                 const nodosPizarra = ['Re', 'Pr', 'M', 'Pe'];
-                let completadasM1 = 0;
                 
                 nodosPizarra.forEach((nodoId, indice) => {
                     let elementoNodo = document.getElementById(`nodo-${nodoId}`);
                     if (elementoNodo) {
                         if (progreso[1][indice]) {
                             elementoNodo.classList.add('completado');
-                            completadasM1++;
                         } else {
                             elementoNodo.classList.remove('completado');
                         }
                     }
                 });
-
-                if (completadasM1 === 4 && progreso[1].includes(false)) {
-                    progreso[1] = [true, true, true, true];
-                    guardarEstado();
-                    setTimeout(() => {
-                        alert("¡MÓDULO 1 ESTABILIZADO! Retorno automático al Nexo Central.");
-                        irAMapa();
-                    }, 2000);
-                }
             }
+
             for(let i=1; i<=5; i++){
                 let hotspot = document.getElementById(`hotspot-${i}`);
                 if(!hotspot) continue;
@@ -1503,21 +1493,6 @@ function enfocarPrueba(idPrueba) {
                 } else { 
                     hotspot.classList.add('bloqueado');
                 }
-            }
-
-            if (vAct === 1) {
-                let p = progreso[1]; 
-                const setV = (num, estado) => {
-                    let val = document.getElementById(`val-${num}`); if(!val) return;
-                    val.className = `valvula valvula-${estado}`;
-                    if(estado === 'activa') val.onclick = () => irAProblema(num);
-                    else val.onclick = null;
-                };
-
-                if(p[0]) { setV(1, 'superada'); document.getElementById('fluido-1').style.width = '100%'; } else { setV(1, 'activa'); document.getElementById('fluido-1').style.width = '0%'; }
-                if(p[0] && !p[1]) { setV(2, 'activa'); } else if(p[1]) { setV(2, 'superada'); document.getElementById('fluido-2').style.height = '100%'; } else { setV(2, 'bloqueada'); document.getElementById('fluido-2').style.height = '0%'; }
-                if(p[1] && !p[2]) { setV(3, 'activa'); } else if(p[2]) { setV(3, 'superada'); document.getElementById('fluido-3').style.width = '100%'; } else { setV(3, 'bloqueada'); document.getElementById('fluido-3').style.width = '0%'; }
-                if(p[2] && !p[3]) { setV(4, 'activa'); } else if(p[3]) { setV(4, 'superada'); document.getElementById('fluido-final').style.width = '100%'; } else { setV(4, 'bloqueada'); document.getElementById('fluido-final').style.width = '0%'; }
             }
             
             if (vAct === 2) {
