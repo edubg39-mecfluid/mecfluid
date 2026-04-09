@@ -1118,7 +1118,11 @@
             { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>¿? = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton", c: false}] },
             { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
             { q: "Si las líneas de corriente son paralelas y rectas en todo momento, el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
-            { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] }
+            { q: "¿Cuándo se dice que un líquido moja una superficie sólida?", opciones: [ { t: "Cuando &theta; es &lt; 90&deg;", c: true }, { t: "Cuando el ángulo de contacto &theta; es &gt; 90&deg;", c: false }, { t: "Cuando la tensión superficial es nula.", c: false }] },
+            { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] },
+            { q: "En ausencia de fuerzas externas... Que forma es la que presenta una superficie libre mínima y por tanto energía minima", opciones: [{t: "Forma esférica", c: true}, {t: "Forma cilindrica", c: false}, {t: "Forma rectangular", c: false}] },
+            { q: "Cual de las siguientes magnitudes NO es una magnitud intensiva", opciones: [{t: "Masa", c: true}, {t: "Densidad", c: false}, {t: "Viscosidad", c: false}] 
+            
         ];
 
         const bdTeoria = [
@@ -1860,18 +1864,27 @@ function enfocarPrueba(idPrueba) {
             for(let i=1; i<=5; i++) { let p = document.getElementById(`pista-ui-${i}`); p.innerHTML = `${i}. [ ENCRIPTADO ]`; p.style.color = "#888"; } mostrar('pantalla-c');
         }
 
-        function tirarRuletaC() {
-            if(tiradasC <= 0) return; let env = document.getElementById("enunciado-mini-c"); let zInput = document.getElementById("zona-input-mini"); let zBotones = document.getElementById("zona-botones-mini"); document.getElementById("feed-mini-c").innerText = "";
-            if (Math.random() < 0.5) {
-                zInput.style.display = "block"; zBotones.style.display = "none"; document.getElementById("inputResMiniC").value = "";
-                let tipo = Math.floor(Math.random() * 4); let val = Math.floor(Math.random() * 9) + 1;
-                if(tipo===0){env.innerHTML=`Pasa <b>${val} m³</b> a <b>Litros</b>`; miniSolC=val*1000;}else if(tipo===1){env.innerHTML=`Pasa <b>${val*1000} L</b> a <b>m³</b>`; miniSolC=val;}else if(tipo===2){env.innerHTML=`Pasa <b>${val} m²</b> a <b>cm²</b>`; miniSolC=val*10000;}else{env.innerHTML=`Pasa <b>${val} horas</b> a <b>segundos</b>`; miniSolC=val*3600;}
-            } else {
-                zInput.style.display = "none"; zBotones.style.display = "flex"; zBotones.innerHTML = "";
-                let preg = bdMiniTeoria[Math.floor(Math.random() * bdMiniTeoria.length)]; env.innerHTML = preg.q;
-                let opc = [...preg.opciones].sort(() => 0.5 - Math.random());
-                opc.forEach(opt => { let btn = document.createElement('button'); btn.className = "btn-opcion"; btn.innerHTML = opt.t; btn.onclick = () => procesarMiniC(opt.c); zBotones.appendChild(btn); });
-            } mostrar('pantalla-c-mini');
+function tirarRuletaC() {
+            if(tiradasC <= 0) return; 
+            let env = document.getElementById("enunciado-mini-c"); 
+            let zInput = document.getElementById("zona-input-mini"); 
+            let zBotones = document.getElementById("zona-botones-mini"); 
+            document.getElementById("feed-mini-c").innerText = "";
+            zInput.style.display = "none"; 
+            zBotones.style.display = "flex"; 
+            zBotones.innerHTML = "";
+            let preg = bdMiniTeoria[Math.floor(Math.random() * bdMiniTeoria.length)]; 
+            env.innerHTML = preg.q;
+            let opc = [...preg.opciones].sort(() => 0.5 - Math.random());
+            opc.forEach(opt => { 
+                let btn = document.createElement('button'); 
+                btn.className = "btn-opcion"; 
+                btn.innerHTML = opt.t; 
+                btn.onclick = () => procesarMiniC(opt.c); 
+                zBotones.appendChild(btn); 
+            }); 
+            
+            mostrar('pantalla-c-mini');
         }
 
         function verificarMiniCNumerico() { procesarMiniC(Math.abs(parseFloat(document.getElementById("inputResMiniC").value) - miniSolC) < 0.000001); }
