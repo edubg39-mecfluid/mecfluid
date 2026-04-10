@@ -445,19 +445,16 @@
 
         #panel-prueba-flotante { position: absolute; right: -600px; top: 50%; transform: translateY(-50%); width: 500px; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff; border-radius: 15px; padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.8); transition: right 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 20;}
         #panel-prueba-flotante.visible { right: 50px; }
-
-        body, html, .pantalla, *, .bloqueada, .bloqueado, .btn-hub-bloqueado {cursor: none !important; user-select: none; -webkit-user-select: none;}
-        input {cursor: text; user-select: text !important; -webkit-user-select: text !important;}
-        #cursor-custom {position: fixed; width: 28px; height: 28px; pointer-events: none; z-index: 1000000; transition: transform 0.1s ease-out, filter 0.2s ease; transform: translate(-50%, -50%); }
-        #cursor-custom .flecha-svg {width: 100%; height: 100%; background-image: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l10 24 4-10 10-4-24-10z" fill="%2300ffff" stroke="%23000000" stroke-width="2" stroke-linejoin="round"/></svg>'); background-size: contain; background-repeat: no-repeat;}
-        #cursor-custom.sobre-interactivo {filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #fff); transform: translate(-50%, -50%) scale(1.1); }
-        #cursor-custom.sobre-interactivo.flash-entrada .flecha-svg {animation: flashEntrada 0.2s ease-out;}
-        @keyframes flashEntrada {
-            0% { filter: brightness(1) drop-shadow(0 0 0px #fff); }
-            50% { filter: brightness(3) drop-shadow(0 0 10px #fff); }
-            100% { filter: brightness(1) drop-shadow(0 0 5px #fff); }
-        }
-        #cursor-custom.sobre-bloqueado .flecha-svg {filter: grayscale(1) brightness(0.5);}
+        body, html, .pantalla, * { cursor: none !important; user-select: none; -webkit-user-select: none; }
+        input { cursor: text !important; user-select: text !important; -webkit-user-select: text !important; }
+        #cursor-custom { position: fixed; top: -50px; left: -50px; width: 28px; height: 28px; pointer-events: none; z-index: 1000000; transition: transform 0.15s ease-out; transform-origin: top left;}
+        #cursor-custom svg { width: 100%; height: 100%; filter: drop-shadow(0 0 2px rgba(0,255,255,0.4)); }
+        #cursor-custom.sobre-interactivo { transform: scale(1.15); }
+        #cursor-custom.sobre-interactivo svg path { stroke: #ffffff; stroke-width: 3; filter: drop-shadow(0 0 8px #ffffff); }
+        #cursor-custom.flash-entrada svg { animation: flashEntrada 0.2s ease-out; }
+        @keyframes flashEntrada { 0% { filter: brightness(1); } 50% { filter: brightness(2.5) drop-shadow(0 0 15px #fff); } 100% { filter: brightness(1); } }
+        #cursor-custom.sobre-bloqueado svg path { fill: #555555; stroke: #222222; filter: none; }
+        
     </style>
 </head>
 <body ontouchstart="">
@@ -2275,6 +2272,39 @@ function tirarRuletaC() {
         <button class="btn-ui" id="modal-prompt-btn" style="background: #ff073a; color: white;">[ VERIFICAR ]</button>
         <button class="btn-ui" onclick="document.getElementById('modal-prompt').style.display='none'" style="background: #333; color: white; margin-left: 10px;">[ CANCELAR ]</button>
     </div>
+<button class="btn-ui" onclick="document.getElementById('modal-prompt').style.display='none'" style="background: #333; color: white; margin-left: 10px;">[ CANCELAR ]</button>
+    </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const cursorDOM = document.createElement('div');
+        cursorDOM.id = 'cursor-custom';
+        cursorDOM.innerHTML = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l10 24 4-10 10-4-24-10z" fill="#00ffff" stroke="#000000" stroke-width="2" stroke-linejoin="round" style="transition: all 0.2s ease;"/></svg>';
+        document.body.appendChild(cursorDOM);
+
+        const interactivos = 'button, .btn-ui, .btn-opcion, .hotspot, .puerta-box, .celda, .pieza, .papel-interactivo, .nodo-pizarra, .cable-bomba, .btn-votar, .icono-proyecto';
+        const bloqueados = '.btn-opcion:disabled, .btn-ui:disabled, .bloqueada, .bloqueado, .btn-hub-bloqueado, .valvula-bloqueada, .cable-cortado';
+
+        document.addEventListener('mousemove', (e) => {
+            cursorDOM.style.left = e.clientX + 'px';
+            cursorDOM.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest(bloqueados)) { cursorDOM.classList.add('sobre-bloqueado'); return; }
+            if (e.target.closest(interactivos)) {
+                cursorDOM.classList.add('sobre-interactivo');
+                cursorDOM.classList.add('flash-entrada');
+                setTimeout(() => cursorDOM.classList.remove('flash-entrada'), 200);
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest(interactivos)) cursorDOM.classList.remove('sobre-interactivo');
+            if (e.target.closest(bloqueados)) cursorDOM.classList.remove('sobre-bloqueado');
+        });
+    });
+</script>
 </body>
 </html>
