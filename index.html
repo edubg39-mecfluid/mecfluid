@@ -354,6 +354,7 @@
         }
         .btn-votar:hover { background: #ff073a; border-color: #ff073a; transform: scale(1.1); }
         .btn-votar.votado { background: #ff073a; border-color: #fff; color: #fff; box-shadow: 0 0 10px #ff073a;}
+        
                 /* ================= ZONA DE PARCHES ================= */
         /* ================= PARCHE PARA TABLETS Y MÓVILES ================= */
         @media (hover: none) {
@@ -400,7 +401,7 @@
         #pantalla-mapa {display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; min-height: 100vh !important; width: 100vw !important;}
         #contenedor-puertas, .contenedor-puertas {display: flex !important; justify-content: center !important; align-items: center !important; flex-wrap: wrap !important; width: 100% !important; flex-grow: 1 !important;}
         
-/* ================= EFECTO LENTE DE CÁMARA (ENTRADA A MÓDULOS) ================= */
+        /* =============== EFECTO LENTE DE CÁMARA (ENTRADA A MÓDULOS) ================= */
         @keyframes lenteCamara {
             0% { filter: blur(20px); transform: scale(1.15); opacity: 0; }
             40% { opacity: 1; filter: blur(10px); }
@@ -445,16 +446,20 @@
 
         #panel-prueba-flotante { position: absolute; right: -600px; top: 50%; transform: translateY(-50%); width: 500px; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff; border-radius: 15px; padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.8); transition: right 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 20;}
         #panel-prueba-flotante.visible { right: 50px; }
-        body, html, .pantalla, * { cursor: none !important; user-select: none; -webkit-user-select: none; }
-        input { cursor: text !important; user-select: text !important; -webkit-user-select: text !important; }
-        #cursor-custom { position: fixed; top: -50px; left: -50px; width: 28px; height: 28px; pointer-events: none; z-index: 1000000; transition: transform 0.15s ease-out; transform-origin: top left;}
-        #cursor-custom svg { width: 100%; height: 100%; filter: drop-shadow(0 0 2px rgba(0,255,255,0.4)); }
-        #cursor-custom.sobre-interactivo { transform: scale(1.15); }
-        #cursor-custom.sobre-interactivo svg path { stroke: #ffffff; stroke-width: 3; filter: drop-shadow(0 0 8px #ffffff); }
-        #cursor-custom.flash-entrada svg { animation: flashEntrada 0.2s ease-out; }
-        @keyframes flashEntrada { 0% { filter: brightness(1); } 50% { filter: brightness(2.5) drop-shadow(0 0 15px #fff); } 100% { filter: brightness(1); } }
-        #cursor-custom.sobre-bloqueado svg path { fill: #555555; stroke: #222222; filter: none; }
         
+        /* ================= CURSORES  ================= */
+        body, html, .pantalla, *, .bloqueada, .bloqueado, .btn-hub-bloqueado { cursor: none !important; user-select: none; -webkit-user-select: none;}
+        input { cursor: text; user-select: text !important; -webkit-user-select: text !important;}
+        #cursor-custom {position: fixed; width: 28px; height: 28px; pointer-events: none; z-index: 1000000; transition: transform 0.1s ease-out, filter 0.2s ease; transform: translate(-50%, -50%);}
+        #cursor-custom .flecha-svg {width: 100%; height: 100%; background-image: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l10 24 4-10 10-4-24-10z" fill="%2300ffff" stroke="%23000000" stroke-width="2" stroke-linejoin="round"/></svg>'); background-size: contain; background-repeat: no-repeat;}
+        #cursor-custom.sobre-interactivo {filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));transform: translate(-50%, -50%) scale(1.1); }
+        #cursor-custom.sobre-interactivo.flash-entrada .flecha-svg {animation: flashEntrada 0.2s ease-out;}
+        @keyframes flashEntrada {
+            0% { filter: brightness(1) drop-shadow(0 0 0px rgba(255, 255, 255, 0)); }
+            50% { filter: brightness(1.8) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9)); } /* Brillo menos intenso y sombra más difusa */
+            100% { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)); } /* Volvemos al estado 'sobre-interactivo' propuesto */
+        }
+        #cursor-custom.sobre-bloqueado .flecha-svg { filter: grayscale(1) brightness(0.5); /* Flecha gris apagada */}     
     </style>
 </head>
 <body ontouchstart="">
