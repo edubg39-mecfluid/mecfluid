@@ -217,7 +217,8 @@
         }
 
         /* ================= MAPAS INTERNOS Y PANELES ================= */
-        #pantalla-habitacion, #pantalla-habitacion-2, #pantalla-habitacion-3, #pantalla-victoria { background: #001a33; }
+        #pantalla-habitacion, #pantalla-habitacion-3, #pantalla-victoria { background: #001a33; }
+        #pantalla-habitacion-2 { background: url('papers.png') center/cover no-repeat !important; background-color: #1a1a1a !important; }
         .titulo-mapa { color: #00ffff; font-size: 36px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px #00ffff; }
         .contenedor-mapa { position: relative; width: 800px; height: 480px; border: 2px solid #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
         
@@ -227,7 +228,7 @@
 
         @keyframes pulso { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
         
-/* ================= FONDO ESCRITORIO Y PAPELES (M2) ================= */
+        /* ================= FONDO ESCRITORIO Y PAPELES (M2) ================= */
         
         .fondo-escritorio-full { background: url('papers.png') center/cover no-repeat; background-color: #1a1a1a !important; width: 100vw; height: 100vh; position: relative; overflow: hidden; }
         .papel-interactivo { position: absolute; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, filter 0.3s; z-index: 5;}
