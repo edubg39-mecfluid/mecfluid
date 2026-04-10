@@ -471,7 +471,7 @@
             <div class="menu-lista-hub">
                 <button class="btn-hub" onclick="entrarJuego()">Entrar al Escape Room</button>
                 <button class="btn-hub" onclick="mostrar('pantalla-alumnos')">Proyectos de Alumnos</button>
-                <button class="btn-hub btn-hub-bloqueado" onclick="alert('Acceso restringido')">Panel Docente</button>
+                <button class="btn-hub btn-hub-bloqueado" onclick="mostrarAlerta('Acceso restringido', 'DENEGADO')">Panel Docente</button>
             </div>
         </div>
 
@@ -594,13 +594,13 @@
                 <div class="titulo-puerta">SECTOR 11</div>
                 <div class="subtitulo-puerta">PRUEBAS UNIDAD 1</div>
             </div>
-            <div class="puerta-box bloqueada" onclick="alert('ACCESO DENEGADO: El Sector 12 aún se encuentra en fase de desarrollo.')">
+            <div class="puerta-box bloqueada" onclick="mostrarAlerta('ACCESO DENEGADO: El Sector 12 aún se encuentra en fase de desarrollo.', 'SECTOR BLOQUEADO')">
                 <img src="valvula.gif" alt="Icono Válvula Sector 12" class="icono-imagen-puerta">
                 
                 <div class="titulo-puerta">SECTOR 12</div>
                 <div class="subtitulo-puerta">[ BLOQUEADO ]<br>PRUEBAS UNIDAD 2</div>
             </div>
-            <div class="puerta-box bloqueada" onclick="alert('ACCESO DENEGADO: Debes superar los Sectores anteriores para acceder al Núcleo Central.')">
+            <div class="puerta-box bloqueada" onclick="mostrarAlerta('ACCESO DENEGADO: Debes superar los Sectores anteriores para acceder al Núcleo Central.', 'NÚCLEO BLOQUEADO')">
                 <div class="icono-puerta" style="color:#ff073a;">☢️</div>
                 <div class="titulo-puerta">NÚCLEO</div>
                 <div class="subtitulo-puerta">[ BLOQUEADO ]<br>PRUEBA FINAL</div>
@@ -1342,7 +1342,7 @@
 
         function iniciarMision() {
             const inputName = document.getElementById('input-equipo').value.trim();
-            if (inputName === "") { alert("ACCESO DENEGADO. Introduzca la identificación del equipo."); return; }
+            if (inputName === "") { mostrarAlerta("ACCESO DENEGADO. Introduzca la identificación del equipo.", "ERROR"); return; }
             nombreEquipo = inputName.toUpperCase();
             codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 10));
             document.getElementById('tiempo-ui').innerText = "00:00"; tiempoSegundos = 0; relojIniciado = false;
@@ -1424,14 +1424,13 @@ function enfocarPrueba(idPrueba) {
             document.getElementById('panel-prueba-flotante').classList.remove('visible');
         }
         function abrirHabitacion(n) { 
-            if(n>1 && !progreso[n-1].every(x=>x===true)) { alert("Este módulo está bloqueado. Resuelve el módulo anterior para continuar."); return; }
-            if(progreso[n].every(x=>x===true)) { alert("Este módulo ya está estabilizado y bloqueado de forma segura."); return; }
-            
+            if(n>1 && !progreso[n-1].every(x=>x===true)) { mostrarAlerta("Este módulo está bloqueado. Resuelve el módulo anterior para continuar.", "ACCESO DENEGADO"); return; }
+            if(progreso[n].every(x=>x===true)) { mostrarAlerta("Este módulo ya está estabilizado y bloqueado de forma segura.", "MÓDULO COMPLETADO"); return; }
             arrancarReloj(); vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
             else if (n === 3) mostrar('pantalla-habitacion-3');
-            else if (n === 4) alert("Módulo 4: En construcción");
-            else if (n === 5) alert("Módulo 5: En construcción");
+            else if (n === 4) mostrarAlerta("Módulo 4: En construcción", "AVISO");
+            else if (n === 5) mostrarAlerta("Módulo 5: En construcción", "AVISO");
             else mostrar('pantalla-habitacion'); 
             
             document.getElementById('hud-cronometro').style.display = "none";
@@ -1518,12 +1517,12 @@ function enfocarPrueba(idPrueba) {
             progreso[mod][fase] = true;
             guardarEstado();
             if (mod === 1 && progreso[1].every(x => x === true)) {
-                abrirHabitacion(1); 
-                setTimeout(() => {
-                    alert("MÓDULO 1 ESTABILIZADO Volviendo al Nexo Central.");
-                    irAMapa(); 
-                }, 2000);
-            } 
+            abrirHabitacion(1); 
+            setTimeout(() => {
+            mostrarAlerta("MÓDULO 1 ESTABILIZADO\nVolviendo al Nexo Central.", "ÉXITO");
+            irAMapa(); 
+          }, 2000);
+        }
             else if (progreso[mod].every(x => x === true)) {
                 irAMapa();
             } else {
@@ -1531,24 +1530,30 @@ function enfocarPrueba(idPrueba) {
             }
         }
 
-        function intentarAbrirSector12() {
-            let modulosListos = 0;
-            for(let i=1; i<=5; i++) {
-                if (progreso[i].every(x=>x===true)) modulosListos++;
-            }
-            
-            if (modulosListos < 5) {
-                alert(`ACCESO DENEGADO: Te faltan ${5 - modulosListos} módulos por completar en el Sector 11.`);
-                return;
-            }
-            
-            let codigoIngresado = prompt("TODOS LOS MÓDULOS ESTABILIZADOS.\n\nINTRODUCE EL CÓDIGO DE DESBLOQUEO DE 5 DÍGITOS (De M1 a M5):");
-            if (codigoIngresado === codigosSecretos.join('')) {
-                alert("✓ ¡CÓDIGO ACEPTADO! \n\nDesbloqueando Sector 12... (Próximamente)");
-            } else if (codigoIngresado !== null && codigoIngresado !== "") {
-                alert("✗ CÓDIGO INCORRECTO. Vuelve a revisar los paneles del mapa.");
-            }
+function intentarAbrirSector12() {
+    let modulosListos = 0;
+    for(let i=1; i<=5; i++) {
+        if (progreso[i].every(x=>x===true)) modulosListos++;
+    }
+
+    if (modulosListos < 5) {
+        mostrarAlerta(`ACCESO DENEGADO: Te faltan ${5 - modulosListos} módulos por completar en el Sector 11.`, "ALERTA DE SEGURIDAD");
+        return;
+    }
+    document.getElementById("modal-prompt-mensaje").innerText = "TODOS LOS MÓDULOS ESTABILIZADOS.\n\nINTRODUCE EL CÓDIGO DE DESBLOQUEO DE 5 DÍGITOS (De M1 a M5):";
+    document.getElementById("modal-prompt-input").value = "";
+    document.getElementById("modal-prompt").style.display = "flex";
+    document.getElementById("modal-prompt-btn").onclick = function() {
+        let codigoIngresado = document.getElementById("modal-prompt-input").value;
+        document.getElementById("modal-prompt").style.display = "none";
+
+        if (codigoIngresado === codigosSecretos.join('')) {
+            mostrarAlerta("✓ ¡CÓDIGO ACEPTADO! \n\nDesbloqueando Sector 12... (Próximamente)", "ACCESO CONCEDIDO");
+        } else if (codigoIngresado !== "") {
+            mostrarAlerta("✗ CÓDIGO INCORRECTO. Vuelve a revisar los paneles del mapa.", "ERROR");
         }
+    };
+}
 
         // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
         function irAProblema(t) {
@@ -2045,7 +2050,7 @@ function tirarRuletaC() {
                 document.querySelector('.fuga-tanque').style.background = "#39ff14"; document.querySelector('.fuga-tanque').style.boxShadow = "0 0 15px #39ff14"; document.querySelector('.fuga-tanque').style.animation = "none";
                 setTimeout(() => {
                     progreso[2] = [true, true, true, true]; 
-                    alert("¡Módulo 2 Completado! ACCESO AL MÓDULO 3 DESBLOQUEADO."); irAMapa();
+                    mostrarAlerta("¡Módulo Completado!\nACCESO AL SIGUIENTE NIVEL DESBLOQUEADO.", "ÉXITO");irAMapa();
                 }, 2000);
             } else {
                 registrarError(); 
@@ -2111,7 +2116,7 @@ function tirarRuletaC() {
                 
                 setTimeout(() => {
                     progreso[3] = [true, true, true, true]; 
-                    alert("¡Módulo 3 Completado! (Nota: Los módulos 4 y 5 están pendientes de programar).");
+                    mostrarAlerta("¡Módulo Completado!\nACCESO AL SIGUIENTE NIVEL DESBLOQUEADO.", "ÉXITO");
                     irAMapa();
                 }, 3500);
             }
