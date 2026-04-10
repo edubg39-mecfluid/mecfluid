@@ -446,18 +446,18 @@
         #panel-prueba-flotante { position: absolute; right: -600px; top: 50%; transform: translateY(-50%); width: 500px; background: rgba(0, 15, 30, 0.95); border: 2px solid #00ffff; border-radius: 15px; padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.8); transition: right 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 20;}
         #panel-prueba-flotante.visible { right: 50px; }
 
-        body, html, .pantalla {
-            cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l10 24 4-10 10-4-24-10z" fill="%2300ffff" stroke="%23000000" stroke-width="2" stroke-linejoin="round"/></svg>'), auto !important;
-            user-select: none; -webkit-user-select: none;
+        body, html, .pantalla, *, .bloqueada, .bloqueado, .btn-hub-bloqueado {cursor: none !important; user-select: none; -webkit-user-select: none;}
+        input {cursor: text; user-select: text !important; -webkit-user-select: text !important;}
+        #cursor-custom {position: fixed; width: 28px; height: 28px; pointer-events: none; z-index: 1000000; transition: transform 0.1s ease-out, filter 0.2s ease; transform: translate(-50%, -50%); }
+        #cursor-custom .flecha-svg {width: 100%; height: 100%; background-image: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l10 24 4-10 10-4-24-10z" fill="%2300ffff" stroke="%23000000" stroke-width="2" stroke-linejoin="round"/></svg>'); background-size: contain; background-repeat: no-repeat;}
+        #cursor-custom.sobre-interactivo {filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #fff); transform: translate(-50%, -50%) scale(1.1); }
+        #cursor-custom.sobre-interactivo.flash-entrada .flecha-svg {animation: flashEntrada 0.2s ease-out;}
+        @keyframes flashEntrada {
+            0% { filter: brightness(1) drop-shadow(0 0 0px #fff); }
+            50% { filter: brightness(3) drop-shadow(0 0 10px #fff); }
+            100% { filter: brightness(1) drop-shadow(0 0 5px #fff); }
         }
-
-        input { user-select: text !important; -webkit-user-select: text !important; }
-
-        button, .btn-ui, .btn-opcion, .hotspot, .puerta-box, .celda, .pieza, .papel-interactivo, .nodo-pizarra, .cable-bomba, .btn-votar, .icono-proyecto {
-            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="10" fill="rgba(57,255,20,0.15)" stroke="%2339ff14" stroke-width="2"/><path d="M16 2v6M16 24v6M2 16h6M24 16h6" stroke="%2339ff14" stroke-width="2" stroke-linecap="round"/></svg>') 16 16, pointer !important;}
-        .btn-opcion:disabled, .btn-ui:disabled, .bloqueada, .bloqueado, .btn-hub-bloqueado, .valvula-bloqueada, .cable-cortado {
-            cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l10 24 4-10 10-4-24-10z" fill="%23555555" stroke="%23000000" stroke-width="2" stroke-linejoin="round"/></svg>'), default !important;
-        }
+        #cursor-custom.sobre-bloqueado .flecha-svg {filter: grayscale(1) brightness(0.5);}
     </style>
 </head>
 <body ontouchstart="">
