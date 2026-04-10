@@ -232,14 +232,8 @@
         
         .fondo-escritorio-full { background: url('papers.png') center/cover no-repeat; background-color: #1a1a1a !important; width: 100vw; height: 100vh; position: relative; overflow: hidden; }
         .papel-interactivo { position: absolute; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, filter 0.3s; z-index: 5;}
-        .expediente-principal {
-            width: 260px !important;
-            height: 360px !important;
-            background: #fdf5e6 !important; /* Blanco crema tipo pergamino */
-            border: 1px solid #ccc !important;
-            box-shadow: 10px 15px 30px rgba(0,0,0,0.8) !important;
-        }
-        .expediente-principal:hover { transform: translate(-50%, -50%) scale(1.1) rotate(0deg) !important; box-shadow: 15px 25px 40px rgba(0,0,0,0.9) !important; z-index: 10;}
+        .expediente-principal { width: 240px !important; height: 330px !important; background: #f7e7c8 !important; border: none !important; box-shadow: 6px 6px 20px rgba(0,0,0,0.6) !important; }
+        .expediente-principal:hover {transform: translate(-50%, -50%) scale(1.1) rotate(0deg) !important; box-shadow: 12px 12px 40px rgba(0,0,0,0.8) !important; z-index: 10;}
         .papel-nota { width: 120px !important; height: 120px !important; box-shadow: 3px 5px 15px rgba(0,0,0,0.6) !important; text-align: center; padding: 10px; }
         .papel-nota:hover { transform: scale(1.2) rotate(0deg) !important; box-shadow: 8px 12px 25px rgba(0,0,0,0.8) !important; z-index: 10;}
         .papel-nota.amarillo { background: #feff9c !important; border: 1px solid #e0e08a !important; }
@@ -780,11 +774,11 @@
         
         <h1 class="titulo-mapa" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-shadow: 0 0 15px #000, 0 0 30px #000; z-index: 10;"></h1>
         
-        <div class="papel-interactivo expediente-principal" id="sub-2-1" onclick="levantarPapelYEmpezar(this)" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-3deg);">
-            <div style="text-align:center; pointer-events: none;">
-                <span style="color:#ff073a; font-size:28px; font-weight:bold; border-bottom: 3px solid #ff073a; letter-spacing: 2px;">EXPEDIENTE 02</span><br><br>
-                <span style="font-size:18px; color: #111; font-weight: 900; border: 2px dashed #111; padding: 5px;">[ TOP SECRET ]</span><br><br>
-                <span style="font-size:14px; color: #444; font-weight: bold;">Derivada Material y<br>Teorema de Reynolds</span>
+    <div class="papel-interactivo expediente-principal" id="sub-2-1" onclick="levantarPapelYEmpezar(this)" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-3deg);">
+            <div style="text-align:center; padding: 20px; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none;">
+                <span style="color:#a80000; font-size:24px; font-weight:bold; letter-spacing: 1px; line-height: 1.2;">EXPEDIENTE 02</span><br>
+                <span style="font-size:16px; color: #333; font-weight: 800; border: 1px dashed #444; padding: 4px 8px;">[ TOP SECRET ]</span><br><br>
+                <span style="font-size:14px; color: #222; font-weight: bold; line-height: 1.4;">Derivada Material y<br>Teorema de Reynolds</span>
             </div>
         </div>
 
