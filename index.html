@@ -402,7 +402,18 @@
         body, html, .pantalla, * { user-select: none; -webkit-user-select: none; }
         input { user-select: text !important; -webkit-user-select: text !important; }
         .btn-opcion:disabled, .btn-ui:disabled, .bloqueada, .bloqueado, .btn-hub-bloqueado, .valvula-bloqueada, .cable-cortado {cursor: not-allowed !important; opacity: 0.6;}
+        /* ... aquí arriba estarán tus otros estilos, como los del Módulo 2 o los del cursor ... */
+
+/* ================= MÓDULO 3: TUBERÍA Y GAS ANIMADO ================= */
         
+        .fondo-tuberia-full { background: url('tuberia.png') center/cover no-repeat !important; background-color: #0b151a !important; width: 100vw; height: 100vh; position: relative; overflow: hidden; box-shadow: inset 0 0 200px rgba(0,0,0,0.95);}
+        .flujo-gas-animado {position: absolute; top: 0; left: 0; width: 200%; height: 100%;
+            background: repeating-linear-gradient( 90deg, rgba(100, 255, 150, 0) 0%, rgba(100, 255, 150, 0.05) 10%, rgba(100, 255, 150, 0) 20%);
+            filter: blur(20px); opacity: 0.8; pointer-events: none; animation: moverGas 6s linear infinite; z-index: 2;
+        }
+        .flujo-gas-animado.lento { background: repeating-linear-gradient( 90deg, rgba(150, 255, 200, 0) 0%, rgba(150, 255, 200, 0.08) 15%, rgba(150, 255, 200, 0) 30%); animation: moverGas 12s linear infinite; filter: blur(30px); z-index: 1;}
+        @keyframes moverGas { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); }
+        }
     </style>
 </head>
 <body ontouchstart="">
@@ -733,7 +744,22 @@
 
     <div id="pantalla-hab2-megareto" class="pantalla"><button class="btn-volver-top" onclick="abortarMegaReto()">[ ◄ ABORTAR MISIÓN ]</button><div class="panel-azul" style="width: 750px;"><div id="progreso-hab2" style="font-size: 22px; color: #888; margin-bottom: 10px; letter-spacing: 5px;"><span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- <span id="indicador-f2">[ FASE 2 ]</span> --- <span id="indicador-f3">[ FASE 3 ]</span></div><div id="fase-hab2-1" class="fase-activa"><h2 style="color:#ffffff;">CALIBRACIÓN MANOMÉTRICA</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>Introduce la Presión Manométrica <b>P₁</b> (en Pascales).</p><input type="number" id="input-h2-f1" placeholder="P₁ (Pa)"><br><button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button></div><div id="fase-hab2-2" class="fase-oculta"><h2 style="color:#ffffff;">ESTABILIZACIÓN DE CAUDAL</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>Por continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>Aplica Bernoulli y calcula <b>V₁</b> (m/s).</p><input type="number" id="input-h2-f2" placeholder="V₁ (m/s)"><br><button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button></div><div id="fase-hab2-3" class="fase-oculta"><h2 style="color:#ff073a;">¡ALERTA DE DESBORDAMIENTO!</h2><div style="display:flex; justify-content: center; gap: 40px; align-items: center; margin: 20px 0;"><div class="tanque-container"><div id="agua-visual" class="agua-tanque" style="height: 100%;"></div><div class="fuga-tanque"></div></div><div style="text-align:left; max-width: 350px;"><p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p><p style="font-size: 19px; color:#39ff14; background: rgba(57, 255, 20, 0.1); padding: 10px; border-left: 3px solid #39ff14; margin-bottom: 15px;">[SISTEMA DE AYUDA]: Aplica el <b>Teorema de Torricelli</b>. Recuerda que la gravedad (<b>g</b>) en esta instalación es de <b>10 m/s²</b>.</p><div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span></div><button id="btn-escanear" class="btn-ui" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button><div id="zona-disparo" style="display:none; margin-top: 15px;"><input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;"><button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button></div></div></div></div><div id="feed-hab2" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
 
-    <div id="pantalla-habitacion-3" class="pantalla"><h1 class="titulo-mapa">MÓDULO 3: ECUACIÓN DE CONTINUIDAD</h1><div class="contenedor-mapa" style="background: rgba(255, 165, 0, 0.05); border-style: dashed; border-color: #ffa500;"><div class="nodo-rojo nodo-gigante" id="sub-3-1" onclick="iniciarRetoDelta()" style="top: 50%; left: 50%; border-color:#ffa500; color:#ffa500; box-shadow: 0 0 15px #ffa500;">[ PROBLEMA COMPUERTA ]</div></div></div>
+<div id="pantalla-habitacion-3" class="pantalla fondo-tuberia-full">
+        <button class="btn-volver-top" onclick="irAMapa()" style="z-index: 10001; background: rgba(0,0,0,0.8);">[ ◄ VOLVER AL NEXO ]</button>
+        
+        <h1 class="titulo-mapa" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-shadow: 0 0 15px #000, 0 0 30px #000; z-index: 10;">MÓDULO 3: FLUJO DE FLUIDOS</h1>
+
+        <div class="flujo-gas-animado"></div>
+        <div class="flujo-gas-animado lento"></div>
+
+        <div class="panel-valvula" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;">
+            <div style="background: rgba(20, 30, 40, 0.95); border: 4px solid #444; border-radius: 10px; padding: 30px; box-shadow: 0 0 30px rgba(0, 255, 100, 0.2); text-align: center;">
+                <h2 style="color: #66ff66; margin-top: 0;">SENSOR DE CAUDAL</h2>
+                <p style="color: #ccc;">[ PANEL BLOQUEADO ]</p>
+                <p style="color: #888; font-size: 12px;">Se requiere input del jugador...</p>
+            </div>
+        </div>
+    </div>
 
     <div id="pantalla-hab3-megareto" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(3)">[ ◄ ABORTAR MISIÓN ]</button><div class="panel-azul panel-delta"><h2 style="color:#ffffff;">SISTEMA DE EQUILIBRIO DE FLUIDOS</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px; line-height: 1.3;">Alerta de descompensación en la compuerta central. La compuerta AB tiene una <b>masa homogénea de 180 kg</b>, un <b>ancho de 1.2 m</b>, una bisagra en A y reposa sobre un muro liso en B. Todos los fluidos están a 20°C.<br><br><span style="color:#00ffff;">DATOS DE INGENIERÍA:</span><br>- <b>Longitud compuerta:</b> 1 m | <b>Inclinación:</b> 60° respecto al muro B.<br>- <b>Fluido Izquierdo:</b> Glicerina (Nivel fijo a 2 m de profundidad).<br>- <b>Fluido Derecho:</b> Agua (Nivel variable <span style="color:#39ff14;">h</span>).<br><br>Calcula la <b>altura <span style="color:#39ff14;">h</span> exacta (en metros)</b> del agua para que la fuerza de reacción en el punto B sea exactamente <b>0 N</b> (punto inminente de apertura).</p><div class="simulador-compuerta"><div class="fluido-izq">GLICERINA (2m)</div><div class="bisagra-ui"></div><div class="compuerta-fisica-inclinada" id="compuerta-inclinada-ui"></div><div class="muro-b"></div><div class="fluido-der" id="agua-nueva-ui">AGUA (h)</div></div><input type="number" id="input-h3-fuerza" placeholder="Altura h (m)" step="0.001" style="width: 280px;"><br><button class="btn-ui" id="btn-delta" onclick="simularFuerzaDelta()">[ CALIBRAR NIVEL DE AGUA ]</button><div id="feed-hab3" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
     
