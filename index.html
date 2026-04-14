@@ -1309,20 +1309,12 @@
             }
         }
 
-        function avanzarHistoria() {
+        function avanzarHistoria() { 
             if (escribiendo) {
-                clearInterval(intvNarrador);
-                document.getElementById('texto-narrador').innerHTML = guionAqualab[pasoHistoria].txt;
-                escribiendo = false;
-                if(!guionAqualab[pasoHistoria].error) {
-                    if(guionAqualab[pasoHistoria].face === "chico-habla.png") document.getElementById('foto-narrador').src = "chico111.png";
-                    document.getElementById('flecha-sig').style.display = "block";
-                }
+                lanzarEventosFinDeTexto();
             } else {
-                if (pasoHistoria < guionAqualab.length - 1) {
-                    pasoHistoria++;
-                    reproducirPasoHistoria();
-                }
+                pasoHistoria++;
+                reproducirPasoHistoria();
             }
         }
 
