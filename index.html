@@ -1216,10 +1216,14 @@
             reproducirPasoHistoria();
         }
 
+// ================= MOTOR DE DIÁLOGOS =================
+        let sustoDisparado = false; // Seguro para evitar doble ejecución
+
         function reproducirPasoHistoria() {
             if (pasoHistoria >= guionAqualab.length) return;
             
             escribiendo = true;
+            sustoDisparado = false; // Reiniciamos el seguro
             document.getElementById('flecha-sig').style.display = "none";
             
             const escena = guionAqualab[pasoHistoria];
@@ -1268,28 +1272,41 @@
 
                 i++; 
                 if (i >= escena.txt.length) { 
-                    clearInterval(intvNarrador); 
-                    escribiendo = false;
-                    
-                    if (escena.error) {
-                        foto.src = "chico-sorpresa.png"; 
-                        document.getElementById('caja-narrador').style.cursor = 'default';
-                        setTimeout(() => {
-                            cajaText.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold; font-size:40px;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
-                            setTimeout(() => {
-                                document.getElementById('capa-fondo-A').style.opacity = 0;
-                                document.getElementById('capa-fondo-B').style.opacity = 0;
-                                document.getElementById('caja-narrador').style.opacity = "0"; 
-                                document.getElementById('filtro-oscuro').style.background = "#000"; 
-                                setTimeout(() => { irAAlerta(); }, 2000);
-                            }, 2000); 
-                        }, 1000);
-                    } else {
-                        if (escena.face === "chico-habla.png") { foto.src = "chico111.png"; }
-                        document.getElementById('flecha-sig').style.display = "block";
-                    }
+                    lanzarEventosFinDeTexto(); // Llamamos al final de la escena
                 }
             }, 30);
+        }
+
+        // ================= NUEVA FUNCIÓN: FINAL DE ESCENA =================
+        function lanzarEventosFinDeTexto() {
+            clearInterval(intvNarrador);
+            if (!escribiendo) return; // Si ya acabó, no hacemos nada
+            escribiendo = false;
+
+            const escena = guionAqualab[pasoHistoria];
+            const foto = document.getElementById('foto-narrador');
+            const cajaText = document.getElementById('texto-narrador');
+            cajaText.innerHTML = escena.txt;
+
+            if (escena.error) {
+                if (sustoDisparado) return; 
+                sustoDisparado = true;
+                foto.src = "chico-sorpresa.png"; 
+                document.getElementById('caja-narrador').style.cursor = 'default';
+                setTimeout(() => {
+                    cajaText.innerHTML += "<br><br><span style='color:#ff073a; font-weight:bold; font-size:40px;'>[ ERROR: CONEXIÓN PERDIDA ]</span>";
+                    setTimeout(() => {
+                        document.getElementById('capa-fondo-A').style.opacity = 0;
+                        document.getElementById('capa-fondo-B').style.opacity = 0;
+                        document.getElementById('caja-narrador').style.opacity = "0"; 
+                        document.getElementById('filtro-oscuro').style.background = "#000"; 
+                        setTimeout(() => { irAAlerta(); }, 1500);
+                    }, 1500); 
+                }, 400); 
+            } else {
+                if (escena.face === "chico-habla.png") { foto.src = "chico111.png"; }
+                document.getElementById('flecha-sig').style.display = "block";
+            }
         }
 
         function avanzarHistoria() {
