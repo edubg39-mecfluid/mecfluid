@@ -414,6 +414,9 @@
         .flujo-gas-animado.lento { background: repeating-linear-gradient( 90deg, rgba(150, 255, 200, 0) 0%, rgba(150, 255, 200, 0.08) 15%, rgba(150, 255, 200, 0) 30%); animation: moverGas 12s linear infinite; filter: blur(30px); z-index: 1;}
         @keyframes moverGas { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); }
         }
+      /* ================= ESTILO LOGO UPCT ================= */
+        .upct-logo-lateral {position: absolute; top: 50px; left: -150px; width: 300px; height: auto; opacity: 0.7; z-index: -1; pointer-events: none;}
+        
     </style>
 </head>
 <body ontouchstart="">
@@ -430,6 +433,7 @@
     </script>
     
     <div id="pantalla-hub" class="pantalla activa">
+        <img src="escudo-institucional-dorado.png" alt="Logo UPCT" class="upct-logo-lateral">
         <div id="fondo-upct-hub"></div>
         <div id="scanlines-hub"></div>
         <div class="circulo-decorativo-hub c1-hub"></div>
