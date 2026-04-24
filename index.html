@@ -306,6 +306,15 @@
         .btn-votar.votado { background: #ff073a; border-color: #fff; color: #fff; box-shadow: 0 0 10px #ff073a;}
         
                 /* ================= ZONA DE PARCHES ================= */
+        /* Estilos para el Chivato y Fusibles */
+        #status-light { width: 40px; height: 40px; border-radius: 50%; background: #ff073a; box-shadow: 0 0 20px #ff073a; margin: 10px auto; border: 4px solid #fff; transition: 0.3s;}
+        #status-light.active { background: #39ff14; box-shadow: 0 0 30px #39ff14; }
+        .fusible-container { display: flex; justify-content: center; gap: 40px; margin-top: 50px; }
+        .fusible { width: 80px; height: 160px; background: #222; border: 3px solid #555; position: relative; cursor: pointer; display: flex; justify-content: center; align-items: flex-end; transition: 0.3s;}
+        .fusible.up { background: #002b4d; border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
+        .fusible::after { content: 'OFF'; color: #555; position: absolute; top: 10px; font-weight: bold; font-size: 20px;}
+        .fusible.up::after { content: 'ON'; color: #00ffff; }
+
         /* ================= PARCHE TECLADO VIRTUAL (TABLETS) ================= */
         #teclado-virtual {
             position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
@@ -422,7 +431,6 @@
         body, html, .pantalla, * { user-select: none; -webkit-user-select: none; }
         input { user-select: text !important; -webkit-user-select: text !important; }
         .btn-opcion:disabled, .btn-ui:disabled, .bloqueada, .bloqueado, .btn-hub-bloqueado, .valvula-bloqueada, .cable-cortado {cursor: not-allowed !important; opacity: 0.6;}
-        /* ... aquí arriba estarán tus otros estilos, como los del Módulo 2 o los del cursor ... */
 
 /* ================= MÓDULO 3: TUBERÍA Y GAS ANIMADO ================= */
         
@@ -769,20 +777,36 @@
 
     <div id="pantalla-hab2-megareto" class="pantalla"><button class="btn-volver-top" onclick="abortarMegaReto()">[ ◄ ABORTAR MISIÓN ]</button><div class="panel-azul" style="width: 750px;"><div id="progreso-hab2" style="font-size: 22px; color: #888; margin-bottom: 10px; letter-spacing: 5px;"><span id="indicador-f1" style="color:#00ffff;">[ FASE 1 ]</span> --- <span id="indicador-f2">[ FASE 2 ]</span> --- <span id="indicador-f3">[ FASE 3 ]</span></div><div id="fase-hab2-1" class="fase-activa"><h2 style="color:#ffffff;">CALIBRACIÓN MANOMÉTRICA</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">El tubo en U marca un desnivel de fluido denso de <b>Δh = 0.5 m</b>.<br>Densidad fluido (<span style="color:#00ffff;">ρ</span>) = 10000 kg/m³.<br>Gravedad (<span style="color:#00ffff;">g</span>) = 10 m/s².<br><br>Introduce la Presión Manométrica <b>P₁</b> (en Pascales).</p><input type="number" id="input-h2-f1" placeholder="P₁ (Pa)"><br><button class="btn-ui" onclick="validarH2F1()">[ INYECTAR DATO ]</button></div><div id="fase-hab2-2" class="fase-oculta"><h2 style="color:#ffffff;">ESTABILIZACIÓN DE CAUDAL</h2><p style="font-size: 24px; color:#e6f2ff; text-align: left; padding: 0 20px;">Dato recuperado: <b>P₁ = 50000 Pa</b>.<br>La tubería de agua (<span style="color:#00ffff;">ρ = 1000 kg/m³</span>) se estrecha. El sensor del cuello marca <b>P₂ = 26000 Pa</b>.<br>Por continuidad, la velocidad en el cuello es el doble (<span style="color:#00ffff;">V₂ = 2·V₁</span>)...<br><br>Aplica Bernoulli y calcula <b>V₁</b> (m/s).</p><input type="number" id="input-h2-f2" placeholder="V₁ (m/s)"><br><button class="btn-ui" onclick="validarH2F2()">[ SINCRONIZAR VELOCIDAD ]</button></div><div id="fase-hab2-3" class="fase-oculta"><h2 style="color:#ff073a;">¡ALERTA DE DESBORDAMIENTO!</h2><div style="display:flex; justify-content: center; gap: 40px; align-items: center; margin: 20px 0;"><div class="tanque-container"><div id="agua-visual" class="agua-tanque" style="height: 100%;"></div><div class="fuga-tanque"></div></div><div style="text-align:left; max-width: 350px;"><p style="font-size: 22px; color:#e6f2ff; margin-top:0;">El tanque principal se está vaciando. El dron necesita la <b>velocidad de salida del chorro</b> (V) para disparar el parche de sellado.</p><p style="font-size: 19px; color:#39ff14; background: rgba(57, 255, 20, 0.1); padding: 10px; border-left: 3px solid #39ff14; margin-bottom: 15px;">[SISTEMA DE AYUDA]: Aplica el <b>Teorema de Torricelli</b>. Recuerda que la gravedad (<b>g</b>) en esta instalación es de <b>10 m/s²</b>.</p><div id="panel-escaner" style="background: rgba(0,255,255,0.1); border: 2px solid #00ffff; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><span style="font-size: 20px; color:#00ffff;">ESTADO ESCÁNER: <span id="txt-escaner" style="color:#fff;">EN ESPERA</span></span></div><button id="btn-escanear" class="btn-ui" onclick="escanearNivel()">[ ESCANEAR NIVEL ]</button><div id="zona-disparo" style="display:none; margin-top: 15px;"><input type="number" id="input-h2-f3" placeholder="V (m/s)" style="width: 140px; margin: 0; font-size: 26px;"><button class="btn-ui" style="background: #ff073a; color: white; font-size: 24px; padding: 8px 15px; margin-left: 5px;" onclick="validarH2F3()">[ DISPARAR ]</button></div></div></div></div><div id="feed-hab2" style="margin-top:20px; font-size:26px; height:30px;"></div></div></div>
 
-<div id="pantalla-habitacion-3" class="pantalla fondo-tuberia-full">
+    <div id="pantalla-habitacion-3" class="pantalla fondo-tuberia-full">
         <button class="btn-volver-top" onclick="irAMapa()" style="z-index: 10001; background: rgba(0,0,0,0.8);">[ ◄ VOLVER AL NEXO ]</button>
         
-        <h1 class="titulo-mapa" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-shadow: 0 0 15px #000, 0 0 30px #000; z-index: 10;">MÓDULO 3: FLUJO DE FLUIDOS</h1>
+        <h1 class="titulo-mapa" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-shadow: 0 0 15px #000, 0 0 30px #000; z-index: 10;">MÓDULO 3: CONTINUIDAD</h1>
 
-        <div class="flujo-gas-animado"></div>
-        <div class="flujo-gas-animado lento"></div>
+        <div class="flujo-gas-animado" id="gas-anim-1"></div>
+        <div class="flujo-gas-animado lento" id="gas-anim-2"></div>
 
-        <div class="panel-valvula" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;">
-            <div style="background: rgba(20, 30, 40, 0.95); border: 4px solid #444; border-radius: 10px; padding: 30px; box-shadow: 0 0 30px rgba(0, 255, 100, 0.2); text-align: center;">
-                <h2 style="color: #66ff66; margin-top: 0;">SENSOR DE CAUDAL</h2>
-                <p style="color: #ccc;">[ PANEL BLOQUEADO ]</p>
-                <p style="color: #888; font-size: 12px;">Se requiere input del jugador...</p>
+        <div class="panel-azul" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5; width: 700px;">
+            <h2 style="color: #00ffff; margin-top: 0;">SENSOR DE ESTRANGULAMIENTO</h2>
+            <p style="font-size: 22px; color: #e6f2ff; text-align: left; line-height: 1.4;">
+                El conducto principal sufre un estrangulamiento. Para evitar la sobrepresión, calcula la <b>velocidad de salida (Vs)</b> asumiendo un flujo incompresible y estacionario.
+            </p>
+            
+            <div style="background: rgba(0,0,0,0.6); padding: 15px; border: 2px solid #39ff14; border-radius: 8px; margin-bottom: 25px; text-align: left; font-size: 22px; display: flex; justify-content: space-around;">
+                <div>
+                    <span style="color:#888;">[ ENTRADA ]</span><br>
+                    Diámetro (De): <b style="color:#00ffff;">2.0 m</b><br>
+                    Velocidad (Ve): <b style="color:#00ffff;">10.0 m/s</b>
+                </div>
+                <div>
+                    <span style="color:#888;">[ SALIDA ]</span><br>
+                    Diámetro (Ds): <b style="color:#00ffff;">1.0 m</b>
+                </div>
             </div>
+            
+            <input type="number" id="input-m3-vs" placeholder="Vs (m/s)" style="width: 250px;">
+            <br>
+            <button class="btn-ui" onclick="validarM3()">[ ESTABILIZAR FLUJO ]</button>
+            <div id="feed-m3" style="margin-top: 20px; font-size: 24px; font-weight: bold; height: 30px;"></div>
         </div>
     </div>
 
@@ -812,16 +836,21 @@
 
         <div class="panel-cables" id="panel-juego-cables">
             <h2 style="position: absolute; top: -60px; width: 100%; text-align: center; color: #00ffff; letter-spacing: 2px;">CALIBRACIÓN DE SENSORES</h2>
+            <div style="text-align: center; width: 100%; position: absolute; top: 10px; z-index: 20; left: 0;">
+                <div id="status-light"></div>
+                <button id="btn-avanzar-fusibles" class="btn-ui" onclick="irAFusibles()" disabled>[ AVANZAR A FUSIBLES ]</button>
+            </div>
+            
             <svg id="capa-cables"></svg>
 
-            <div class="columna col-izq">
+            <div class="columna col-izq" style="margin-top: 40px;">
                 <div class="fila-cable"><div class="etiqueta-cable">VISCOSIDAD</div><div class="conector c-izq" data-id="izq1" data-match="der3" data-color="c1"></div></div>
                 <div class="fila-cable"><div class="etiqueta-cable">DENSIDAD</div><div class="conector c-izq" data-id="izq2" data-match="der1" data-color="c2"></div></div>
                 <div class="fila-cable"><div class="etiqueta-cable">CAUDAL</div><div class="conector c-izq" data-id="izq3" data-match="der4" data-color="c3"></div></div>
                 <div class="fila-cable"><div class="etiqueta-cable">PRESIÓN</div><div class="conector c-izq" data-id="izq4" data-match="der2" data-color="c4"></div></div>
             </div>
 
-            <div class="columna col-derecha">
+            <div class="columna col-derecha" style="margin-top: 40px;">
                 <div class="fila-cable"><div class="etiqueta-cable">Masa / Volumen</div><div class="conector c-der" data-id="der1"></div></div>
                 <div class="fila-cable"><div class="etiqueta-cable">Fuerza / Área</div><div class="conector c-der" data-id="der2"></div></div>
                 <div class="fila-cable"><div class="etiqueta-cable">Resistencia Interna</div><div class="conector c-der" data-id="der3"></div></div>
@@ -830,7 +859,7 @@
         </div>
         <div id="feedback-cables" style="margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px;"></div>
 
-<script>
+        <script>
             (() => {
                 const panel = document.getElementById('panel-juego-cables');
                 const svg = document.getElementById('capa-cables');
@@ -894,10 +923,13 @@
                             conectorDer.classList.add('conectado'); 
                             conexiones[origenActual.dataset.id] = true;
                             
+                            // LÓGICA DE FUSIBLES (ACTUALIZADA)
                             if (Object.values(conexiones).every(estado => estado === true)) {
                                 const f = document.getElementById('feedback-cables');
                                 f.style.color = '#39ff14'; f.style.textShadow = '0 0 10px #39ff14';
                                 f.innerText = "[ CALIBRACIÓN COMPLETADA CON ÉXITO ]";
+                                document.getElementById('status-light').classList.add('active');
+                                document.getElementById('btn-avanzar-fusibles').disabled = false;
                             }
                         } else {
                             cableActual.remove();
@@ -919,7 +951,18 @@
                 });
             })();
         </script>
+    </div>
+
+    <div id="pantalla-fusibles" class="pantalla" style="background: #0a1118; justify-content: center; width: 100vw; height: 100vh;">
+        <h1 style="color: #00ffff; text-align: center; font-size: 40px; margin-bottom: 10px;">SISTEMA ELÉCTRICO: FUSIBLES</h1>
+        <p style="color: white; font-size: 24px; text-align: center; max-width: 800px; line-height: 1.4;">Responde a las preguntas de fluidos para levantar los fusibles y activar el simulador del proyecto.</p>
+        <div class="fusible-container">
+            <div class="fusible" onclick="preguntarFusible(0, this)"></div>
+            <div class="fusible" onclick="preguntarFusible(1, this)"></div>
+            <div class="fusible" onclick="preguntarFusible(2, this)"></div>
         </div>
+        <div id="feed-fusibles" style="color: #39ff14; font-size: 28px; margin-top: 30px; text-align: center; font-weight: bold; height: 40px;"></div>
+    </div>
     
 <div id="pantalla-proyecto-purga" class="pantalla" style="background-color: #050505;">
         <button class="btn-volver-top" onclick="mostrar('pantalla-alumnos')" style="z-index: 10001;">[ ◄ VOLVER AL ESTANTE ]</button>
@@ -1167,6 +1210,39 @@
             { q: "Un 'fluido ideal' es una abstracción teórica que supone que el fluido:", opciones: [ { t: "Completamente no viscoso e incompresible.", c: true }, { t: "Viscosidad infinitamente alta.", c: false }, { t: "Gas real sometido a bajas presiones.", c: false }]},
         ];
         let preguntasSeleccionadas = [];
+
+        // FUSIBLES LOGIC Y GLOBAL FUNCTIONS
+        const preguntasFluidosFusibles = [
+            {q: "¿Qué ley rige la conservación de la energía en fluidos (apellidos del científico)?", a: "bernoulli"},
+            {q: "¿Qué propiedad mide la resistencia de un fluido a fluir?", a: "viscosidad"},
+            {q: "¿Cómo se llama la fuerza perpendicular a la superficie por unidad de área?", a: "presion"}
+        ];
+        let fusiblesResueltos = 0;
+
+        function irAFusibles() { mostrar('pantalla-fusibles'); }
+
+        function preguntarFusible(index, element) {
+            if(element.classList.contains('up')) return;
+            document.getElementById("modal-prompt-mensaje").innerText = preguntasFluidosFusibles[index].q;
+            document.getElementById("modal-prompt-input").value = "";
+            document.getElementById("modal-prompt").style.display = "flex";
+            
+            document.getElementById("modal-prompt-btn").onclick = function() {
+                let resp = document.getElementById("modal-prompt-input").value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                document.getElementById("modal-prompt").style.display = "none";
+                
+                if(resp.includes(preguntasFluidosFusibles[index].a)) {
+                    element.classList.add('up');
+                    fusiblesResueltos++;
+                    if(fusiblesResueltos === 3) {
+                        document.getElementById('feed-fusibles').innerText = "✓ SISTEMA TOTALMENTE OPERATIVO";
+                        setTimeout(() => { mostrar('pantalla-alumnos'); }, 2000); 
+                    }
+                } else {
+                    mostrarAlerta("Respuesta incorrecta. El fusible no se mueve.", "ERROR ELÉCTRICO");
+                }
+            };
+        }
 
 
         // ================= SISTEMA DE GUARDADO =================
@@ -2113,7 +2189,43 @@ function tirarRuletaC() {
             }
         }
 
-        // ====== LÓGICA HABITACIÓN 3 (MÓDULO 3) ======
+        // ====== LÓGICA HABITACIÓN 3 (MÓDULO 3 CONTINUIDAD) ======
+        function validarM3() {
+            const res = parseFloat(document.getElementById("input-m3-vs").value);
+            const feed = document.getElementById("feed-m3");
+            const gas1 = document.getElementById("gas-anim-1");
+            const gas2 = document.getElementById("gas-anim-2");
+
+            // Solución: Vs = Ve * (De/Ds)^2 = 10 * (2/1)^2 = 40
+            if (res === 40) {
+                feed.style.color = "#39ff14";
+                feed.innerText = "✓ CÁLCULO CORRECTO. ABRIENDO VÁLVULAS.";
+                
+                // Efecto visual: El gas acelera y cambia a color cian seguro
+                if(gas1) { gas1.style.animationDuration = "1.5s"; gas1.style.background = "repeating-linear-gradient( 90deg, rgba(0, 255, 255, 0) 0%, rgba(0, 255, 255, 0.2) 10%, rgba(0, 255, 255, 0) 20%)"; }
+                if(gas2) { gas2.style.animationDuration = "3s"; }
+
+                setTimeout(() => {
+                    progreso[3] = [true, true, true, true]; // M3 Completado
+                    
+                    // DESBLOQUEAMOS EL M4 SOBREESCRIBIENDO EL PARCHE CSS
+                    let hotspotM4 = document.getElementById('hotspot-4');
+                    if(hotspotM4) {
+                        hotspotM4.style.setProperty('display', 'block', 'important');
+                        hotspotM4.style.setProperty('pointer-events', 'auto', 'important');
+                    }
+
+                    mostrarAlerta("¡Módulo de Continuidad Estabilizado!\nHas desbloqueado el Sector M4.", "ÉXITO");
+                    irAMapa();
+                }, 2500);
+            } else {
+                registrarError();
+                feed.style.color = "#ff073a";
+                feed.innerText = "✗ CÁLCULO INCORRECTO. RIESGO DE ROTURA.";
+                setTimeout(() => { feed.innerText = ""; document.getElementById("input-m3-vs").value = ""; }, 2000);
+            }
+        }
+
         function iniciarRetoDelta() {
             document.getElementById('input-h3-fuerza').value = "";
             document.getElementById('feed-hab3').innerText = "";
@@ -2280,7 +2392,6 @@ function tirarRuletaC() {
         <input type="text" id="modal-prompt-input" style="width: 80%; font-size: 30px; margin: 20px 0; text-align: center; border-color: #ff073a; color: #ff073a; background: #001a33;">
         <br>
         <button class="btn-ui" id="modal-prompt-btn" style="background: #ff073a; color: white;">[ VERIFICAR ]</button>
-        <button class="btn-ui" onclick="document.getElementById('modal-prompt').style.display='none'" style="background: #333; color: white; margin-left: 10px;">[ CANCELAR ]</button>
         <button class="btn-ui" onclick="document.getElementById('modal-prompt').style.display='none'" style="background: #333; color: white; margin-left: 10px;">[ CANCELAR ]</button>
     </div>
 </div>
