@@ -2454,5 +2454,55 @@ function tirarRuletaC() {
             inputActivoVirtual = null;
         }
     </script>
+    <script>
+        // Esperamos un segundo para asegurar que el mapa está cargado
+        setTimeout(() => {
+            for(let i=1; i<=4; i++) {
+                let hotspot = document.getElementById(`hotspot-${i}`);
+                if(!hotspot) continue;
+
+                // 1. Crear el botón rojo "trampa"
+                let btnTrampa = document.createElement('div');
+                btnTrampa.style.position = 'absolute';
+                btnTrampa.style.width = '20px';
+                btnTrampa.style.height = '20px';
+                btnTrampa.style.background = '#ff073a';
+                btnTrampa.style.borderRadius = '50%';
+                btnTrampa.style.cursor = 'pointer';
+                btnTrampa.style.zIndex = '1000';
+                btnTrampa.style.boxShadow = '0 0 10px #000, 0 0 10px #ff073a';
+                btnTrampa.style.border = '2px solid white';
+                btnTrampa.title = `[ MODO DEMO ] Forzar victoria M${i}`;
+                
+                // 2. Colocarlo en la esquina superior derecha del hotspot
+                btnTrampa.style.top = '-10px';
+                btnTrampa.style.right = '-10px';
+
+                // 3. Lógica al hacer clic en el círculo rojo
+                btnTrampa.onclick = (e) => {
+                    e.stopPropagation(); // Evita que se abra la habitación
+                    
+                    // Rellenamos el progreso del módulo con 'true'
+                    progreso[i] = [true, true, true, true]; 
+                    
+                    // Forzamos el guardado y la actualización visual
+                    guardarEstado();
+                    actualizarMapas();
+                    
+                    // Si completamos M3 (o forzamos M3), nos aseguramos de que M4 sea clicable
+                    if(i === 3) {
+                        let h4 = document.getElementById('hotspot-4');
+                        if(h4) {
+                            h4.style.setProperty('display', 'block', 'important');
+                            h4.style.setProperty('pointer-events', 'auto', 'important');
+                        }
+                    }
+                };
+
+                // 4. Añadir el botón al mapa
+                hotspot.appendChild(btnTrampa);
+            }
+        }, 1500);
+    </script>
 </body>
 </html>
