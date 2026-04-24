@@ -306,6 +306,24 @@
         .btn-votar.votado { background: #ff073a; border-color: #fff; color: #fff; box-shadow: 0 0 10px #ff073a;}
         
                 /* ================= ZONA DE PARCHES ================= */
+        /* ================= PARCHE TECLADO VIRTUAL (TABLETS) ================= */
+        #teclado-virtual {
+            position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+            width: 280px; background: rgba(0, 20, 40, 0.95); border: 2px solid #00ffff;
+            border-radius: 10px; padding: 15px; display: none; grid-template-columns: repeat(3, 1fr);
+            gap: 10px; z-index: 100000; box-shadow: -10px 0 30px rgba(0,0,0,0.8), 0 0 20px rgba(0,255,255,0.3);
+            backdrop-filter: blur(5px);
+        }
+        .tecla {
+            background: #003366; color: #fff; border: 2px solid #00ffff; border-radius: 5px;
+            font-size: 32px; font-weight: bold; padding: 15px 0; cursor: pointer;
+            text-align: center; font-family: 'Montserrat', sans-serif; transition: 0.2s;
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+        .tecla:active { background: #00ffff; color: #000; transform: scale(0.95); }
+        .tecla-larga { grid-column: span 3; background: #002b4d; font-size: 24px;}
+        .tecla-roja { border-color: #ff073a; color: #ff073a; }
+        .tecla-roja:active { background: #ff073a; color: #fff; }
         /* PARCHE DE EMERGENCIA: Ocultar M5 temporalmente */
         #hotspot-5 { display: none !important; pointer-events: none !important; }
         /* ================= PARCHE PARA TABLETS Y MÓVILES ================= */
@@ -2266,5 +2284,64 @@ function tirarRuletaC() {
         <button class="btn-ui" onclick="document.getElementById('modal-prompt').style.display='none'" style="background: #333; color: white; margin-left: 10px;">[ CANCELAR ]</button>
     </div>
 </div>
+<div id="teclado-virtual">
+        <div class="tecla" onclick="teclearVirtual('7')">7</div>
+        <div class="tecla" onclick="teclearVirtual('8')">8</div>
+        <div class="tecla" onclick="teclearVirtual('9')">9</div>
+        <div class="tecla" onclick="teclearVirtual('4')">4</div>
+        <div class="tecla" onclick="teclearVirtual('5')">5</div>
+        <div class="tecla" onclick="teclearVirtual('6')">6</div>
+        <div class="tecla" onclick="teclearVirtual('1')">1</div>
+        <div class="tecla" onclick="teclearVirtual('2')">2</div>
+        <div class="tecla" onclick="teclearVirtual('3')">3</div>
+        <div class="tecla" onclick="teclearVirtual('0')">0</div>
+        <div class="tecla" onclick="teclearVirtual('.')">.</div>
+        <div class="tecla" onclick="teclearVirtual('-')">-</div>
+        <div class="tecla tecla-roja" onclick="teclearVirtual('DEL')">DEL</div>
+        <div class="tecla tecla-larga" onclick="cerrarTecladoVirtual()">[ CERRAR / OK ]</div>
+    </div>
+
+    <script>
+        let inputActivoVirtual = null;
+
+        // Esperamos un poquito a que cargue todo para inyectar el bloqueo
+        setTimeout(() => {
+            // Buscamos solo los inputs numéricos (cálculos)
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                
+                // 1. Esto es la magia: Evita que el teclado de la tablet suba
+                input.setAttribute('readonly', 'true'); 
+                input.style.cursor = 'pointer';
+
+                // 2. Al tocar el input, abrimos nuestro teclado hacker
+                input.addEventListener('click', (e) => {
+                    inputActivoVirtual = e.target;
+                    document.getElementById('teclado-virtual').style.display = 'grid';
+                    
+                    // Efecto visual para saber qué caja estamos editando
+                    document.querySelectorAll('input').forEach(i => i.style.boxShadow = 'none');
+                    inputActivoVirtual.style.boxShadow = '0 0 20px #00ffff';
+                });
+            });
+        }, 500);
+
+        function teclearVirtual(valor) {
+            if (!inputActivoVirtual) return;
+            
+            if (valor === 'DEL') {
+                inputActivoVirtual.value = inputActivoVirtual.value.slice(0, -1);
+            } else {
+                inputActivoVirtual.value += valor;
+            }
+        }
+
+        function cerrarTecladoVirtual() {
+            document.getElementById('teclado-virtual').style.display = 'none';
+            if (inputActivoVirtual) {
+                inputActivoVirtual.style.boxShadow = 'none';
+            }
+            inputActivoVirtual = null;
+        }
+    </script>
 </body>
 </html>
