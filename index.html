@@ -306,6 +306,8 @@
         .btn-votar.votado { background: #ff073a; border-color: #fff; color: #fff; box-shadow: 0 0 10px #ff073a;}
         
                 /* ================= ZONA DE PARCHES ================= */
+        /* PARCHE DE EMERGENCIA: Ocultar M5 temporalmente */
+        #hotspot-5 { display: none !important; pointer-events: none !important; }
         /* ================= PARCHE PARA TABLETS Y MÓVILES ================= */
         @media (hover: none) {
             .hotspot:hover { transform: none; box-shadow: 0 0 5px rgba(0, 255, 255, 0.2), inset 0 0 5px rgba(0, 255, 255, 0.2) !important; border: 3px dashed rgba(0, 255, 255, 0.7); background: rgba(0, 255, 255, 0.15); }
@@ -596,7 +598,7 @@
 
             <div class="hotspot bloqueado" id="hotspot-2" style="top: 75%; left: 15%; width: 20%; height: 20%; border-radius: 50%;" onclick="abrirHabitacion(2)">
                 <div class="tag-modulo">M2</div>
-                <div class="tooltip-layton">M2: DERIVADA TEMPORAL <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
+                <div class="tooltip-layton">M2: ENERGÍA <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-2">0 Fallos</div>
             </div>
 
