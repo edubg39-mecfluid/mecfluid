@@ -445,6 +445,13 @@
       /* ================= ESTILO LOGO UPCT ================= */
         .upct-logo-lateral {position: absolute; top: 50px; left: -250px; width: 550px; height: auto; opacity: 0.45; z-index: -1; pointer-events: none;}
         
+      /* ================= CANDADO FÍSICO (MAPA) ================= */
+        .candado-container { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 20; }
+        .candado-arco { width: 70px; height: 50px; border: 12px solid #b0c4de; border-bottom: none; border-radius: 35px 35px 0 0; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5), 0 5px 10px rgba(0,0,0,0.5); position: relative; top: 10px; z-index: 1;}
+        .candado-cuerpo { width: 180px; height: 70px; background: linear-gradient(180deg, #333 0%, #111 100%); border-radius: 8px; border: 2px solid #555; box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 15px #000; display: flex; justify-content: space-evenly; align-items: center; padding: 0 15px; z-index: 2;}
+        .ruleta-candado { width: 28px; height: 45px; background: linear-gradient(180deg, #aaa 0%, #eee 50%, #aaa 100%); border-radius: 4px; color: #000; font-size: 26px; font-weight: bold; font-family: 'Montserrat', monospace; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 15px 10px -10px rgba(0,0,0,0.8), inset 0 -15px 10px -10px rgba(0,0,0,0.8); border: 1px solid #666; transition: color 0.3s;}
+        .ruleta-candado.resuelta { color: #ff073a; text-shadow: 0 0 5px rgba(255,7,58,0.5); background: linear-gradient(180deg, #ccc 0%, #fff 50%, #ccc 100%);}
+        
     </style>
 </head>
 <body ontouchstart="">
@@ -645,9 +652,17 @@
                 <div class="tooltip-layton">M5: ENERGÍA <br><span style="color:#ff073a; font-size: 16px;">[ BLOQUEADO ]</span></div>
                 <div class="badge-error-layton" id="badge-err-5">0 Fallos</div>
             </div>
-
+        <div class="candado-container">
+            <div class="candado-arco"></div>
+            <div class="candado-cuerpo">
+                <div class="ruleta-candado" id="ruleta-1">-</div>
+                <div class="ruleta-candado" id="ruleta-2">-</div>
+                <div class="ruleta-candado" id="ruleta-3">-</div>
+                <div class="ruleta-candado" id="ruleta-4">-</div>
+            </div>
         </div>
     </div>
+</div>
 
 <div id="pantalla-habitacion" class="pantalla">
         <button class="btn-volver-top" onclick="irAMapa()" style="z-index: 10001;">[ ◄ VOLVER AL NEXO ]</button>
@@ -1274,7 +1289,7 @@
             progreso = estado.progreso;
             if(estado.erroresModulo) erroresModulo = estado.erroresModulo; 
             if(estado.codigosSecretos) codigosSecretos = estado.codigosSecretos;
-            else codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 10));
+            else codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 5) + 4);
             let mins = Math.floor(tiempoSegundos / 60).toString().padStart(2, '0');
             let secs = (tiempoSegundos % 60).toString().padStart(2, '0');
             document.getElementById('tiempo-ui').innerText = `${mins}:${secs}`;
@@ -1460,7 +1475,7 @@
             const inputName = document.getElementById('input-equipo').value.trim();
             if (inputName === "") { mostrarAlerta("ACCESO DENEGADO. Introduzca la identificación del equipo.", "ERROR"); return; }
             nombreEquipo = inputName.toUpperCase();
-            codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 10));
+            codigosSecretos = Array.from({length: 5}, () => Math.floor(Math.random() * 5) + 4);
             document.getElementById('tiempo-ui').innerText = "00:00"; tiempoSegundos = 0; relojIniciado = false;
             guardarEstado(); irAPasillo();
         }
@@ -1557,22 +1572,22 @@ function enfocarPrueba(idPrueba) {
             actualizarMapas(); 
         }
 
-            function actualizarMapas() {
+const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
+
+        function actualizarMapas() {
+            // 1. Actualizar Nodos de la Pizarra (M1)
             if (vAct === 1) {
                 const nodosPizarra = ['Re', 'Pr', 'M', 'Pe'];
-                
                 nodosPizarra.forEach((nodoId, indice) => {
                     let elementoNodo = document.getElementById(`nodo-${nodoId}`);
                     if (elementoNodo) {
-                        if (progreso[1][indice]) {
-                            elementoNodo.classList.add('completado');
-                        } else {
-                            elementoNodo.classList.remove('completado');
-                        }
+                        if (progreso[1][indice]) elementoNodo.classList.add('completado');
+                        else elementoNodo.classList.remove('completado');
                     }
                 });
             }
 
+            // 2. Actualizar Hotspots (Sectores)
             for(let i=1; i<=5; i++){
                 let hotspot = document.getElementById(`hotspot-${i}`);
                 if(!hotspot) continue;
@@ -1607,22 +1622,18 @@ function enfocarPrueba(idPrueba) {
                     hotspot.classList.add('bloqueado');
                 }
             }
-            
-        if (vAct === 2) {
-            let n2 = document.getElementById('sub-2-1');
-             if(n2) {
-                if(progreso[2][0]) { 
-                n2.style.border = "4px solid #39ff14";
-                n2.style.background = "rgba(57, 255, 20, 0.2)";
-                n2.innerHTML = "<span style='color:#39ff14; font-weight:bold; font-size:18px;'>[ RESUELTO ]</span>"; 
-                n2.onclick = null; 
-                n2.style.pointerEvents = "none";
-                } 
-            else { 
-            n2.onclick = function() { levantarPapelYEmpezar(this); }; 
-        }
-    }
-}
+
+            // 3. Lógica específica M2 y M3
+            if (vAct === 2) {
+                let n2 = document.getElementById('sub-2-1');
+                if(n2) {
+                    if(progreso[2][0]) { 
+                        n2.style.border = "4px solid #39ff14"; n2.style.background = "rgba(57, 255, 20, 0.2)";
+                        n2.innerHTML = "<span style='color:#39ff14; font-weight:bold; font-size:18px;'>[ RESUELTO ]</span>"; 
+                        n2.onclick = null; n2.style.pointerEvents = "none";
+                    } else { n2.onclick = function() { levantarPapelYEmpezar(this); }; }
+                }
+            }
 
             if (vAct === 3) {
                 let n3 = document.getElementById('sub-3-1');
@@ -1634,9 +1645,56 @@ function enfocarPrueba(idPrueba) {
                     }
                 }
             }
+
+            // 4. LÓGICA DEL CANDADO VIRTUAL VINCULADO AL FÍSICO
+            for(let i=1; i<=4; i++) {
+                let ruleta = document.getElementById(`ruleta-${i}`);
+                if(!ruleta) continue;
+                
+                let targetReal = CODIGO_CANDADO[i-1];
+                let numVueltas = codigosSecretos[i-1];
+                // Truco matemático: ¿De qué número partimos para que al sumarle las vueltas llegue al target?
+                let numeroInicial = (targetReal - numVueltas + 20) % 10; 
+
+                if (progreso[i] && progreso[i].every(x => x === true)) {
+                    // Módulo superado
+                    let actualStr = ruleta.innerText;
+                    if (actualStr === "-" || actualStr === numeroInicial.toString()) {
+                        // Si está esperando a girar, ejecutamos animación
+                        animarRuletaCandado(i, numeroInicial, targetReal, numVueltas);
+                    } else if (actualStr === targetReal.toString()) {
+                        // Si ya giró previamente (ej. cargar partida)
+                        ruleta.classList.add('resuelta');
+                    }
+                } else {
+                    // Módulo aún bloqueado: mostrar número falso (calculado)
+                    ruleta.innerText = numeroInicial;
+                    ruleta.classList.remove('resuelta');
+                }
+            }
+
             guardarEstado(); 
         }
 
+        // FUNCIÓN QUE HACE GIRAR LA RULETA
+        function animarRuletaCandado(index, inicio, target, vueltasTotales) {
+            let ruleta = document.getElementById(`ruleta-${index}`);
+            let numeroActual = inicio;
+            let pasosDados = 0;
+            
+            // Sonido opcional si quieres meterle un "click" mecánico
+            let intervaloGiro = setInterval(() => {
+                numeroActual = (numeroActual + 1) % 10;
+                ruleta.innerText = numeroActual;
+                pasosDados++;
+                
+                if (pasosDados >= vueltasTotales) {
+                    clearInterval(intervaloGiro);
+                    ruleta.innerText = target; // Asegurar anclaje final exacto
+                    ruleta.classList.add('resuelta');
+                }
+            }, 150); // 150ms por número, da una sensación de giro mecánico buena
+        }
         function procesarVictoriaFase(mod, fase) {
             progreso[mod][fase] = true;
             guardarEstado();
