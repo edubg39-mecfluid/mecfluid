@@ -446,6 +446,10 @@
         .upct-logo-lateral {position: absolute; top: 50px; left: -250px; width: 550px; height: auto; opacity: 0.45; z-index: -1; pointer-events: none;}
         
       /* ================= CANDADO FÍSICO (MAPA) ================= */
+        @keyframes latido-candado {
+            0% { transform: translateX(-50%) rotate(1deg) scale(1); filter: drop-shadow(8px 15px 10px rgba(0,0,0,0.7)); }
+            100% { transform: translateX(-50%) rotate(1deg) scale(1.08); filter: drop-shadow(0 0 25px #39ff14); }
+        }
         .candado-container { position: absolute; bottom: 17px; left: 91%; transform: translateX(-50%) rotate(1deg); display: flex; flex-direction: column; align-items: center; z-index: 20; filter: drop-shadow(8px 15px 10px rgba(0,0,0,0.7));}
         .candado-arco { width: 70px; height: 50px; border: 12px solid #b0c4de; border-bottom: none; border-radius: 35px 35px 0 0; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5), 0 5px 10px rgba(0,0,0,0.5); position: relative; top: 10px; z-index: 1;}
         .candado-cuerpo { width: 180px; height: 70px; background: linear-gradient(180deg, #333 0%, #111 100%); border-radius: 8px; border: 2px solid #555; box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 15px #000; display: flex; justify-content: space-evenly; align-items: center; padding: 0 15px; z-index: 2;}
@@ -605,7 +609,7 @@
                 <div class="titulo-puerta">SECTOR 11</div>
                 <div class="subtitulo-puerta">PRUEBAS UNIDAD 1</div>
             </div>
-        <div class="puerta-box bloqueada" id="puerta-sector-12" onclick="intentarAbrirSector12()">
+        <div class="puerta-box bloqueada" id="puerta-sector-12" onclick="intentarAbrir()">
                 <img src="valvula.gif" alt="Icono Válvula Sector 12" class="icono-imagen-puerta">
                 <div class="titulo-puerta">SECTOR 12</div>
                 <div class="subtitulo-puerta" id="subtitulo-s12">[ BLOQUEADO ]<br>PRUEBAS UNIDAD 2</div>
@@ -666,7 +670,7 @@
     <div id="pantalla-mapa-12" class="pantalla">
         <button class="btn-volver-top" onclick="irAPasillo()">[ ◄ VOLVER AL NEXO ]</button>
         <!-- De momento reutilizamos la imagen del departamento, la cambiaremos luego si quieres -->
-        <div class="escenario-interactivo" id="escenario-sector12" style="background: url('departamento.jpg') center/cover no-repeat; filter: hue-rotate(180deg);">
+        <div class="escenario-interactivo" id="escenario-" style="background: url('departamento.jpg') center/cover no-repeat; filter: hue-rotate(180deg);">
             
             <h1 style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 50px; text-shadow: 0 0 20px #00ffff; pointer-events: none;">SECTOR 12: EN CONSTRUCCIÓN</h1>
 
@@ -1683,13 +1687,13 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
                     // Módulo superado
                     let actualStr = ruleta.innerText;
                     if (actualStr === "-" || actualStr === numeroInicial.toString()) {
-                        // Si está esperando a girar, ejecutamos animación
-                        animarRuletaCandado(i, numeroInicial, targetReal, numVueltas);
-                    } else if (actualStr === targetReal.toString()) {
-                        // Si ya giró previamente (ej. cargar partida)
+                        animarRuletaCandado(i, numeroInicial, targetReal, numVueltas);}
+                    else if (actualStr === targetReal.toString()) {
                         ruleta.classList.add('resuelta');
+                        verificarCandadoSilencioso();
                     }
-                } else {
+                } 
+                else {
                     // Módulo aún bloqueado: mostrar número falso (calculado)
                     ruleta.innerText = numeroInicial;
                     ruleta.classList.remove('resuelta');
@@ -1699,13 +1703,43 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
             guardarEstado(); 
         }
 
-        // FUNCIÓN QUE HACE GIRAR LA RULETA
+// ================= FUNCIONES DE CANDADO ================= //
+        let transicionPendiente = false;
+
+        function verificarCandadoAnimado() {
+            let resueltas = document.querySelectorAll('.ruleta-candado.resuelta').length;
+            let candado = document.querySelector('.candado-container');
+            if (resueltas === 4) {
+                // Hacerlo interactivo y brillante
+                candado.style.cursor = 'pointer';
+                candado.style.animation = 'latido-candado 1.5s infinite alternate ease-in-out';
+                candado.onclick = intentarAbrir; // Si cancelan, pueden hacer clic en el candado para reabrir
+                
+                // Lanzar la transición automática solo 1 vez
+                if (!transicionPendiente) {
+                    transicionPendiente = true;
+                    setTimeout(() => {
+                        intentarAbrir();
+                    }, 1500); // 1.5 seg de cortesía para que vean que el número es correcto
+                }
+            }
+        }
+
+        function verificarCandadoSilencioso() {
+            let resueltas = document.querySelectorAll('.ruleta-candado.resuelta').length;
+            let candado = document.querySelector('.candado-container');
+            if (resueltas === 4) {
+                candado.style.cursor = 'pointer';
+                candado.style.animation = 'latido-candado 1.5s infinite alternate ease-in-out';
+                candado.onclick = intentarAbrir;
+            }
+        }
+
         function animarRuletaCandado(index, inicio, target, vueltasTotales) {
             let ruleta = document.getElementById(`ruleta-${index}`);
             let numeroActual = inicio;
             let pasosDados = 0;
             
-            // Sonido opcional si quieres meterle un "click" mecánico
             let intervaloGiro = setInterval(() => {
                 numeroActual = (numeroActual + 1) % 10;
                 ruleta.innerText = numeroActual;
@@ -1713,10 +1747,11 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
                 
                 if (pasosDados >= vueltasTotales) {
                     clearInterval(intervaloGiro);
-                    ruleta.innerText = target; // Asegurar anclaje final exacto
+                    ruleta.innerText = target; 
                     ruleta.classList.add('resuelta');
+                    verificarCandadoAnimado(); // <-- LLAMADA AL CHECK AUTOMÁTICO
                 }
-            }, 150); // 150ms por número, da una sensación de giro mecánico buena
+            }, 150); 
         }
         function procesarVictoriaFase(mod, fase) {
             progreso[mod][fase] = true;
@@ -1735,7 +1770,7 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
             }
         }
 
-function intentarAbrirSector12() {
+function intentarAbrir() {
             let modulosListos = 0;
             for(let i=1; i<=4; i++) {
                 if (progreso[i].every(x=>x===true)) modulosListos++;
@@ -1759,7 +1794,7 @@ function intentarAbrirSector12() {
                 if (codigoIngresado === "2468") { 
                     mostrarAlerta("✓ ¡CÓDIGO ACEPTADO! \n\nCompuerta hermética abierta. Desbloqueando Sector 12...", "ACCESO CONCEDIDO");
                     setTimeout(() => {
-                        abrirSector12();
+                        abrir();
                     }, 2500);
                 } else if (codigoIngresado !== "") {
                     mostrarAlerta("✗ CÓDIGO INCORRECTO. Revisa la combinación en las ruletas virtuales de tu mapa.", "ERROR");
@@ -1767,10 +1802,10 @@ function intentarAbrirSector12() {
             };
         }
 
-        function abrirSector12() {
+        function abrir() {
             mostrar('pantalla-mapa-12');
             document.getElementById('hud-cronometro').style.display = "block";
-            // Aquí luego meteremos un actualizarMapasSector12()
+            // Aquí luego meteremos un actualizarMapas()
         }
 
         // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
