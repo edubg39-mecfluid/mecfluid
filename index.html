@@ -455,48 +455,47 @@
         .candado-cuerpo { width: 180px; height: 70px; background: linear-gradient(180deg, #333 0%, #111 100%); border-radius: 8px; border: 2px solid #555; box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 15px #000; display: flex; justify-content: space-evenly; align-items: center; padding: 0 15px; z-index: 2;}
         .ruleta-candado { width: 28px; height: 45px; background: linear-gradient(180deg, #aaa 0%, #eee 50%, #aaa 100%); border-radius: 4px; color: #000; font-size: 26px; font-weight: bold; font-family: 'Montserrat', monospace; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 15px 10px -10px rgba(0,0,0,0.8), inset 0 -15px 10px -10px rgba(0,0,0,0.8); border: 1px solid #666; transition: color 0.3s;}
         .ruleta-candado.resuelta { color: #ff073a; text-shadow: 0 0 5px rgba(255,7,58,0.5); background: linear-gradient(180deg, #ccc 0%, #fff 50%, #ccc 100%);}
-        /* ================= SECTOR 12: ESCLUSA DE CONTENCIÓN ================= */
-        #pantalla-mapa-12 {
-            background: radial-gradient(circle at center, rgba(0, 30, 60, 0.8), #000), url('presa.gif') center/cover;
-            justify-content: center; align-items: center; display: flex; flex-direction: column;
-        }
-        .consola-s12 {
-            display: grid; grid-template-columns: 1fr 350px 1fr; gap: 30px; 
-            width: 90vw; max-width: 1400px; height: 80vh; 
-        }
-        .columna-retos { display: flex; flex-direction: column; gap: 20px; justify-content: space-between; }
+/* ================= SECTOR 12: CINEMÁTICAS Y HUD ================= */
+        #pantalla-mapa-12 { background: #050a0f; justify-content: center; align-items: center; display: flex; flex-direction: column; }
         
-        .panel-reto-s12 {
-            background: rgba(0, 20, 40, 0.9); border: 2px solid #555; border-radius: 10px; padding: 20px;
-            transition: 0.4s; position: relative; overflow: hidden; opacity: 0.4; pointer-events: none;
-        }
-        .panel-reto-s12.activo { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); opacity: 1; pointer-events: auto; }
-        .panel-reto-s12.completado { border-color: #39ff14; box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); opacity: 0.8; pointer-events: none; }
+        .s12-contenedor-maestro { width: 90vw; max-width: 1200px; height: 85vh; display: flex; flex-direction: column; border: 4px solid #333; border-radius: 15px; overflow: hidden; background: #000; box-shadow: 0 0 50px rgba(0,255,255,0.1); }
         
-        .panel-reto-s12 h3 { color: #00ffff; margin-top: 0; font-size: 22px; margin-bottom: 10px; border-bottom: 1px solid #00ffff; padding-bottom: 5px;}
-        .panel-reto-s12.completado h3 { color: #39ff14; border-color: #39ff14; }
-        .texto-reto-s12 { color: #e6f2ff; font-size: 18px; line-height: 1.4; margin-bottom: 15px; text-align: left;}
+        /* VISOR CINEMÁTICO (ARRIBA) */
+        .s12-visor { height: 55%; position: relative; background: radial-gradient(circle at top, #1a2a3a, #050a0f); border-bottom: 4px solid #00ffff; overflow: hidden; }
+        .s12-capa-visual { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; opacity: 0; transition: opacity 1s ease-in-out; }
+        .s12-capa-visual.activa { display: block; opacity: 1; }
+
+        /* HUD TÁCTICO (ABAJO) */
+        .s12-hud { height: 45%; background: rgba(0, 20, 40, 0.95); padding: 30px; display: flex; gap: 30px; }
+        .s12-hud-texto { flex: 2; color: #e6f2ff; font-size: 20px; line-height: 1.5; text-align: left; border-right: 2px dashed #555; padding-right: 30px;}
+        .s12-hud-controles { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .s12-titulo-fase { color: #00ffff; font-size: 28px; margin-top: 0; margin-bottom: 15px; letter-spacing: 2px; }
         
-        .zona-candado-s12 {
-            background: #0a1118; border: 4px solid #333; border-radius: 20px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; box-shadow: inset 0 0 50px #000, 0 10px 30px rgba(0,0,0,0.8);
-            position: relative;
-        }
-        .titulo-candado { font-family: 'Cinzel', serif; font-size: 32px; color: #ff073a; margin-bottom: 30px; text-shadow: 0 0 15px #ff073a; text-align: center; line-height: 1.2;}
-        .displays-candado { display: flex; gap: 15px; }
-        .digito-display {
-            width: 60px; height: 90px; background: #111; border: 3px solid #555; border-radius: 8px;
-            color: #fff; font-size: 60px; font-weight: bold; font-family: 'VT323', monospace;
-            display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 15px #000;
-            transition: 0.5s;
-        }
-        .digito-display.animando { color: #00ffff; text-shadow: 0 0 20px #00ffff; border-color: #00ffff; }
-        .digito-display.fijo { color: #39ff14; text-shadow: 0 0 20px #39ff14; border-color: #39ff14; box-shadow: inset 0 0 20px rgba(57, 255, 20, 0.3);}
-        
-        .input-s12 { width: 100px; font-size: 24px; padding: 5px; margin: 0 10px 0 0; }
-        .btn-s12 { font-size: 18px; padding: 8px 15px; }
-        
-        .feed-s12 { font-size: 16px; font-weight: bold; height: 20px; margin-top: 10px; }
+        /* ELEMENTOS CINEMÁTICOS FASE 1: Manómetro */
+        .f1-tanque { position: absolute; left: 15%; bottom: 15%; width: 150px; height: 200px; border: 6px solid #888; border-top: 10px solid #555; border-radius: 10px; background: rgba(0, 255, 255, 0.2); }
+        .f1-agua { position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; background: #00ffff; box-shadow: 0 0 20px #00ffff; transition: height 2s; }
+        .f1-tubo { position: absolute; left: 150px; bottom: 30%; width: 150px; height: 20px; background: #00ffff; border-top: 4px solid #555; border-bottom: 4px solid #555; }
+        .f1-u { position: absolute; left: 300px; bottom: 15%; width: 100px; height: 150px; border: 20px solid rgba(255, 255, 255, 0.1); border-top: none; border-radius: 0 0 50px 50px; }
+        .f1-mercurio { position: absolute; left: 300px; bottom: 15%; width: 100px; height: 150px; border: 20px solid #ff073a; border-top: none; border-radius: 0 0 50px 50px; box-shadow: inset 0 0 15px #ff073a; transition: 2s; }
+        .f1-valvula { position: absolute; right: -30px; bottom: -10px; width: 30px; height: 30px; background: #ff073a; border-radius: 50%; border: 4px solid #fff; z-index: 10; transition: 0.5s; box-shadow: 0 0 15px #ff073a; }
+        .f1-chorro { position: absolute; right: -150px; bottom: -5px; width: 0px; height: 15px; background: #00ffff; transition: width 1s ease-in 2s; } /* Sale tras 2s */
+
+        /* ELEMENTOS CINEMÁTICOS FASE 2: Llenado */
+        .f2-chorro-in { position: absolute; left: 0; top: 20%; width: 25%; height: 20px; background: #00ffff; box-shadow: 0 0 15px #00ffff; }
+        .f2-chorro-cae { position: absolute; left: 25%; top: 20%; width: 20px; height: 0%; background: #00ffff; transition: height 1s; box-shadow: 0 0 15px #00ffff; }
+        .f2-tanque { position: absolute; left: 20%; bottom: 10%; width: 400px; height: 250px; border: 8px solid #555; border-top: none; }
+        .f2-agua-sube { position: absolute; bottom: 0; left: 0; width: 100%; height: 5%; background: rgba(0, 255, 255, 0.6); transition: height 3s linear; }
+        .f2-presa-muro { position: absolute; right: -8px; bottom: 0; width: 8px; height: 100%; background: #ff073a; transition: 1s; transform-origin: bottom; }
+
+        /* ELEMENTOS CINEMÁTICOS FASE 3: Compuerta Inclinada */
+        .f3-agua-tsunami { position: absolute; left: -10%; bottom: 10%; width: 10%; height: 250px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s ease-out; border-right: 4px solid #00ffff; }
+        .f3-compuerta { position: absolute; left: 60%; bottom: 10%; width: 10px; height: 300px; background: #bbb; border-radius: 5px; transform-origin: top; transform: rotate(-30deg); transition: transform 1.5s ease-in-out; z-index: 5; }
+        .f3-tope { position: absolute; left: 45%; bottom: 10%; width: 20px; height: 20px; background: #ff073a; }
+
+        /* ELEMENTOS CINEMÁTICOS FASE 4: Compuerta Radial */
+        .f4-agua-rio { position: absolute; left: 0; bottom: 10%; width: 0%; height: 200px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s; }
+        .f4-radial { position: absolute; right: 20%; bottom: 10%; width: 200px; height: 200px; background: transparent; border-top: 10px solid #bbb; border-left: 10px solid #bbb; border-radius: 100% 0 0 0; transform-origin: bottom right; transition: transform 2s ease-in-out; z-index: 5; }
+        .f4-pivote { position: absolute; right: 20%; bottom: 10%; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid #ff073a; transform: translate(50%, 50%); z-index: 10; }
     </style>
 </head>
 <body ontouchstart="">
@@ -710,74 +709,55 @@
 <!-- ================= MAPA SECTOR 12 ================= -->
 <div id="pantalla-mapa-12" class="pantalla">
         <button class="btn-volver-top" onclick="irAPasillo()">[ ◄ VOLVER AL NEXO ]</button>
-        
-        <h1 style="color: #fff; font-size: 45px; text-shadow: 0 0 20px #ff073a; margin-bottom: 20px; font-family: 'Cinzel', serif;">SISTEMA CENTRAL DE ESCLUSAS</h1>
+        <h1 style="color: #fff; font-size: 40px; margin-top: 10px; margin-bottom: 10px; font-family: 'Cinzel', serif;">SISTEMA CENTRAL DE ESCLUSAS</h1>
 
-        <div class="consola-s12">
-            <div class="columna-retos">
-                <div class="panel-reto-s12 activo" id="s12-reto-1">
-                    <h3>FASE 1: MANOMETRÍA COMPUESTA</h3>
-                    <div class="texto-reto-s12">
-                        Un tanque de agua (&rho; = 1000 kg/m&sup3;) presurizado está conectado a un manómetro de tubo en U con mercurio (&rho; = 13600 kg/m&sup3;). La superficie del agua está <b>1.5 m</b> por encima del menisco izquierdo del mercurio. El menisco derecho (abierto a la atmósfera) está <b>0.25 m</b> por encima del izquierdo.<br><br>
-                        Calcula la presión manométrica del aire atrapado en el tanque en <b>kPa</b>. <i>(Asume g = 9.8 m/s&sup2;)</i>
+        <div class="s12-contenedor-maestro">
+            <div class="s12-visor">
+                
+                <div id="vis-fase-1" class="s12-capa-visual activa">
+                    <div class="f1-tanque"><div class="f1-agua" id="anim-f1-agua"></div></div>
+                    <div class="f1-tubo"></div>
+                    <div class="f1-u"></div>
+                    <div class="f1-mercurio" id="anim-f1-hg">
+                        <div class="f1-valvula" id="anim-f1-valvula"></div>
+                        <div class="f1-chorro" id="anim-f1-chorro"></div>
                     </div>
-                    <div style="display:flex; align-items:center;">
-                        <input type="number" step="0.01" id="input-s12-1" class="input-s12" placeholder="P (kPa)">
-                        <button class="btn-ui btn-s12" onclick="validarS12(1)">[ INYECTAR ]</button>
-                    </div>
-                    <div class="feed-s12" id="feed-s12-1"></div>
                 </div>
 
-                <div class="panel-reto-s12" id="s12-reto-2">
-                    <h3>FASE 2: EQUILIBRIO EN INTERFAZ</h3>
-                    <div class="texto-reto-s12">
-                        Un cubo sólido de <b>0.8 m</b> de arista flota en la interfaz entre agua (&rho; = 1000 kg/m&sup3;) y aceite (&rho; = 800 kg/m&sup3;). El cubo está sumergido <b>0.6 m</b> en el agua y <b>0.2 m</b> en el aceite.<br><br>
-                        Aplicando el Principio de Arquímedes, calcula la masa total del cubo en <b>kg</b>.
+                <div id="vis-fase-2" class="s12-capa-visual">
+                    <div class="f2-chorro-in"></div>
+                    <div class="f2-chorro-cae" id="anim-f2-cae"></div>
+                    <div class="f2-tanque">
+                        <div class="f2-agua-sube" id="anim-f2-agua"></div>
+                        <div class="f2-presa-muro" id="anim-f2-presa"></div>
                     </div>
-                    <div style="display:flex; align-items:center;">
-                        <input type="number" step="0.1" id="input-s12-2" class="input-s12" placeholder="M (kg)">
-                        <button class="btn-ui btn-s12" onclick="validarS12(2)">[ CALIBRAR ]</button>
-                    </div>
-                    <div class="feed-s12" id="feed-s12-2"></div>
+                </div>
+
+                <div id="vis-fase-3" class="s12-capa-visual">
+                    <div class="f3-agua-tsunami" id="anim-f3-tsunami"></div>
+                    <div class="f3-compuerta" id="anim-f3-compuerta"></div>
+                    <div class="f3-tope"></div>
+                </div>
+
+                <div id="vis-fase-4" class="s12-capa-visual">
+                    <div class="f4-agua-rio" id="anim-f4-rio"></div>
+                    <div class="f4-radial" id="anim-f4-radial"></div>
+                    <div class="f4-pivote"></div>
                 </div>
             </div>
 
-            <div class="zona-candado-s12">
-                <div class="titulo-candado">BLOQUEO DE<br>EMERGENCIA</div>
-                <div class="displays-candado">
-                    <div class="digito-display" id="dig-s12-1">-</div>
-                    <div class="digito-display" id="dig-s12-2">-</div>
-                    <div class="digito-display" id="dig-s12-3">-</div>
-                    <div class="digito-display" id="dig-s12-4">-</div>
+            <div class="s12-hud">
+                <div class="s12-hud-texto">
+                    <h2 class="s12-titulo-fase" id="txt-s12-titulo">FASE 1: MANOMETRÍA</h2>
+                    <div id="txt-s12-desc">
+                        Un tanque de agua está conectado a un manómetro en U con mercurio (ρ = 13600 kg/m³). La superficie del agua está <b>1.5 m</b> por encima del menisco izquierdo. El menisco derecho está <b>0.25 m</b> por encima del izquierdo.<br><br>
+                        Calcula la presión manométrica en el tanque en <b>kPa</b> para desbloquear la purga inferior.
+                    </div>
                 </div>
-                <div id="status-s12" style="margin-top: 30px; font-size: 22px; color: #ff073a; font-weight: bold; text-shadow: 0 0 10px #ff073a;">SISTEMA COMPROMETIDO</div>
-            </div>
-
-            <div class="columna-retos">
-                <div class="panel-reto-s12" id="s12-reto-3">
-                    <h3>FASE 3: SUPERFICIE INCLINADA</h3>
-                    <div class="texto-reto-s12">
-                        Una compuerta rectangular inclinada <b>30&deg;</b> respecto a la horizontal retiene agua. Tiene <b>4 m</b> de largo inclinado y <b>3 m</b> de ancho. Pivota en su borde superior (ubicado en la superficie del agua).<br><br>
-                        Calcula la fuerza de reacción en el tope inferior en <b>kiloNewtons (kN)</b>. <i>(g = 9.8 m/s&sup2;)</i>
-                    </div>
-                    <div style="display:flex; align-items:center;">
-                        <input type="number" step="0.1" id="input-s12-3" class="input-s12" placeholder="R (kN)">
-                        <button class="btn-ui btn-s12" onclick="validarS12(3)">[ VERIFICAR ]</button>
-                    </div>
-                    <div class="feed-s12" id="feed-s12-3"></div>
-                </div>
-
-                <div class="panel-reto-s12" id="s12-reto-4">
-                    <h3>FASE 4: COMPUERTA RADIAL</h3>
-                    <div class="texto-reto-s12">
-                        Una compuerta cilíndrica (cuarto de círculo) de radio <b>R = 2 m</b> y ancho <b>3 m</b> retiene agua. Su pivote coincide con la superficie libre.<br><br>
-                        Halla la magnitud de la fuerza <b>RESULTANTE</b> total (combinación de componente horizontal y vertical) del agua sobre la compuerta en <b>kN</b>. <i>(g = 9.8 m/s&sup2;, &pi; = 3.1416)</i>
-                    </div>
-                    <div style="display:flex; align-items:center;">
-                        <input type="number" step="0.1" id="input-s12-4" class="input-s12" placeholder="Fr (kN)">
-                        <button class="btn-ui btn-s12" onclick="validarS12(4)">[ ASEGURAR ]</button>
-                    </div>
-                    <div class="feed-s12" id="feed-s12-4"></div>
+                <div class="s12-hud-controles">
+                    <input type="number" step="0.01" id="input-s12-global" placeholder="Valor" style="width: 200px; font-size: 30px; margin-bottom: 20px;">
+                    <button class="btn-ui" id="btn-s12-global" onclick="validarCinematicaS12()" style="font-size: 22px;">[ EJECUTAR ACCIÓN ]</button>
+                    <div id="feed-s12-global" style="margin-top: 15px; font-size: 20px; font-weight: bold; height: 25px;"></div>
                 </div>
             </div>
         </div>
@@ -2736,93 +2716,146 @@ function tirarRuletaC() {
                 hotspot.appendChild(btnTrampa);
             }
         }, 1500);
-        // ================= LÓGICA SECTOR 12 (NIVEL UNIVERSITARIO) =================
-        function validarS12(fase) {
-            let input = document.getElementById(`input-s12-${fase}`);
-            let feed = document.getElementById(`feed-s12-${fase}`);
-            let resUsuario = parseFloat(input.value.replace(",", "."));
+// ================= LÓGICA SECTOR 12 (CINEMÁTICAS) =================
+        let s12FaseActual = 1;
+        let s12Bloqueado = false; // Evita clics dobles durante las animaciones
+
+        // Diccionario con las 4 fases
+        const baseDatosS12 = {
+            1: {
+                solucion: 18.62,
+                tolerancia: 0.2,
+                siguienteT: "FASE 2: CONTINUIDAD Y LLENADO",
+                siguienteD: "La válvula se ha abierto y el agua fluye hacia el tanque de retención principal rectangular (Base = 2m, Ancho = 2m).<br><br>El caudal de entrada se ha estabilizado en <b>Q = 0.12 m³/s</b>. Calcula la velocidad a la que sube el nivel del agua en <b>mm/s</b>."
+            },
+            2: {
+                solucion: 30, // 0.12 / 4 = 0.03 m/s = 30 mm/s
+                tolerancia: 0.5,
+                siguienteT: "FASE 3: FUERZAS SOBRE SUPERFICIES",
+                siguienteD: "El tanque de retención actúa como una presa. Al abrirse, el agua inunda el canal seco hasta una profundidad de <b>4 m</b>, chocando contra una compuerta rectangular inclinada <b>30°</b> respecto a la horizontal. Longitud inclinada = 4m, Ancho = 3m. Pivote en la superficie libre.<br><br>Calcula la fuerza de reacción en el tope inferior en <b>kN</b>."
+            },
+            3: {
+                solucion: 78.4,
+                tolerancia: 0.2,
+                siguienteT: "FASE 4: COMPUERTA RADIAL FINAL",
+                siguienteD: "La compuerta inclinada ha cedido. El flujo llega al sello final del Sector 12: Una compuerta cilíndrica (cuarto de círculo) de radio <b>R = 2m</b> y ancho <b>3m</b>.<br><br>Halla la magnitud de la fuerza <b>RESULTANTE</b> total (combinación de componente horizontal y vertical) del agua sobre la compuerta en <b>kN</b>."
+            },
+            4: {
+                solucion: 109.5,
+                tolerancia: 0.2,
+                siguienteT: "", siguienteD: ""
+            }
+        };
+
+        function validarCinematicaS12() {
+            if (s12Bloqueado) return;
+            
+            let inputUI = document.getElementById("input-s12-global");
+            let feedUI = document.getElementById("feed-s12-global");
+            let resUsuario = parseFloat(inputUI.value.replace(",", "."));
 
             if (isNaN(resUsuario)) return;
 
-            // DICCIONARIO DE RESPUESTAS: [Valor Calculado, Dígito para el Candado]
-            // Fase 1: P = (13600*9.8*0.25) - (1000*9.8*1.5) = 33320 - 14700 = 18620 Pa = 18.62 kPa
-            // Fase 2: Masa = (1000*0.8*0.8*0.6) + (800*0.8*0.8*0.2) = 384 + 102.4 = 486.4 kg
-            // Fase 3: F_total = 117.6 kN. y_cp = 2/3 * 4 = 2.66m. Momentos: 117.6 * (2/3) = 78.4 kN
-            // Fase 4: Fh = 58.8 kN. Fv = 92.36 kN. Fr = sqrt(58.8^2 + 92.36^2) = 109.5 kN
-            const respuestasS12 = {
-                1: { valor: 18.62, digitoCandado: 1 },
-                2: { valor: 486.4, digitoCandado: 3 },
-                3: { valor: 78.4,  digitoCandado: 5 },
-                4: { valor: 109.5, digitoCandado: 9 }
-            };
+            let objFase = baseDatosS12[s12FaseActual];
 
-            let valorCorrecto = respuestasS12[fase].valor;
-            let digitoGiro = respuestasS12[fase].digitoCandado;
-            let tolerancia = 0.2; // Permite un leve margen de error por redondeos
+            if (Math.abs(resUsuario - objFase.solucion) <= objFase.tolerancia) {
+                s12Bloqueado = true;
+                feedUI.style.color = "#39ff14";
+                feedUI.innerText = "✓ PARÁMETRO ACEPTADO. EJECUTANDO...";
+                inputUI.disabled = true;
 
-            if (Math.abs(resUsuario - valorCorrecto) <= tolerancia) {
-                // Éxito: Desactivar UI de esta fase
-                input.disabled = true;
-                feed.style.color = "#39ff14";
-                feed.innerText = "✓ CÁLCULO VERIFICADO. CODIFICANDO...";
-                document.getElementById(`s12-reto-${fase}`).classList.remove('activo');
-                document.getElementById(`s12-reto-${fase}`).classList.add('completado');
-
-                // Animar el dígito del candado (Gira hasta el dígito secreto 1,3,5 o 9)
-                animarDigitoS12(fase, digitoGiro, () => {
-                    if (fase < 4) {
-                        document.getElementById(`s12-reto-${fase + 1}`).classList.add('activo');
-                    } else {
-                        victoriaSector12();
-                    }
-                });
+                // Disparar animación visual correspondiente
+                dispararAnimacionS12(s12FaseActual);
 
             } else {
-                registrarError(); // Penamos en el contador global
-                feed.style.color = "#ff073a";
-                feed.innerText = "✗ CÁLCULO INCORRECTO. REVISA VARIABLES.";
-                setTimeout(() => { feed.innerText = ""; input.value = ""; }, 2000);
+                registrarError();
+                feedUI.style.color = "#ff073a";
+                feedUI.innerText = "✗ CÁLCULO INCORRECTO. FALLO DE SISTEMA.";
+                setTimeout(() => { feedUI.innerText = ""; inputUI.value = ""; }, 2000);
             }
         }
 
-        function animarDigitoS12(indexDígito, target, callback) {
-            let display = document.getElementById(`dig-s12-${indexDígito}`);
-            display.classList.add('animando');
-            let numActual = 0;
-            let vueltas = 0;
-            let totalVueltas = 15; // Número de giros "falsos" antes de detenerse
+        function dispararAnimacionS12(fase) {
+            if (fase === 1) {
+                // FASE 1: La válvula se pone verde, el mercurio se vacía, el chorro sale.
+                document.getElementById('anim-f1-valvula').style.background = "#39ff14";
+                document.getElementById('anim-f1-valvula').style.borderColor = "#39ff14";
+                setTimeout(() => {
+                    document.getElementById('anim-f1-hg').style.borderBottomWidth = "0px"; // Simula el vacío
+                    document.getElementById('anim-f1-agua').style.height = "20%"; // Baja el nivel del tanque
+                    document.getElementById('anim-f1-chorro').style.width = "200px"; // Sale el chorro
+                }, 500);
 
-            let intervalo = setInterval(() => {
-                numActual = (numActual + 1) % 10;
-                display.innerText = numActual;
-                vueltas++;
+                setTimeout(() => avanzarCapaS12(), 3500);
+            } 
+            else if (fase === 2) {
+                // FASE 2: Cae el agua y llena el tanque
+                document.getElementById('anim-f2-cae').style.height = "100%";
+                setTimeout(() => {
+                    document.getElementById('anim-f2-agua').style.height = "100%";
+                }, 1000);
 
-                if (vueltas >= totalVueltas && numActual === target) {
-                    clearInterval(intervalo);
-                    display.innerText = target;
-                    display.classList.remove('animando');
-                    display.classList.add('fijo');
-                    if(callback) callback();
-                }
-            }, 80);
+                setTimeout(() => avanzarCapaS12(), 4500);
+            }
+            else if (fase === 3) {
+                // FASE 3: El muro rojo cae, el agua sale disparada hacia la compuerta inclinada, que rota
+                document.getElementById('anim-f3-tsunami').style.width = "60%"; // Inunda hasta chocar
+                setTimeout(() => {
+                    document.getElementById('anim-f3-compuerta').style.transform = "rotate(0deg)"; // Se abre por la presión
+                    document.getElementById('anim-f3-tsunami').style.width = "100%"; // Sigue fluyendo
+                }, 1500);
+
+                setTimeout(() => avanzarCapaS12(), 3500);
+            }
+            else if (fase === 4) {
+                // FASE 4: El agua llega a la radial y esta se levanta
+                document.getElementById('anim-f4-rio').style.width = "80%";
+                setTimeout(() => {
+                    document.getElementById('anim-f4-radial').style.transform = "rotate(90deg)"; // Sube la radial
+                    document.getElementById('anim-f4-rio').style.width = "100%";
+                }, 1500);
+
+                setTimeout(() => victoriaSector12(), 3500);
+            }
+        }
+
+        function avanzarCapaS12() {
+            // Ocultar capa actual y mostrar la siguiente
+            document.getElementById(`vis-fase-${s12FaseActual}`).classList.remove('activa');
+            s12FaseActual++;
+            document.getElementById(`vis-fase-${s12FaseActual}`).classList.add('activa');
+
+            // Actualizar textos del HUD
+            let objFase = baseDatosS12[s12FaseActual];
+            document.getElementById('txt-s12-titulo').innerText = objFase.siguienteT;
+            document.getElementById('txt-s12-desc').innerHTML = objFase.siguienteD;
+            
+            // Resetear inputs
+            let inputUI = document.getElementById("input-s12-global");
+            inputUI.value = "";
+            inputUI.disabled = false;
+            document.getElementById("feed-s12-global").innerText = "";
+            s12Bloqueado = false;
+            
+            // Extra: Si es la Fase 2, auto-iniciar la caída de agua al entrar
+            if (s12FaseActual === 2) {
+                setTimeout(() => { document.getElementById('anim-f2-cae').style.height = "100%"; }, 500);
+            }
         }
 
         function victoriaSector12() {
-            let statusDiv = document.getElementById('status-s12');
-            statusDiv.style.color = "#39ff14";
-            statusDiv.style.textShadow = "0 0 20px #39ff14";
-            statusDiv.innerText = "SISTEMA ESTABILIZADO";
+            document.getElementById('txt-s12-titulo').innerText = "ESCLUSAS ASEGURADAS";
+            document.getElementById('txt-s12-titulo').style.color = "#39ff14";
+            document.getElementById('txt-s12-desc').innerHTML = "La instalación principal ha sido asegurada. Protocolo de estabilización finalizado con éxito.";
             
-            // Efecto visual a toda la consola
-            document.querySelector('.zona-candado-s12').style.borderColor = "#39ff14";
-            document.querySelector('.zona-candado-s12').style.boxShadow = "inset 0 0 50px rgba(57, 255, 20, 0.2), 0 0 40px rgba(57, 255, 20, 0.5)";
+            document.querySelector('.s12-visor').style.borderColor = "#39ff14";
+            document.querySelector('.s12-hud').style.boxShadow = "inset 0 0 50px rgba(57, 255, 20, 0.2)";
 
-            // Animación final del Escape Room
             setTimeout(() => {
-                mostrarAlerta("¡CONTENCIÓN EXITOSA!\n\nHabéis salvado el Sector 12 y asegurado la instalación principal.", "ESCLUSAS ASEGURADAS");
+                mostrarAlerta("¡CONTENCIÓN EXITOSA!\n\nHabéis salvado el Sector 12 usando vuestros conocimientos.", "VICTORIA");
                 setTimeout(() => {
                     document.getElementById('modal-alerta').style.display = 'none';
-                    mostrarVictoria(); // Carga la pantalla final de tiempos
+                    mostrarVictoria(); 
                 }, 4000);
             }, 1500);
         }
