@@ -2751,54 +2751,7 @@ function tirarRuletaC() {
         }
     </script>
     <script>
-        // Esperamos un segundo para asegurar que el mapa está cargado
-        setTimeout(() => {
-            for(let i=1; i<=4; i++) {
-                let hotspot = document.getElementById(`hotspot-${i}`);
-                if(!hotspot) continue;
 
-                // 1. Crear el botón rojo "trampa"
-                let btnTrampa = document.createElement('div');
-                btnTrampa.style.position = 'absolute';
-                btnTrampa.style.width = '20px';
-                btnTrampa.style.height = '20px';
-                btnTrampa.style.background = '#ff073a';
-                btnTrampa.style.borderRadius = '50%';
-                btnTrampa.style.cursor = 'pointer';
-                btnTrampa.style.zIndex = '1000';
-                btnTrampa.style.boxShadow = '0 0 10px #000, 0 0 10px #ff073a';
-                btnTrampa.style.border = '2px solid white';
-                btnTrampa.title = `[ MODO DEMO ] Forzar victoria M${i}`;
-                
-                // 2. Colocarlo en la esquina superior derecha del hotspot
-                btnTrampa.style.top = '-10px';
-                btnTrampa.style.right = '-10px';
-
-                // 3. Lógica al hacer clic en el círculo rojo
-                btnTrampa.onclick = (e) => {
-                    e.stopPropagation(); // Evita que se abra la habitación
-                    
-                    // Rellenamos el progreso del módulo con 'true'
-                    progreso[i] = [true, true, true, true]; 
-                    
-                    // Forzamos el guardado y la actualización visual
-                    guardarEstado();
-                    actualizarMapas();
-                    
-                    // Si completamos M3 (o forzamos M3), nos aseguramos de que M4 sea clicable
-                    if(i === 3) {
-                        let h4 = document.getElementById('hotspot-4');
-                        if(h4) {
-                            h4.style.setProperty('display', 'block', 'important');
-                            h4.style.setProperty('pointer-events', 'auto', 'important');
-                        }
-                    }
-                };
-
-                // 4. Añadir el botón al mapa
-                hotspot.appendChild(btnTrampa);
-            }
-        }, 1500);
 // ================= LÓGICA SECTOR 12 (CINEMÁTICAS) =================
         let s12FaseActual = 1;
         let s12Bloqueado = false; // Evita clics dobles durante las animaciones
@@ -2988,40 +2941,73 @@ else if (fase === 4) {
             document.getElementById("feed-s12-global").innerText = "";
             s12Bloqueado = false;
         }
-// =========================================================================
-        // ================= MODO DEMO / BOTONES TRAMPA UNIFICADOS =================
-        // =========================================================================
+        // ======================= PANEL MODO DIOS (FLOTANTE) ======================
+
         setTimeout(() => {
+            // Borra cualquier panel anterior por seguridad al recargar
+            let viejo = document.getElementById('panel-modo-dios');
+            if(viejo) viejo.remove();
+
+            let panelDios = document.createElement('div');
+            panelDios.id = 'panel-modo-dios';
+            panelDios.style.position = 'fixed';
+            panelDios.style.bottom = '20px';
+            panelDios.style.left = '20px'; // Fijo abajo a la izquierda, donde no molesta
+            panelDios.style.background = 'rgba(0, 10, 20, 0.95)';
+            panelDios.style.border = '2px solid #ff073a';
+            panelDios.style.padding = '15px';
+            panelDios.style.borderRadius = '10px';
+            panelDios.style.zIndex = '9999999'; // Absolutamente por encima de todo
+            panelDios.style.display = 'flex';
+            panelDios.style.flexDirection = 'column';
+            panelDios.style.gap = '10px';
+            panelDios.style.boxShadow = '0 0 20px rgba(255, 7, 58, 0.5)';
             
-            // --- 1. BOTONES TRAMPA SECTOR 11 (MÓDULOS 1 AL 4 EN EL MAPA) ---
-            for(let i=1; i<=4; i++) {
-                let hotspot = document.getElementById(`hotspot-${i}`);
-                if(!hotspot) continue;
+            let titulo = document.createElement('div');
+            titulo.innerHTML = '<span style="color:#ff073a; font-weight:bold; font-size:18px; letter-spacing:2px; font-family:\'Montserrat\', sans-serif;">[ MODO DIOS ]</span>';
+            panelDios.appendChild(titulo);
 
-                let btnTrampa = document.createElement('div');
-                btnTrampa.style.position = 'absolute';
-                btnTrampa.style.width = '25px'; // Un poco más grandes para verlos bien
-                btnTrampa.style.height = '25px';
-                btnTrampa.style.background = '#ff073a';
-                btnTrampa.style.borderRadius = '50%';
-                btnTrampa.style.cursor = 'pointer';
-                btnTrampa.style.zIndex = '999999'; // Forzamos que esté por encima de todo
-                btnTrampa.style.boxShadow = '0 0 15px #000, 0 0 15px #ff073a';
-                btnTrampa.style.border = '2px solid white';
-                btnTrampa.title = `[ MODO DEMO ] Forzar victoria M${i}`;
+            let filaBotones = document.createElement('div');
+            filaBotones.style.display = 'flex';
+            filaBotones.style.gap = '8px';
+            filaBotones.style.flexWrap = 'wrap';
+            filaBotones.style.maxWidth = '300px';
+
+            // Generador de botones del panel
+            const crearBtn = (texto, accion) => {
+                let btn = document.createElement('button');
+                btn.innerText = texto;
+                btn.style.background = '#222';
+                btn.style.color = '#fff';
+                btn.style.border = '1px solid #ff073a';
+                btn.style.borderRadius = '5px';
+                btn.style.padding = '8px 12px';
+                btn.style.cursor = 'pointer';
+                btn.style.fontWeight = 'bold';
+                btn.style.fontFamily = "'Montserrat', sans-serif";
                 
-                // Los metemos hacia DENTRO del recuadro para que el mapa no los recorte
-                btnTrampa.style.top = '10px';
-                btnTrampa.style.right = '10px';
+                btn.onclick = () => {
+                    accion();
+                    // Efecto visual al hacer clic (parpadea en verde)
+                    let originalBg = btn.style.background;
+                    btn.style.background = '#39ff14';
+                    btn.style.color = '#000';
+                    setTimeout(() => {
+                        btn.style.background = originalBg;
+                        btn.style.color = '#fff';
+                    }, 400);
+                };
+                return btn;
+            };
 
-                btnTrampa.onclick = (e) => {
-                    e.stopPropagation(); // Evita que se abra la habitación
-                    
-                    progreso[i] = [true, true, true, true]; 
+            // Botones para autocompletar M1, M2, M3 y M4
+            for(let i=1; i<=4; i++) {
+                filaBotones.appendChild(crearBtn(`M${i}`, () => {
+                    progreso[i] = [true, true, true, true];
                     guardarEstado();
                     actualizarMapas();
                     
-                    // Si completamos M3 (o forzamos M3), nos aseguramos de que M4 sea clicable
+                    // Aseguramos que M4 se haga clicable si forzamos M3
                     if(i === 3) {
                         let h4 = document.getElementById('hotspot-4');
                         if(h4) {
@@ -3029,71 +3015,30 @@ else if (fase === 4) {
                             h4.style.setProperty('pointer-events', 'auto', 'important');
                         }
                     }
-                };
-
-                hotspot.appendChild(btnTrampa);
+                }));
             }
 
-            // --- 2. BOTÓN TRAMPA SECTOR 12 (CINEMÁTICAS) ---
-            let controlesS12 = document.querySelector('.s12-hud-controles');
-            if(controlesS12) {
-                let btnTrampaS12 = document.createElement('div');
-                btnTrampaS12.style.position = 'absolute';
-                btnTrampaS12.style.width = '25px';
-                btnTrampaS12.style.height = '25px';
-                btnTrampaS12.style.background = '#ff073a';
-                btnTrampaS12.style.borderRadius = '50%';
-                btnTrampaS12.style.cursor = 'pointer';
-                btnTrampaS12.style.zIndex = '999999';
-                
-                // Lo colocamos fijo arriba a la derecha de la caja de controles
-                btnTrampaS12.style.top = '10px';
-                btnTrampaS12.style.right = '10px';
-                
-                btnTrampaS12.style.boxShadow = '0 0 15px #000, 0 0 15px #ff073a';
-                btnTrampaS12.style.border = '2px solid white';
-                btnTrampaS12.title = "[ MODO DEMO ] Autocompletar Fase S12";
-                
-                btnTrampaS12.onclick = () => {
-                    if (s12Bloqueado) return; // Si hay una cinemática en curso, no hacemos nada
-                    document.getElementById("input-s12-global").value = baseDatosS12[s12FaseActual].solucion;
+            // Botón para avanzar cada cinemática del Sector 12
+            filaBotones.appendChild(crearBtn('Fase S12', () => {
+                let inputS12 = document.getElementById("input-s12-global");
+                if (inputS12 && !s12Bloqueado) {
+                    inputS12.value = baseDatosS12[s12FaseActual].solucion;
                     validarCinematicaS12();
-                };
-                
-                controlesS12.style.position = 'relative'; 
-                controlesS12.appendChild(btnTrampaS12);
-            }
+                }
+            }));
 
-            // --- 3. BOTÓN TRAMPA NÚCLEO (PRUEBA FINAL) ---
-            let panelNucleo = document.getElementById('panel-nucleo-final');
-            if(panelNucleo) {
-                let btnTrampaN = document.createElement('div');
-                btnTrampaN.style.position = 'absolute';
-                btnTrampaN.style.width = '25px';
-                btnTrampaN.style.height = '25px';
-                btnTrampaN.style.background = '#ff073a';
-                btnTrampaN.style.borderRadius = '50%';
-                btnTrampaN.style.cursor = 'pointer';
-                btnTrampaN.style.zIndex = '999999';
-                
-                // Lo colocamos fijo arriba a la derecha del panel
-                btnTrampaN.style.top = '15px';
-                btnTrampaN.style.right = '15px';
-                
-                btnTrampaN.style.boxShadow = '0 0 15px #000, 0 0 15px #ff073a';
-                btnTrampaN.style.border = '2px solid white';
-                btnTrampaN.title = "[ MODO DEMO ] Autocompletar Núcleo";
-                
-                btnTrampaN.onclick = () => {
-                    document.getElementById("input-nucleo").value = 312.5;
+            // Botón para el Núcleo
+            filaBotones.appendChild(crearBtn('NÚCLEO', () => {
+                let inputN = document.getElementById("input-nucleo");
+                if(inputN) {
+                    inputN.value = 312.5;
                     validarNucleo();
-                };
-                
-                panelNucleo.style.position = 'relative';
-                panelNucleo.appendChild(btnTrampaN);
-            }
+                }
+            }));
 
-        }, 2000); // Se ejecuta a los 2 segundos para asegurar que el HTML se ha cargado
+            panelDios.appendChild(filaBotones);
+            document.body.appendChild(panelDios);
+        }, 2000);
     </script>
 </body>
 </html>
