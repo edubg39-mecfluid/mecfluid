@@ -1882,16 +1882,11 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
                 // Truco matemático: ¿De qué número partimos para que al sumarle las vueltas llegue al target?
                 let numeroInicial = (targetReal - numVueltas + 20) % 10; 
 
-                if (progreso[i] && progreso[i].every(x => x === true)) {
-                    // Módulo superado
-                    let actualStr = ruleta.innerText;
-                    if (actualStr === "-" || actualStr === numeroInicial.toString()) {
-                        animarRuletaCandado(i, numeroInicial, targetReal, numVueltas);}
-                    else if (actualStr === targetReal.toString()) {
-                        ruleta.classList.add('resuelta');
-                        verificarCandadoSilencioso();
-                    }
-                } 
+            if (progreso[i] && progreso[i].every(x => x === true)) {
+                ruleta.innerText = targetReal;
+                ruleta.classList.add('resuelta');
+                verificarCandadoAnimado(); 
+            }
                 else {
                     // Módulo aún bloqueado: mostrar número falso (calculado)
                     ruleta.innerText = numeroInicial;
@@ -2725,34 +2720,32 @@ function intentarAbrir() {
             p.style.display = p.style.display === "none" ? "block" : "none";
         }
 
-        function completarModuloModoDios(mod) {
-            if (mod >= 1 && mod <= 4) {
-                // Forzar todos los sub-pasos del módulo a "true"
-                progreso[mod] = [true, true, true, true];
-                guardarEstado();
-                
-                // Si estamos en la pantalla del mapa, actualizar candado y luces
-                if (document.getElementById('pantalla-mapa').classList.contains('activa')) {
-                    actualizarMapas();
-                }
-                mostrarAlerta(`MÓDULO ${mod} COMPLETADO FORZOSAMENTE.`, "MODO DIOS");
-                
-            } else if (mod === 12) {
-                // Desbloquear directamente la puerta del Núcleo Final
-                let pNucleo = document.getElementById('puerta-nucleo');
-                let sNucleo = document.getElementById('subtitulo-nucleo');
-                if(pNucleo && sNucleo) {
-                    pNucleo.classList.remove('bloqueada');
-                    pNucleo.classList.add('activa');
-                    sNucleo.innerHTML = "<span style='color:#39ff14;'>[ DESBLOQUEADO ]</span><br>PRUEBA FINAL";
-                }
-                mostrarAlerta("SECTOR 12 COMPLETADO FORZOSAMENTE.\nAcceso al Núcleo concedido.", "MODO DIOS");
-                
-            } else if (mod === 99) {
-                // Forzar la victoria del juego (Núcleo Central)
-                mostrarVictoria();
-            }
+function completarModuloModoDios(mod) {
+    if (mod >= 1 && mod <= 4) {
+        // Marcamos el módulo como completo
+        progreso[mod] = [true, true, true, true];
+        guardarEstado();
+        
+        // Si estamos en el mapa, actualizamos visualmente
+        if (document.getElementById('pantalla-mapa').classList.contains('activa')) {
+            actualizarMapas();
+            // Forzamos la comprobación del candado por si este era el último módulo
+            setTimeout(verificarCandadoAnimado, 500); 
         }
+        
+    } else if (mod === 12) {
+        // Desbloqueo forzado directo
+        progreso[1] = [true,true,true,true];
+        progreso[2] = [true,true,true,true];
+        progreso[3] = [true,true,true,true];
+        progreso[4] = [true,true,true,true];
+        actualizarMapas();
+        setTimeout(verificarCandadoAnimado, 100);
+        
+    } else if (mod === 99) {
+        mostrarVictoria();
+    }
+}
 
     </script>
 </body>
