@@ -488,15 +488,44 @@
         .f1-tubo-subida { position: absolute; left: 270px; /* 160 (izq de la U) + 140 (ancho de la U) - 30 (ancho tubo) */top: 110px; width: 30px; height: 100px; border-left: 6px solid #888; border-right: 6px solid #888; background: rgba(255, 255, 255, 0.05);box-sizing: border-box;}
         .f1-valvula { position: absolute; left: 215px; /* Centro de la U (160 + 140/2 = 230). Menos mitad de válvula (15) */top: 275px; width: 30px; height: 30px; background: #ff073a; border-radius: 50%; border: 4px solid #fff; z-index: 10; transition: 0.5s; box-shadow: 0 0 15px #ff073a; cursor: pointer;}
         .f1-chorro { position: absolute; left: 225px; top: 300px; width: 10px; height: 0px; background: #00ffff; transition: height 1s ease-in; box-shadow: 0 0 15px #00ffff; z-index: 5;}
-/* ================= FASE 2: ================= */
         
-        #anim-f2-cae-dinamico {position: absolute; left: 220px; top: -20px; width: 20px; height: 0px; z-index: 2; transition: height 1s ease-in; }
-        .chorro-agua {fill: #00ffff; stroke: none;animation: aguaCaeTurbulenta 0.8s infinite linear;}
-        @keyframes aguaCaeTurbulenta {
-            0% { transform: scaleY(1) translateY(0); }
-            33% { transform: scaleY(1.03) translateY(2px); }
-            66% { transform: scaleY(0.97) translateY(-2px); }
-            100% { transform: scaleY(1) translateY(0); }
+/* ================= FASE 2 NUEVA ================= */
+
+        .f2-tubo-bajada {
+            position: absolute;
+            left: 215px; 
+            top: 0; 
+            width: 20px;
+            height: 150px; 
+            background: linear-gradient(90deg, #333 0%, #777 50%, #333 100%); 
+            border-left: 2px solid #111;
+            border-right: 2px solid #111;
+            z-index: 2;
+        }
+
+        .f2-flujo-agua {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%;
+            height: 0px; 
+            background-color: #00ffff;
+            background-image: repeating-linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.4) 0px,
+                rgba(255, 255, 255, 0.4) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            background-size: 100% 40px;
+            animation: fluirAguaCae 0.3s linear infinite;
+            transition: height 0.8s ease-in; 
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        @keyframes fluirAguaCae {
+            from { background-position: 0 -40px; }
+            to { background-position: 0 0; }
         }
 
         .f2-tanque { position: absolute; left: 85px; top: 150px; width: 280px; height: 180px; border: 6px solid #888; border-top: none; border-radius: 0 0 5px 5px;background: rgba(0, 255, 255, 0.05);box-sizing: border-box;overflow: hidden;z-index: 1; }
@@ -726,7 +755,6 @@
         </div>
     </div>
 </div>
-<!-- ================= MAPA SECTOR 12 ================= -->
 <div id="pantalla-mapa-12" class="pantalla">
         <button class="btn-volver-top" onclick="irAPasillo()">[ ◄ VOLVER AL NEXO ]</button>
         <h1 style="color: #fff; font-size: 40px; margin-top: 10px; margin-bottom: 10px; font-family: 'Cinzel', serif;">SISTEMA CENTRAL DE ESCLUSAS</h1>
@@ -752,16 +780,10 @@
 <div id="vis-fase-2" class="s12-capa-visual">
     <div class="s12-canvas">
         
-        <svg id="anim-f2-cae-dinamico" width="20" height="180" viewBox="0 0 20 180" preserveAspectRatio="none">
-            <defs>
-                <filter id="liqFiltro">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
-                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="liq" />
-                </filter>
-            </defs>
-            
-            <path class="chorro-agua" d="M10,0 C12,50 8,100 12,150 L8,150 C12,100 8,50 10,0 Z" filter="url(#liqFiltro)" />
-        </svg>
+        <div class="f2-tubo-bajada">
+            <div class="f2-flujo-agua" id="anim-f2-cae-dinamico"></div>
+        </div>
+        
         <div class="f2-tanque">
             <div class="f2-techo-izq"></div>
             <div class="f2-techo-der"></div>
@@ -2853,52 +2875,37 @@ function tirarRuletaC() {
                     document.getElementById('anim-f4-rio').style.width = "100%";
                 }, 1500);
 
-                setTimeout(() => victoriaSector12(), 3500);
-            }
-        }
+                setTimeout(() => {
+                    mostrarAlerta("¡NÚCLEO CENTRAL ESTABILIZADO!\nTodos los sistemas operativos. Misión cumplida.", "ÉXITO TOTAL");
+                    setTimeout(() => {
+                        mostrarVictoria();
+                    }, 2500);
+                }, 3000);
+            }
+        }
 
-        function avanzarCapaS12() {
-            // Ocultar capa actual y mostrar la siguiente
-            document.getElementById(`vis-fase-${s12FaseActual}`).classList.remove('activa');
-            s12FaseActual++;
-            document.getElementById(`vis-fase-${s12FaseActual}`).classList.add('activa');
-
-            // Actualizar textos del HUD
-            let objFase = baseDatosS12[s12FaseActual];
-            document.getElementById('txt-s12-titulo').innerText = objFase.siguienteT;
-            document.getElementById('txt-s12-desc').innerHTML = objFase.siguienteD;
-            
-            // Resetear inputs
-            let inputUI = document.getElementById("input-s12-global");
-            inputUI.value = "";
-            inputUI.disabled = false;
-            document.getElementById("feed-s12-global").innerText = "";
-            s12Bloqueado = false;
-            
-            if (s12FaseActual === 2) {
-
-                setTimeout(() => { document.getElementById('anim-f2-cae').style.height = "180px"; }, 500);
- 
-                setTimeout(() => { document.getElementById('anim-f2-agua').style.height = "90%"; }, 1500); 
-            }
-        }
-
-        function victoriaSector12() {
-            document.getElementById('txt-s12-titulo').innerText = "ESCLUSAS ASEGURADAS";
-            document.getElementById('txt-s12-titulo').style.color = "#39ff14";
-            document.getElementById('txt-s12-desc').innerHTML = "La instalación principal ha sido asegurada. Protocolo de estabilización finalizado con éxito.";
-            
-            document.querySelector('.s12-visor').style.borderColor = "#39ff14";
-            document.querySelector('.s12-hud').style.boxShadow = "inset 0 0 50px rgba(57, 255, 20, 0.2)";
-
-            setTimeout(() => {
-                mostrarAlerta("¡CONTENCIÓN EXITOSA!\n\nHabéis salvado el Sector 12 usando vuestros conocimientos.", "VICTORIA");
-                setTimeout(() => {
-                    document.getElementById('modal-alerta').style.display = 'none';
-                    mostrarVictoria(); 
-                }, 4000);
-            }, 1500);
-        }
-    </script>
+        function avanzarCapaS12() {
+            document.getElementById(`vis-fase-${s12FaseActual}`).classList.remove('activa');
+            s12FaseActual++;
+            
+            if (document.getElementById(`vis-fase-${s12FaseActual}`)) {
+                document.getElementById(`vis-fase-${s12FaseActual}`).classList.add('activa');
+                document.getElementById("txt-s12-titulo").innerText = baseDatosS12[s12FaseActual].siguienteT;
+                document.getElementById("txt-s12-desc").innerHTML = baseDatosS12[s12FaseActual].siguienteD;
+                
+                // Detalle visual para arrancar el agua cayendo en la Fase 2
+                if (s12FaseActual === 2) {
+                    setTimeout(() => {
+                        document.getElementById('anim-f2-cae-dinamico').style.height = "150px";
+                    }, 200);
+                }
+            }
+            
+            document.getElementById("input-s12-global").value = "";
+            document.getElementById("input-s12-global").disabled = false;
+            document.getElementById("feed-s12-global").innerText = "";
+            s12Bloqueado = false;
+        }
+    </script>
 </body>
 </html>
