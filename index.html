@@ -471,18 +471,24 @@
         .s12-hud-controles { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .s12-titulo-fase { color: #00ffff; font-size: 28px; margin-top: 0; margin-bottom: 15px; letter-spacing: 2px; }
         
-/* ELEMENTOS CINEMÁTICOS FASE 1: Manómetro (REDESEÑADO) */
-        .f1-tanque { position: absolute; left: 25%; top: 10%; width: 160px; height: 180px; border: 6px solid #888; border-top: 10px solid #555; background: rgba(0, 255, 255, 0.1); border-radius: 10px; }
-        .f1-agua { position: absolute; bottom: 0; left: 0; width: 100%; height: 75%; background: rgba(0, 255, 255, 0.8); box-shadow: inset 0 0 20px #00ffff; transition: height 2s; }
-        .f1-tubo-bajada { position: absolute; left: calc(25% + 130px); top: calc(10% + 180px); width: 20px; height: 40px; background: rgba(0, 255, 255, 0.8); border-left: 4px solid #555; border-right: 4px solid #555; z-index: 1;}
-        .f1-u { position: absolute; left: calc(25% + 130px); top: calc(10% + 220px); width: 120px; height: 70px; border: 20px solid rgba(255, 255, 255, 0.1); border-top: none; border-radius: 0 0 60px 60px; box-sizing: border-box; }
-        .f1-mercurio { position: absolute; left: calc(25% + 130px); top: calc(10% + 220px); width: 120px; height: 70px; border: 20px solid #ff073a; border-top: none; border-radius: 0 0 60px 60px; box-sizing: border-box; box-shadow: inset 0 0 15px #ff073a; transition: 1.5s; z-index: 2; }
-        .f1-tubo-subida { position: absolute; left: calc(25% + 230px); top: calc(10% + 150px); width: 20px; height: 70px; border-left: 4px solid #555; border-right: 4px solid #555; background: rgba(255, 255, 255, 0.05); }
-        .f1-valvula { position: absolute; left: calc(25% + 175px); top: calc(10% + 275px); width: 30px; height: 30px; background: #ff073a; border-radius: 50%; border: 4px solid #fff; z-index: 10; transition: 0.5s; box-shadow: 0 0 15px #ff073a; }
-        .f1-chorro { position: absolute; left: calc(25% + 185px); top: calc(10% + 300px); width: 10px; height: 0px; background: #00ffff; transition: height 1s ease-in; box-shadow: 0 0 15px #00ffff; z-index: 5;}
+/* ================= SECTOR 12: FASE 1 REDISEÑADA ================= */
 
-        /* ELEMENTOS CINEMÁTICOS FASE 2: Llenado (ALINEADO CON FASE 1) */
-        .f2-chorro-cae { position: absolute; left: calc(25% + 185px); top: 0; width: 10px; height: 0%; background: #00ffff; transition: height 1s; box-shadow: 0 0 15px #00ffff; z-index: 2; }
+        .s12-canvas {position: relative;width: 450px; height: 380px;margin: 0 auto;margin-top: 5%;}
+        .f1-tanque { position: absolute; left: 50px; top: 20px; width: 140px; height: 140px; border: 6px solid #888; border-top: none; border-radius: 0 0 5px 5px;background: rgba(0, 255, 255, 0.05);box-sizing: border-box;overflow: hidden;}
+        .f1-agua { position: absolute; bottom: 0; left: 0; width: 100%; height: 75%; background: linear-gradient(180deg, rgba(0, 255, 255, 0.8), rgba(0, 150, 255, 0.9)); box-shadow: inset 0 0 15px rgba(0,255,255,0.8);transition: height 2s ease-in-out; }
+        .f1-agua::before {content: "";position: absolute; top: -10px; left: -50%;width: 200%; height: 20px;background: rgba(0, 255, 255, 0.6);border-radius: 50%;animation: olaDinamica 2.5s infinite alternate ease-in-out;}
+        @keyframes olaDinamica {0% { transform: translateX(0) scaleY(1); }
+                                100% { transform: translateX(10%) scaleY(1.8); }
+        }
+        .f1-tubo-bajada { position: absolute; left: 160px; top: 154px; width: 30px; height: 60px; border-left: 6px solid #888; border-right: 6px solid #888; background: rgba(0, 255, 255, 0.8); box-sizing: border-box;z-index: 2;}
+        .f1-tubo-bajada::after {content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);background-size: 100% 200%;animation: flujoBajando 1s infinite linear;}
+        @keyframes flujoBajando { 0% { background-position: 0 -100%; } 100% { background-position: 0 100%; } }
+        .f1-u-base { position: absolute; left: 160px; top: 210px; width: 140px; height: 80px; border: 30px solid rgba(255, 255, 255, 0.1); /* 30px coincide con el ancho de los tubos */border-top: none; border-radius: 0 0 70px 70px; box-sizing: border-box;}
+        .f1-mercurio { position: absolute; left: 160px; top: 210px; width: 140px; height: 80px; border: 30px solid #ff073a; border-top: none; border-radius: 0 0 70px 70px; box-sizing: border-box; box-shadow: inset 0 0 15px rgba(255, 7, 58, 0.8), 0 0 10px rgba(255, 7, 58, 0.5); transition: opacity 1.5s; z-index: 3;}
+        .f1-tubo-subida { position: absolute; left: 270px; /* 160 (izq de la U) + 140 (ancho de la U) - 30 (ancho tubo) */top: 110px; width: 30px; height: 100px; border-left: 6px solid #888; border-right: 6px solid #888; background: rgba(255, 255, 255, 0.05);box-sizing: border-box;}
+        .f1-valvula { position: absolute; left: 215px; /* Centro de la U (160 + 140/2 = 230). Menos mitad de válvula (15) */top: 275px; width: 30px; height: 30px; background: #ff073a; border-radius: 50%; border: 4px solid #fff; z-index: 10; transition: 0.5s; box-shadow: 0 0 15px #ff073a; cursor: pointer;}
+        .f1-chorro { position: absolute; left: 225px; top: 300px; width: 10px; height: 0px; background: #00ffff; transition: height 1s ease-in; box-shadow: 0 0 15px #00ffff; z-index: 5;}
+        .f2-chorro-cae { position: absolute; left: calc(50% - 5px);top: 0; width: 10px; height: 0%; background: #00ffff; transition: height 1s; box-shadow: 0 0 15px #00ffff; z-index: 2; }
         .f2-tanque { position: absolute; left: calc(25% + 50px); bottom: 10%; width: 280px; height: 160px; border: 8px solid #555; border-top: none; z-index: 1; }
         .f2-agua-sube { position: absolute; bottom: 0; left: 0; width: 100%; height: 5%; background: rgba(0, 255, 255, 0.6); transition: height 3s linear; }
         .f2-presa-muro { position: absolute; right: -8px; bottom: 0; width: 8px; height: 100%; background: #ff073a; transition: 1s; transform-origin: bottom; }
@@ -714,11 +720,16 @@
         <div class="s12-contenedor-maestro">
             <div class="s12-visor">
                 
-                <div id="vis-fase-1" class="s12-capa-visual activa">
-                    <div class="f1-tanque"><div class="f1-agua" id="anim-f1-agua"></div></div>
-                    <div class="f1-tubo"></div>
-                    <div class="f1-u"></div>
-                    <div class="f1-mercurio" id="anim-f1-hg">
+        <div id="vis-fase-1" class="s12-capa-visual activa">
+                    <div class="s12-canvas">
+                        <div class="f1-tanque">
+                            <div class="f1-agua" id="anim-f1-agua"></div>
+                        </div>
+                        <div class="f1-tubo-bajada"></div>
+                        <div class="f1-tubo-subida"></div>
+                        <div class="f1-u-base"></div>
+                        <div class="f1-mercurio" id="anim-f1-hg"></div>
+                        
                         <div class="f1-valvula" id="anim-f1-valvula"></div>
                         <div class="f1-chorro" id="anim-f1-chorro"></div>
                     </div>
