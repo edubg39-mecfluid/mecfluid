@@ -703,11 +703,11 @@
                 <div class="titulo-puerta">SECTOR 12</div>
                 <div class="subtitulo-puerta" id="subtitulo-s12">[ BLOQUEADO ]<br>PRUEBAS UNIDAD 2</div>
             </div>
-            <div class="puerta-box bloqueada" onclick="mostrarAlerta('ACCESO DENEGADO: Debes superar los Sectores anteriores para acceder al Núcleo Central.', 'NÚCLEO BLOQUEADO')">
-                <div class="icono-puerta" style="color:#ff073a;">☢️</div>
-                <div class="titulo-puerta">NÚCLEO</div>
-                <div class="subtitulo-puerta">[ BLOQUEADO ]<br>PRUEBA FINAL</div>
-            </div>
+        <div class="puerta-box bloqueada" id="puerta-nucleo" onclick="intentarAbrirNucleo()">
+            <div class="icono-puerta" style="color:#ff073a; font-size: 80px; margin-bottom: 5px; z-index: 2;">☢️</div>
+            <div class="titulo-puerta">NÚCLEO</div>
+            <div class="subtitulo-puerta" id="subtitulo-nucleo">[ BLOQUEADO ]<br>PRUEBA FINAL</div>
+        </div>
         </div>
     </div>
 
@@ -847,7 +847,29 @@
             </div>
         </div>
     </div>
-
+<div id="pantalla-nucleo" class="pantalla" style="background: radial-gradient(circle, #3a0000, #000); justify-content: center; align-items: center;">
+    <div class="panel-azul" id="panel-nucleo-final" style="border-color: #ff073a; box-shadow: 0 0 50px #ff073a; width: 850px; transition: 1s;">
+        <h1 style="color: #ff073a; text-shadow: 0 0 20px #ff073a; font-size: 45px; margin-top:0; font-family: 'Cinzel', serif;">MELTDOWN INMINENTE</h1>
+        <p style="color: #fff; font-size: 24px; text-align: left; line-height: 1.4;">
+            El reactor principal ha perdido su sistema de enfriamiento primario. Para evitar el colapso de la instalación, debes activar la <b>BOMBA DE EMERGENCIA</b> calculando la potencia exacta requerida.
+        </p>
+        <div style="background: rgba(0,0,0,0.6); border: 2px dashed #ff073a; padding: 20px; text-align: left; margin-bottom: 20px;">
+            <span style="color:#00ffff; font-size: 22px; font-weight: bold;">[ DATOS DE INGENIERÍA ]</span><br><br>
+            <span style="font-size: 20px; color: #e6f2ff;">
+            - Caudal requerido (Q): <b style="color:#00ffff;">0.5 m³/s</b><br>
+            - Altura manométrica (H): <b style="color:#00ffff;">50 m</b><br>
+            - Rendimiento de la bomba (η): <b style="color:#00ffff;">0.80 (80%)</b><br>
+            - Densidad del agua (ρ): <b style="color:#00ffff;">1000 kg/m³</b><br>
+            - Gravedad (g): <b style="color:#ff073a;">Usar 10 m/s²</b>
+            </span>
+        </div>
+        <p style="color: #ffcc00; font-size: 24px; margin-bottom: 10px;">Introduce la <b>POTENCIA</b> requerida (en <b>kW</b>):</p>
+        <input type="number" step="0.1" id="input-nucleo" placeholder="Potencia (kW)" style="font-size: 35px; width: 300px; border-color: #ff073a; color: #ff073a; background: #1a0000;">
+        <br><br>
+        <button class="btn-ui" style="background: #ff073a; color: #fff; font-size: 26px; box-shadow: 0 0 20px #ff073a;" onclick="validarNucleo()">[ INYECTAR REFRIGERANTE ]</button>
+        <div id="feed-nucleo" style="margin-top: 20px; font-size: 26px; height: 30px; font-weight: bold;"></div>
+    </div>
+</div>
     <div id="pantalla-victoria" class="pantalla">
         <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
             <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
@@ -2867,7 +2889,7 @@ function tirarRuletaC() {
 
                 setTimeout(() => avanzarCapaS12(), 3500);
             }
-            else if (fase === 4) {
+else if (fase === 4) {
                 // FASE 4: El agua llega a la radial y esta se levanta
                 document.getElementById('anim-f4-rio').style.width = "80%";
                 setTimeout(() => {
@@ -2875,13 +2897,73 @@ function tirarRuletaC() {
                     document.getElementById('anim-f4-rio').style.width = "100%";
                 }, 1500);
 
-                setTimeout(() => {
-                    mostrarAlerta("¡NÚCLEO CENTRAL ESTABILIZADO!\nTodos los sistemas operativos. Misión cumplida.", "ÉXITO TOTAL");
-                    setTimeout(() => {
-                        mostrarVictoria();
-                    }, 2500);
-                }, 3000);
-            }
+                // --- MODIFICADO: Ahora desbloquea el Núcleo en lugar de ganar directamente ---
+                setTimeout(() => {
+                    mostrarAlerta("¡SECTOR 12 SUPERADO!\nCompuertas de acceso al NÚCLEO CENTRAL desbloqueadas.", "ACCESO AUTORIZADO");
+                    
+                    // Desbloqueamos visualmente la puerta del núcleo
+                    let pNucleo = document.getElementById('puerta-nucleo');
+                    let subNucleo = document.getElementById('subtitulo-nucleo');
+                    
+                    pNucleo.classList.remove('bloqueada');
+                    pNucleo.classList.add('activa');
+                    pNucleo.setAttribute('onclick', 'abrirNucleo()');
+                    
+                    subNucleo.innerHTML = "<span style='color:#39ff14;'>[ DESBLOQUEADO ]</span><br>PRUEBA FINAL";
+                    
+                    setTimeout(() => {
+                        irAPasillo();
+                    }, 3000);
+                }, 3500);
+            }
+        } // <-- Fin de dispararAnimacionS12
+
+        // ================= LÓGICA DEL RETO FINAL (NÚCLEO) =================
+        function intentarAbrirNucleo() {
+            let pNucleo = document.getElementById('puerta-nucleo');
+            if (pNucleo.classList.contains('bloqueada')) {
+                mostrarAlerta('ACCESO DENEGADO: Debes superar el Sector 12 para acceder al Núcleo Central.', 'NÚCLEO BLOQUEADO');
+            } else {
+                abrirNucleo();
+            }
+        }
+
+        function abrirNucleo() {
+            mostrar('pantalla-nucleo');
+        }
+
+        function validarNucleo() {
+            let inputUI = document.getElementById("input-nucleo");
+            let val = parseFloat(inputUI.value.replace(",", "."));
+            let feed = document.getElementById("feed-nucleo");
+            
+            // Fórmula: Potencia = (ρ * g * Q * H) / η
+            // P = (1000 * 10 * 0.5 * 50) / 0.8 = 250000 / 0.8 = 312500 W = 312.5 kW
+            
+            if (val === 312.5) {
+                feed.style.color = "#39ff14";
+                feed.innerText = "✓ POTENCIA CORRECTA. BOMBA ACTIVADA.";
+                inputUI.disabled = true;
+                
+                // Efecto visual de que el reactor se ha enfriado
+                document.getElementById('pantalla-nucleo').style.background = "radial-gradient(circle, #001a33, #000)";
+                let panel = document.getElementById('panel-nucleo-final');
+                panel.style.borderColor = "#39ff14";
+                panel.style.boxShadow = "0 0 50px #39ff14";
+                
+                setTimeout(() => {
+                    mostrarAlerta("¡PRESIÓN ESTABILIZADA!\nInstalación salvada. Procediendo a registro de marcas.", "MISIÓN CUMPLIDA");
+                    setTimeout(() => {
+                        mostrarVictoria();
+                    }, 3000);
+                }, 2000);
+            } else {
+                registrarError();
+                feed.style.color = "#ff073a";
+                feed.innerText = "✗ POTENCIA INCORRECTA. EL SISTEMA COLAPSA.";
+                setTimeout(() => { feed.innerText = ""; inputUI.value = ""; }, 2500);
+            }
+        }
         }
 
         function avanzarCapaS12() {
