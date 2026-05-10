@@ -2591,7 +2591,6 @@ function validarCinematicaS12() {
             feed.innerText = "✓ PRESIÓN CORRECTA. NIVELANDO AGUAS...";
             document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
             document.getElementById('anim-f1-valvula').style.background = "#39ff14";
-            
             setTimeout(() => {
                 document.getElementById('anim-f1-chorro').style.height = "80px";
                 document.getElementById('anim-f1-agua').style.height = "20%";
@@ -2599,9 +2598,8 @@ function validarCinematicaS12() {
                 document.getElementById('vis-fase-1').classList.remove('activa');
                 document.getElementById('vis-fase-2').classList.add('activa');
                 titulo.innerText = "FASE 2: PRESIÓN SOBRE COMPUERTA";
-                desc.innerHTML = `La compuerta del fondo mide <b>2m de ancho</b> por <b>1.5m de alto</b>.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance <b>4m</b> de profundidad.<br>(g = 9.8 m/s²)`;
-                document.getElementById('input-s12-global').value = "";
-                feed.innerText = "";
+                desc.innerHTML = `La compuerta del fondo mide 2m de ancho por 1.5m de alto.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance 4m de profundidad.<br>(g = 9.8 m/s²)`;
+                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
                 document.getElementById('anim-f2-cae-dinamico').style.height = "150px";
                 document.getElementById('anim-f2-agua').style.height = "90%";
             }, 2000);
@@ -2612,18 +2610,13 @@ function validarCinematicaS12() {
         if (val === 95.55) {
             feed.style.color = "#39ff14";
             feed.innerText = "✓ FUERZA CALCULADA. COMPUERTA EN TENSIÓN.";
-            
             setTimeout(() => {
                 faseS12Activa = 3;
                 document.getElementById('vis-fase-2').classList.remove('activa');
                 document.getElementById('vis-fase-3').classList.add('activa');
-                
                 titulo.innerText = "FASE 3: CENTRO DE PRESIONES";
-                desc.innerHTML = `<span style='color:#ff073a'>¡AVISO DE FALLO!</span> La compuerta se está deformando. Debes colocar un refuerzo en el <b>Centro de Presiones (h_cp)</b>.<br><br>Calcula la profundidad exacta del h_cp (en metros) desde la superficie.`;
-                document.getElementById('input-s12-global').value = "";
-                feed.innerText = "";
-                
-                // Animación Fase 3: activamos el tsunami visual como "peligro"
+                desc.innerHTML = `<span style='color:#ff073a'>¡AVISO!</span> La compuerta se deforma. Calcula la profundidad exacta del <b>Centro de Presiones (h_cp en metros)</b> para colocar un refuerzo.`;
+                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
                 document.getElementById('anim-f3-tsunami').style.width = "40%";
             }, 1500);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INCORRECTA"; }
@@ -2633,22 +2626,31 @@ function validarCinematicaS12() {
         if (val === 3.31) {
             feed.style.color = "#39ff14";
             feed.innerText = "✓ REFUERZO INSTALADO. ESTRUCTURA ESTABILIZADA.";
-            
-            // Animación: La compuerta se endereza y el tsunami se retira
             document.getElementById('anim-f3-compuerta').style.transform = "rotate(0deg)";
             document.getElementById('anim-f3-tsunami').style.width = "0%";
-            
             setTimeout(() => {
                 faseS12Activa = 4;
                 document.getElementById('vis-fase-3').classList.remove('activa');
                 document.getElementById('vis-fase-4').classList.add('activa');
-                
                 titulo.innerText = "FASE 4: COMPUERTA RADIAL";
-                desc.innerHTML = "Último obstáculo. Diseñando protocolo de apertura radial...";
-                document.getElementById('input-s12-global').value = "";
-                feed.innerText = "";
+                desc.innerHTML = `La compuerta radial tiene un <b>radio de 4m</b> y un <b>ancho de 5m</b>. El agua llega al tope.<br><br>Calcula la <b>Componente Horizontal de la fuerza (en kN)</b> para abrirla.`;
+                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 2000);
-        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ POSICIÓN INCORRECTA. EL REFUERZO NO ENCAJA."; }
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ POSICIÓN INCORRECTA"; }
+    }
+    // FASE 4: FUERZA HORIZONTAL RADIAL (392)
+    else if (faseS12Activa === 4) {
+        if (val === 392) {
+            feed.style.color = "#39ff14";
+            feed.innerText = "✓ FUERZA ACEPTADA. ABRIENDO SECTOR 12...";
+            document.getElementById('anim-f4-radial').style.transform = "rotate(-45deg)";
+            document.getElementById('anim-f4-rio').style.width = "100%";
+            
+            setTimeout(() => {
+                mostrarAlerta("✓ SECTOR 12 ESTABILIZADO.<br>El acceso al NÚCLEO está ahora disponible.", "SISTEMA SECTORIAL ONLINE");
+                irAPasillo(); // Volvemos al pasillo para que elijan el núcleo
+            }, 3000);
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INSUFICIENTE PARA EL GIRO"; }
     }
 }
         // ==========================================
@@ -2735,15 +2737,15 @@ function completarModuloModoDios(mod) {
         if (inputS12) {
             if (faseS12Activa === 1) inputS12.value = "19";
             else if (faseS12Activa === 2) inputS12.value = "95.55";
-            else if (faseS12Activa === 3) inputS12.value = "3.31"; // <--- Añadido valor Fase 3
+            else if (faseS12Activa === 3) inputS12.value = "3.31";
+            else if (faseS12Activa === 4) inputS12.value = "392"; // <--- Fase 4
         }
         
-        progreso[1] = [true,true,true,true];
-        progreso[2] = [true,true,true,true];
-        progreso[3] = [true,true,true,true];
-        progreso[4] = [true,true,true,true];
+        // Marcamos todo el Sector 11 como completado por seguridad
+        for(let i=1; i<=4; i++) progreso[i] = [true,true,true,true];
         actualizarMapas();
 
+        // Activamos la puerta del núcleo
         let pNucleo = document.getElementById('puerta-nucleo');
         if (pNucleo) {
             pNucleo.classList.remove('bloqueada');
