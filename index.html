@@ -1722,23 +1722,24 @@
         }
 
 function irAPasillo() {
-            mostrar('pantalla-pasillo');
-            document.getElementById('hud-cronometro').style.display = "block";
-            let modulosS11Listos = 0;
-            for(let i=1; i<=4; i++) {
-                if(progreso[i].every(x=>x===true)) modulosS11Listos++;
-            }
-            
-            let p12 = document.getElementById('puerta-sector-12');
-            let sub12 = document.getElementById('subtitulo-s12');
-            if (p12 && sub12) {
-                if (modulosS11Listos === 4) {
-                    p12.classList.remove('bloqueada');
-                    p12.classList.add('activa');
-                    sub12.innerHTML = "<span style='color:#39ff14;'>[ INTRODUCIR CÓDIGO ]</span><br>PRUEBAS UNIDAD 2";
-                }
-            }
+    mostrar('pantalla-pasillo');
+    document.getElementById('hud-cronometro').style.display = "block";
+    let modulosS11Listos = 0;
+    for(let i=1; i<=4; i++) {
+        if(progreso[i].every(x=>x===true)) modulosS11Listos++;
+    }
+    
+    let p12 = document.getElementById('puerta-sector-12');
+    let sub12 = document.getElementById('subtitulo-s12');
+    if (p12 && sub12) {
+        if (modulosS11Listos === 4) {
+            p12.classList.remove('bloqueada');
+            p12.classList.add('activa');
+            // Cambiamos el texto para que ya no pida código
+            sub12.innerHTML = "<span style='color:#39ff14;'>[ ACCESO CONCEDIDO ]</span><br>PRUEBAS UNIDAD 2";
         }
+    }
+}
         function irAMapa() { 
             mostrar('pantalla-mapa'); 
             document.getElementById('hud-cronometro').style.display = "block";
@@ -1981,36 +1982,19 @@ function verificarCandadoAnimado() {
         }
 
 function intentarAbrir() {
-            let modulosListos = 0;
-            for(let i=1; i<=4; i++) {
-                if (progreso[i].every(x=>x===true)) modulosListos++;
-            }
+    let modulosListos = 0;
+    for(let i=1; i<=4; i++) {
+        if (progreso[i].every(x=>x===true)) modulosListos++;
+    }
 
-            if (modulosListos < 4) {
-                mostrarAlerta(`ACCESO DENEGADO: Faltan ${4 - modulosListos} módulos operativos en el Sector 11 para descifrar el código del candado físico.`, "ALERTA DE SEGURIDAD");
-                return;
-            }
-            
-            // Si ya tienen los 4, pedimos el código físico de la maleta
-            document.getElementById("modal-prompt-mensaje").innerText = "SISTEMA SECTOR 11 ESTABILIZADO.\n\nIntroduce la combinación de 4 dígitos del candado físico para desbloquear la compuerta:";
-            document.getElementById("modal-prompt-input").value = "";
-            document.getElementById("modal-prompt").style.display = "flex";
-            
-            document.getElementById("modal-prompt-btn").onclick = function() {
-                let codigoIngresado = document.getElementById("modal-prompt-input").value;
-                document.getElementById("modal-prompt").style.display = "none";
-
-                // Código del candado real
-                if (codigoIngresado === "2468") { 
-                    mostrarAlerta("✓ ¡CÓDIGO ACEPTADO! \n\nCompuerta hermética abierta. Desbloqueando Sector 12...", "ACCESO CONCEDIDO");
-                    setTimeout(() => {
-                        abrir();
-                    }, 2500);
-                } else if (codigoIngresado !== "") {
-                    mostrarAlerta("✗ CÓDIGO INCORRECTO. Revisa la combinación en las ruletas virtuales de tu mapa.", "ERROR");
-                }
-            };
-        }
+    if (modulosListos < 4) {
+        mostrarAlerta(`ACCESO DENEGADO: Faltan ${4 - modulosListos} módulos operativos en el Sector 11 para estabilizar el sistema.`, "ALERTA DE SEGURIDAD");
+        return;
+    }
+    
+    // Si ya tienen los 4 módulos, entran directamente sin pedir el código manual
+    abrir();
+}
 
         function abrir() {
             mostrar('pantalla-mapa-12');
