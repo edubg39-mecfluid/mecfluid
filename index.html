@@ -488,14 +488,24 @@
         .f1-tubo-subida { position: absolute; left: 270px; /* 160 (izq de la U) + 140 (ancho de la U) - 30 (ancho tubo) */top: 110px; width: 30px; height: 100px; border-left: 6px solid #888; border-right: 6px solid #888; background: rgba(255, 255, 255, 0.05);box-sizing: border-box;}
         .f1-valvula { position: absolute; left: 215px; /* Centro de la U (160 + 140/2 = 230). Menos mitad de válvula (15) */top: 275px; width: 30px; height: 30px; background: #ff073a; border-radius: 50%; border: 4px solid #fff; z-index: 10; transition: 0.5s; box-shadow: 0 0 15px #ff073a; cursor: pointer;}
         .f1-chorro { position: absolute; left: 225px; top: 300px; width: 10px; height: 0px; background: #00ffff; transition: height 1s ease-in; box-shadow: 0 0 15px #00ffff; z-index: 5;}
-/* ================= FASE 2: CONTINUIDAD Y LLENADO ================= */
-        .f2-chorro-cae { position: absolute; left: 225px; top: -20px; width: 10px; height: 0px; background: #00ffff; transition: height 1s ease-in; box-shadow: 0 0 15px #00ffff; z-index: 2; }
+/* ================= FASE 2: ================= */
+        
+        #anim-f2-cae-dinamico {position: absolute; left: 220px; top: -20px; width: 20px; height: 0px; z-index: 2; transition: height 1s ease-in; }
+        .chorro-agua {fill: #00ffff; stroke: none;animation: aguaCaeTurbulenta 0.8s infinite linear;}
+        @keyframes aguaCaeTurbulenta {
+            0% { transform: scaleY(1) translateY(0); }
+            33% { transform: scaleY(1.03) translateY(2px); }
+            66% { transform: scaleY(0.97) translateY(-2px); }
+            100% { transform: scaleY(1) translateY(0); }
+        }
+
         .f2-tanque { position: absolute; left: 85px; top: 150px; width: 280px; height: 180px; border: 6px solid #888; border-top: none; border-radius: 0 0 5px 5px;background: rgba(0, 255, 255, 0.05);box-sizing: border-box;overflow: hidden;z-index: 1; }
+
         .f2-techo-izq { position: absolute; top: 0; left: 0; width: 130px; height: 6px; background: #888; z-index: 3;}
         .f2-techo-der { position: absolute; top: 0; right: 0; width: 130px; height: 6px; background: #888; z-index: 3;}
-        .f2-agua-sube { position: absolute; bottom: 0; left: 0; width: 100%; height: 5%; background: linear-gradient(180deg, rgba(0, 255, 255, 0.8), rgba(0, 150, 255, 0.9)); box-shadow: inset 0 0 15px rgba(0,255,255,0.8);transition: height 45s linear;}
+        .f2-agua-sube { position: absolute; bottom: 0; left: 0; width: 100%; height: 5%; background: linear-gradient(180deg, rgba(0, 255, 255, 0.8), rgba(0, 150, 255, 0.9)); box-shadow: inset 0 0 15px rgba(0,255,255,0.8);transition: height 45s linear; }
         .f2-agua-sube::before {content: ""; position: absolute; top: -10px; left: -50%; width: 200%; height: 20px;background: rgba(0, 255, 255, 0.6); border-radius: 50%;animation: olaDinamica 2.5s infinite alternate ease-in-out;}
-        .f2-presa-muro { position: absolute; right: 0; bottom: 0; width: 6px; height: 100%; background: #ff073a; box-shadow: 0 0 10px #ff073a;z-index: 4; }
+        .f2-presa-muro { position: absolute; right: 0; bottom: 0; width: 6px; height: 100%; background: #ff073a; box-shadow: 0 0 10px #ff073a; z-index: 4; }
 
         /* ELEMENTOS CINEMÁTICOS FASE 3: Compuerta Inclinada */
         .f3-agua-tsunami { position: absolute; left: -10%; bottom: 10%; width: 10%; height: 250px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s ease-out; border-right: 4px solid #00ffff; }
@@ -739,20 +749,28 @@
                     </div>
                 </div>
 
-            <div id="vis-fase-2" class="s12-capa-visual">
-                    <div class="s12-canvas">
-                        <div class="f2-chorro-cae" id="anim-f2-cae"></div>
-                        
-                        <div class="f2-tanque">
-                            <div class="f2-techo-izq"></div>
-                            <div class="f2-techo-der"></div>
-                            
-                            <div class="f2-agua-sube" id="anim-f2-agua"></div>
-                            <div class="f2-presa-muro"></div>
-                        </div>
-                    </div>
-                </div>
-
+<div id="vis-fase-2" class="s12-capa-visual">
+    <div class="s12-canvas">
+        
+        <svg id="anim-f2-cae-dinamico" width="20" height="180" viewBox="0 0 20 180" preserveAspectRatio="none">
+            <defs>
+                <filter id="liqFiltro">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="liq" />
+                </filter>
+            </defs>
+            
+            <path class="chorro-agua" d="M10,0 C12,50 8,100 12,150 L8,150 C12,100 8,50 10,0 Z" filter="url(#liqFiltro)" />
+        </svg>
+        <div class="f2-tanque">
+            <div class="f2-techo-izq"></div>
+            <div class="f2-techo-der"></div>
+            
+            <div class="f2-agua-sube" id="anim-f2-agua"></div>
+            <div class="f2-presa-muro"></div>
+        </div>
+    </div>
+</div>
                 <div id="vis-fase-3" class="s12-capa-visual">
                     <div class="f3-agua-tsunami" id="anim-f3-tsunami"></div>
                     <div class="f3-compuerta" id="anim-f3-compuerta"></div>
@@ -2813,10 +2831,8 @@ function tirarRuletaC() {
             else if (fase === 2) {
                 let aguaF2 = document.getElementById('anim-f2-agua');
                 aguaF2.style.transition = "height 1s ease-out"; 
-                aguaF2.style.height = "100%";
-
-                document.getElementById('anim-f2-cae').style.height = "0px";
-
+                aguaF2.style.height = "100%"; 
+                document.getElementById('anim-f2-cae-dinamico').style.height = "0px";
                 setTimeout(() => avanzarCapaS12(), 1500);
             }
             else if (fase === 3) {
