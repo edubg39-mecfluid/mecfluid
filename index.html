@@ -2708,7 +2708,28 @@ function validarCinematicaS12() {
         }
 
 function completarModuloModoDios(mod) {
-    if (mod === 12) {
+    // Caso para Módulos del 1 al 4
+    if (mod >= 1 && mod <= 4) {
+        progreso[mod] = [true, true, true, true];
+        guardarEstado();
+        actualizarMapas();
+        
+        // Auto-rellenar si estamos dentro de una prueba de esos módulos
+        if (mod === 2) {
+            if (document.getElementById('input-h2-f1')) document.getElementById('input-h2-f1').value = "50000";
+            if (document.getElementById('input-h2-f2')) document.getElementById('input-h2-f2').value = "4";
+            if (document.getElementById('input-h2-f3')) document.getElementById('input-h2-f3').value = "10";
+        } else if (mod === 3) {
+            if (document.getElementById('input-m3-vs')) document.getElementById('input-m3-vs').value = "40";
+            if (document.getElementById('input-h3-fuerza')) document.getElementById('input-h3-fuerza').value = "1.5";
+        }
+        
+        if (document.getElementById('pantalla-mapa').classList.contains('activa')) {
+            setTimeout(verificarCandadoAnimado, 500); 
+        }
+    } 
+    // Caso para el Sector 12 (Detección por fases)
+    else if (mod === 12) {
         let inputS12 = document.getElementById('input-s12-global');
         if (inputS12) {
             if (faseS12Activa === 1) {
@@ -2716,35 +2737,32 @@ function completarModuloModoDios(mod) {
             } else if (faseS12Activa === 2) {
                 inputS12.value = "95.55";
             } else if (faseS12Activa === 3) {
-                inputS12.value = "0"; // Placeholder para cuando definamos la 3
+                inputS12.value = "0"; // Pendiente de definir
             }
         }
         
-        // Desbloqueos de seguridad
+        // Desbloqueo visual preventivo por si se pulsa desde fuera
         progreso[1] = [true,true,true,true];
         progreso[2] = [true,true,true,true];
         progreso[3] = [true,true,true,true];
         progreso[4] = [true,true,true,true];
         actualizarMapas();
-    }
-        
-        // Desbloqueamos también la puerta del núcleo preventivamente
+
         let pNucleo = document.getElementById('puerta-nucleo');
         if (pNucleo) {
             pNucleo.classList.remove('bloqueada');
             pNucleo.classList.add('activa');
             document.getElementById('subtitulo-nucleo').innerHTML = "<span style='color:#39ff14;'>[ DESBLOQUEADO ]</span><br>PRUEBA FINAL";
         }
-        
-    } else if (mod === 99) {
-        // AUTO-RELLENAR Núcleo
+    } 
+    // Caso para el Núcleo Final
+    else if (mod === 99) {
         let inputNucleo = document.getElementById('input-nucleo');
         if (inputNucleo) {
-            inputNucleo.value = "312.5"; // Valor correcto para ganar
+            inputNucleo.value = "312.5";
         }
     }
 }
-
     </script>
 </body>
 </html>
