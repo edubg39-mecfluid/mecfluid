@@ -1905,24 +1905,40 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
 // ================= FUNCIONES DE CANDADO ================= //
         let transicionPendiente = false;
 
-        function verificarCandadoAnimado() {
-            let resueltas = document.querySelectorAll('.ruleta-candado.resuelta').length;
-            let candado = document.querySelector('.candado-container');
-            if (resueltas === 4) {
-                // Hacerlo interactivo y brillante
-                candado.style.cursor = 'pointer';
-                candado.style.animation = 'latido-candado 1.5s infinite alternate ease-in-out';
-                candado.onclick = intentarAbrir; // Si cancelan, pueden hacer clic en el candado para reabrir
+function verificarCandadoAnimado() {
+    let resueltas = document.querySelectorAll('.ruleta-candado.resuelta').length;
+    let candado = document.querySelector('.candado-container');
+    
+    if (resueltas === 4) {
+        // Estética del candado
+        candado.style.cursor = 'pointer';
+        candado.style.animation = 'latido-candado 1.5s infinite alternate ease-in-out';
+        
+        if (!transicionPendiente) {
+            transicionPendiente = true;
+            
+            setTimeout(() => {
+                // EFECTO DE DESBLOQUEO AUTOMÁTICO
+                mostrarAlerta("✓ SISTEMA SECTOR 11 ESTABILIZADO.<br>Desbloqueando acceso al Sector 12...", "CONEXIÓN ESTABLECIDA");
                 
-                // Lanzar la transición automática solo 1 vez
-                if (!transicionPendiente) {
-                    transicionPendiente = true;
-                    setTimeout(() => {
-                        intentarAbrir();
-                    }, 1500); // 1.5 seg de cortesía para que vean que el número es correcto
+                // Desbloqueamos la puerta físicamente en el nexo
+                let p12 = document.getElementById('puerta-sector-12');
+                let sub12 = document.getElementById('subtitulo-s12');
+                if (p12 && sub12) {
+                    p12.classList.remove('bloqueada');
+                    p12.classList.add('activa');
+                    sub12.innerHTML = "<span style='color:#39ff14;'>[ ACCESO CONCEDIDO ]</span><br>PRUEBAS UNIDAD 2";
                 }
-            }
+                
+                // Enviamos al jugador al Sector 12 tras una breve pausa
+                setTimeout(() => {
+                    abrir(); // Esta función ya la tienes, es la que muestra 'pantalla-mapa-12'
+                }, 2500);
+                
+            }, 1000);
         }
+    }
+}
 
         function verificarCandadoSilencioso() {
             let resueltas = document.querySelectorAll('.ruleta-candado.resuelta').length;
