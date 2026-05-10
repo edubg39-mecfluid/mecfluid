@@ -2584,67 +2584,73 @@ function validarCinematicaS12() {
     let desc = document.getElementById('txt-s12-desc');
     let titulo = document.getElementById('txt-s12-titulo');
 
-    // LOGICA FASE 1: MANOMETRÍA (Respuesta: 19)
+    // FASE 1: MANOMETRÍA (19)
     if (faseS12Activa === 1) {
         if (val === 19) {
             feed.style.color = "#39ff14";
             feed.innerText = "✓ PRESIÓN CORRECTA. NIVELANDO AGUAS...";
-            
-            // Animación de apertura de válvula Fase 1
             document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
             document.getElementById('anim-f1-valvula').style.background = "#39ff14";
             
             setTimeout(() => {
                 document.getElementById('anim-f1-chorro').style.height = "80px";
                 document.getElementById('anim-f1-agua').style.height = "20%";
-                
-                // Transición a Fase 2 (ESTÁTICA, ESPERANDO INPUT)
                 faseS12Activa = 2;
                 document.getElementById('vis-fase-1').classList.remove('activa');
                 document.getElementById('vis-fase-2').classList.add('activa');
-                
                 titulo.innerText = "FASE 2: PRESIÓN SOBRE COMPUERTA";
-                desc.innerHTML = `El nivel en la esclusa sube. La compuerta rectangular del fondo mide <b>2m de ancho</b> por <b>1.5m de alto</b>.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> sobre la compuerta cuando el agua alcance <b>4m</b> de profundidad.<br>(Usa g = 9.8 m/s²)`;
-                
-                document.getElementById('input-s12-global').value = ""; // Limpiamos para el siguiente reto
+                desc.innerHTML = `La compuerta del fondo mide <b>2m de ancho</b> por <b>1.5m de alto</b>.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance <b>4m</b> de profundidad.<br>(g = 9.8 m/s²)`;
+                document.getElementById('input-s12-global').value = "";
                 feed.innerText = "";
-                
-                // Iniciamos animación visual de llenado
                 document.getElementById('anim-f2-cae-dinamico').style.height = "150px";
                 document.getElementById('anim-f2-agua').style.height = "90%";
             }, 2000);
-        } else {
-            registrarError();
-            feed.style.color = "#ff073a";
-            feed.innerText = "✗ PRESIÓN INCORRECTA";
-        }
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ PRESIÓN INCORRECTA"; }
     } 
-    // LOGICA FASE 2: COMPUERTA RECTANGULAR (Respuesta: 95.55)
+    // FASE 2: FUERZA HIDROSTÁTICA (95.55)
     else if (faseS12Activa === 2) {
         if (val === 95.55) {
             feed.style.color = "#39ff14";
-            feed.innerText = "✓ FUERZA CALCULADA. COMPUERTA LIBERADA.";
+            feed.innerText = "✓ FUERZA CALCULADA. COMPUERTA EN TENSIÓN.";
             
             setTimeout(() => {
-                // De momento, como fase 3 y 4 queremos modificarlas, 
-                // saltamos a la cinemática de la Fase 3 original o lo dejamos aquí.
                 faseS12Activa = 3;
                 document.getElementById('vis-fase-2').classList.remove('activa');
                 document.getElementById('vis-fase-3').classList.add('activa');
                 
-                titulo.innerText = "FASE 3: ESTADO CRÍTICO";
-                desc.innerHTML = "<span style='color:#ff073a'>¡ALERTA!</span> La presión ha causado una fractura. Diseñando nuevo protocolo...";
+                titulo.innerText = "FASE 3: CENTRO DE PRESIONES";
+                desc.innerHTML = `<span style='color:#ff073a'>¡AVISO DE FALLO!</span> La compuerta se está deformando. Debes colocar un refuerzo en el <b>Centro de Presiones (h_cp)</b>.<br><br>Calcula la profundidad exacta del h_cp (en metros) desde la superficie.`;
                 document.getElementById('input-s12-global').value = "";
                 feed.innerText = "";
+                
+                // Animación Fase 3: activamos el tsunami visual como "peligro"
+                document.getElementById('anim-f3-tsunami').style.width = "40%";
             }, 1500);
-        } else {
-            registrarError();
-            feed.style.color = "#ff073a";
-            feed.innerText = "✗ FUERZA INCORRECTA. REVISA h_cg Y EL ÁREA.";
-        }
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INCORRECTA"; }
+    }
+    // FASE 3: CENTRO DE PRESIONES (3.31)
+    else if (faseS12Activa === 3) {
+        if (val === 3.31) {
+            feed.style.color = "#39ff14";
+            feed.innerText = "✓ REFUERZO INSTALADO. ESTRUCTURA ESTABILIZADA.";
+            
+            // Animación: La compuerta se endereza y el tsunami se retira
+            document.getElementById('anim-f3-compuerta').style.transform = "rotate(0deg)";
+            document.getElementById('anim-f3-tsunami').style.width = "0%";
+            
+            setTimeout(() => {
+                faseS12Activa = 4;
+                document.getElementById('vis-fase-3').classList.remove('activa');
+                document.getElementById('vis-fase-4').classList.add('activa');
+                
+                titulo.innerText = "FASE 4: COMPUERTA RADIAL";
+                desc.innerHTML = "Último obstáculo. Diseñando protocolo de apertura radial...";
+                document.getElementById('input-s12-global').value = "";
+                feed.innerText = "";
+            }, 2000);
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ POSICIÓN INCORRECTA. EL REFUERZO NO ENCAJA."; }
     }
 }
-
         // ==========================================
         // NÚCLEO FINAL
         // ==========================================
@@ -2708,13 +2714,10 @@ function validarCinematicaS12() {
         }
 
 function completarModuloModoDios(mod) {
-    // Caso para Módulos del 1 al 4
     if (mod >= 1 && mod <= 4) {
         progreso[mod] = [true, true, true, true];
         guardarEstado();
         actualizarMapas();
-        
-        // Auto-rellenar si estamos dentro de una prueba de esos módulos
         if (mod === 2) {
             if (document.getElementById('input-h2-f1')) document.getElementById('input-h2-f1').value = "50000";
             if (document.getElementById('input-h2-f2')) document.getElementById('input-h2-f2').value = "4";
@@ -2723,25 +2726,18 @@ function completarModuloModoDios(mod) {
             if (document.getElementById('input-m3-vs')) document.getElementById('input-m3-vs').value = "40";
             if (document.getElementById('input-h3-fuerza')) document.getElementById('input-h3-fuerza').value = "1.5";
         }
-        
         if (document.getElementById('pantalla-mapa').classList.contains('activa')) {
             setTimeout(verificarCandadoAnimado, 500); 
         }
     } 
-    // Caso para el Sector 12 (Detección por fases)
     else if (mod === 12) {
         let inputS12 = document.getElementById('input-s12-global');
         if (inputS12) {
-            if (faseS12Activa === 1) {
-                inputS12.value = "19";
-            } else if (faseS12Activa === 2) {
-                inputS12.value = "95.55";
-            } else if (faseS12Activa === 3) {
-                inputS12.value = "0"; // Pendiente de definir
-            }
+            if (faseS12Activa === 1) inputS12.value = "19";
+            else if (faseS12Activa === 2) inputS12.value = "95.55";
+            else if (faseS12Activa === 3) inputS12.value = "3.31"; // <--- Añadido valor Fase 3
         }
         
-        // Desbloqueo visual preventivo por si se pulsa desde fuera
         progreso[1] = [true,true,true,true];
         progreso[2] = [true,true,true,true];
         progreso[3] = [true,true,true,true];
@@ -2755,12 +2751,9 @@ function completarModuloModoDios(mod) {
             document.getElementById('subtitulo-nucleo').innerHTML = "<span style='color:#39ff14;'>[ DESBLOQUEADO ]</span><br>PRUEBA FINAL";
         }
     } 
-    // Caso para el Núcleo Final
     else if (mod === 99) {
         let inputNucleo = document.getElementById('input-nucleo');
-        if (inputNucleo) {
-            inputNucleo.value = "312.5";
-        }
+        if (inputNucleo) inputNucleo.value = "312.5";
     }
 }
     </script>
