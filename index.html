@@ -2988,6 +2988,103 @@ else if (fase === 4) {
             document.getElementById("feed-s12-global").innerText = "";
             s12Bloqueado = false;
         }
+        // =========================================================================
+        // ================= MODO DEMO / BOTONES TRAMPA UNIFICADOS =================
+        // =========================================================================
+        setTimeout(() => {
+            
+            // --- 1. BOTONES TRAMPA SECTOR 11 (MÓDULOS 1 AL 4) ---
+            for(let i=1; i<=4; i++) {
+                let hotspot = document.getElementById(`hotspot-${i}`);
+                if(!hotspot) continue;
+
+                let btnTrampa = document.createElement('div');
+                btnTrampa.style.position = 'absolute';
+                btnTrampa.style.width = '20px';
+                btnTrampa.style.height = '20px';
+                btnTrampa.style.background = '#ff073a';
+                btnTrampa.style.borderRadius = '50%';
+                btnTrampa.style.cursor = 'pointer';
+                btnTrampa.style.zIndex = '1000';
+                btnTrampa.style.boxShadow = '0 0 10px #000, 0 0 10px #ff073a';
+                btnTrampa.style.border = '2px solid white';
+                btnTrampa.title = `[ MODO DEMO ] Forzar victoria M${i}`;
+                
+                btnTrampa.style.top = '-10px';
+                btnTrampa.style.right = '-10px';
+
+                btnTrampa.onclick = (e) => {
+                    e.stopPropagation(); // Evita que se abra la habitación
+                    
+                    progreso[i] = [true, true, true, true]; 
+                    guardarEstado();
+                    actualizarMapas();
+                    
+                    // Si completamos M3 (o forzamos M3), nos aseguramos de que M4 sea clicable
+                    if(i === 3) {
+                        let h4 = document.getElementById('hotspot-4');
+                        if(h4) {
+                            h4.style.setProperty('display', 'block', 'important');
+                            h4.style.setProperty('pointer-events', 'auto', 'important');
+                        }
+                    }
+                };
+
+                hotspot.appendChild(btnTrampa);
+            }
+
+            // --- 2. BOTÓN TRAMPA SECTOR 12 (CINEMÁTICAS) ---
+            let controlesS12 = document.querySelector('.s12-hud-controles');
+            if(controlesS12) {
+                let btnTrampaS12 = document.createElement('div');
+                btnTrampaS12.style.position = 'absolute';
+                btnTrampaS12.style.width = '20px';
+                btnTrampaS12.style.height = '20px';
+                btnTrampaS12.style.background = '#ff073a';
+                btnTrampaS12.style.borderRadius = '50%';
+                btnTrampaS12.style.cursor = 'pointer';
+                btnTrampaS12.style.bottom = '20px';
+                btnTrampaS12.style.right = '20px';
+                btnTrampaS12.style.boxShadow = '0 0 10px #000, 0 0 10px #ff073a';
+                btnTrampaS12.style.border = '2px solid white';
+                btnTrampaS12.title = "[ MODO DEMO ] Autocompletar Fase S12";
+                
+                btnTrampaS12.onclick = () => {
+                    if (s12Bloqueado) return; // Si hay una cinemática en curso, no hacemos nada
+                    document.getElementById("input-s12-global").value = baseDatosS12[s12FaseActual].solucion;
+                    validarCinematicaS12();
+                };
+                
+                controlesS12.style.position = 'relative'; 
+                controlesS12.appendChild(btnTrampaS12);
+            }
+
+            // --- 3. BOTÓN TRAMPA NÚCLEO (PRUEBA FINAL) ---
+            let panelNucleo = document.getElementById('panel-nucleo-final');
+            if(panelNucleo) {
+                let btnTrampaN = document.createElement('div');
+                btnTrampaN.style.position = 'absolute';
+                btnTrampaN.style.width = '20px';
+                btnTrampaN.style.height = '20px';
+                btnTrampaN.style.background = '#ff073a';
+                btnTrampaN.style.borderRadius = '50%';
+                btnTrampaN.style.cursor = 'pointer';
+                btnTrampaN.style.top = '20px';
+                btnTrampaN.style.right = '20px';
+                btnTrampaN.style.boxShadow = '0 0 10px #000, 0 0 10px #ff073a';
+                btnTrampaN.style.border = '2px solid white';
+                btnTrampaN.title = "[ MODO DEMO ] Autocompletar Núcleo";
+                
+                btnTrampaN.onclick = () => {
+                    document.getElementById("input-nucleo").value = 312.5;
+                    validarNucleo();
+                };
+                
+                panelNucleo.style.position = 'relative';
+                panelNucleo.appendChild(btnTrampaN);
+            }
+
+        }, 2000); // Se ejecuta a los 2 segundos para asegurar que el HTML se ha cargado
     </script>
 </body>
 </html>
