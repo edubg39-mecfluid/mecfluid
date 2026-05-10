@@ -2706,28 +2706,54 @@ function intentarAbrir() {
 
 function completarModuloModoDios(mod) {
     if (mod >= 1 && mod <= 4) {
-        // Marcamos el módulo como completo
+        // Marcamos el módulo como completo en el sistema
         progreso[mod] = [true, true, true, true];
         guardarEstado();
+        
+        // AUTO-RELLENAR: Si estamos dentro de un módulo, ponemos las respuestas
+        if (mod === 2) {
+            if (document.getElementById('input-h2-f1')) document.getElementById('input-h2-f1').value = "50000";
+            if (document.getElementById('input-h2-f2')) document.getElementById('input-h2-f2').value = "4";
+            if (document.getElementById('input-h2-f3')) document.getElementById('input-h2-f3').value = "10";
+        } else if (mod === 3) {
+            if (document.getElementById('input-m3-vs')) document.getElementById('input-m3-vs').value = "40";
+            if (document.getElementById('input-h3-fuerza')) document.getElementById('input-h3-fuerza').value = "1.5";
+        }
         
         // Si estamos en el mapa, actualizamos visualmente
         if (document.getElementById('pantalla-mapa').classList.contains('activa')) {
             actualizarMapas();
-            // Forzamos la comprobación del candado por si este era el último módulo
             setTimeout(verificarCandadoAnimado, 500); 
         }
         
     } else if (mod === 12) {
-        // Desbloqueo forzado directo
+        // AUTO-RELLENAR Sector 12
+        let inputS12 = document.getElementById('input-s12-global');
+        if (inputS12) {
+            inputS12.value = "19"; // Valor correcto para lanzar la cinemática
+        }
+        
+        // Desbloqueo forzado de los M1-M4 en segundo plano por si lo usas desde el menú
         progreso[1] = [true,true,true,true];
         progreso[2] = [true,true,true,true];
         progreso[3] = [true,true,true,true];
         progreso[4] = [true,true,true,true];
         actualizarMapas();
-        setTimeout(verificarCandadoAnimado, 100);
+        
+        // Desbloqueamos también la puerta del núcleo preventivamente
+        let pNucleo = document.getElementById('puerta-nucleo');
+        if (pNucleo) {
+            pNucleo.classList.remove('bloqueada');
+            pNucleo.classList.add('activa');
+            document.getElementById('subtitulo-nucleo').innerHTML = "<span style='color:#39ff14;'>[ DESBLOQUEADO ]</span><br>PRUEBA FINAL";
+        }
         
     } else if (mod === 99) {
-        mostrarVictoria();
+        // AUTO-RELLENAR Núcleo
+        let inputNucleo = document.getElementById('input-nucleo');
+        if (inputNucleo) {
+            inputNucleo.value = "312.5"; // Valor correcto para ganar
+        }
     }
 }
 
