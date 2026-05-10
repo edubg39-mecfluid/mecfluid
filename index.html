@@ -2575,72 +2575,75 @@ function intentarAbrir() {
         // ==========================================
         // SECTOR 12 (Cinemáticas y Manometría)
         // ==========================================
-        function validarCinematicaS12() {
-            let val = parseFloat(document.getElementById('input-s12-global').value);
-            let feed = document.getElementById('feed-s12-global');
-            
-            if (val === 19) { // 19 kPa
-                feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CORRECTA. INICIANDO SECUENCIA...";
-                document.getElementById('btn-s12-global').disabled = true;
-                
-                // Fase 1 anim
-                document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
-                document.getElementById('anim-f1-valvula').style.background = "#39ff14";
-                setTimeout(() => {
-                    document.getElementById('anim-f1-chorro').style.height = "80px";
-                    document.getElementById('anim-f1-agua').style.height = "20%";
-                }, 500);
+// Variable global para controlar en qué paso del Sector 12 estamos
+let faseS12Activa = 1; 
 
-                // Transición a Fase 2
-                setTimeout(() => {
-                    document.getElementById('vis-fase-1').classList.remove('activa');
-                    document.getElementById('vis-fase-2').classList.add('activa');
-                    document.getElementById('txt-s12-titulo').innerText = "FASE 2: LLENADO DE ESCLUSA";
-                    document.getElementById('txt-s12-desc').innerHTML = "La purga ha derivado el caudal al estanque secundario.<br><br><span style='color:#39ff14'>SISTEMA AUTOMÁTICO EN CURSO...</span>";
-                    document.getElementById('anim-f2-cae-dinamico').style.height = "150px";
-                    document.getElementById('anim-f2-agua').style.height = "90%";
-                }, 3500);
+function validarCinematicaS12() {
+    let val = parseFloat(document.getElementById('input-s12-global').value);
+    let feed = document.getElementById('feed-s12-global');
+    let desc = document.getElementById('txt-s12-desc');
+    let titulo = document.getElementById('txt-s12-titulo');
 
-                // Transición a Fase 3
-                setTimeout(() => {
-                    document.getElementById('vis-fase-2').classList.remove('activa');
-                    document.getElementById('vis-fase-3').classList.add('activa');
-                    document.getElementById('txt-s12-titulo').innerText = "FASE 3: ALERTA ESTRUCTURAL";
-                    document.getElementById('txt-s12-desc').innerHTML = "¡Atención! Oleaje detectado. La compuerta se está abriendo.<br><br><span style='color:#ff073a'>IMPACTO INMINENTE.</span>";
-                    setTimeout(() => {
-                        document.getElementById('anim-f3-tsunami').style.width = "60%";
-                        document.getElementById('anim-f3-compuerta').style.transform = "rotate(-90deg)";
-                    }, 500);
-                }, 8000);
-
-                // Transición a Fase 4
-                setTimeout(() => {
-                    document.getElementById('vis-fase-3').classList.remove('activa');
-                    document.getElementById('vis-fase-4').classList.add('activa');
-                    document.getElementById('txt-s12-titulo').innerText = "FASE 4: COMPUERTA RADIAL";
-                    document.getElementById('txt-s12-desc').innerHTML = "Flujo desviado a la compuerta radial final. Abriendo aliviadero...<br><br><span style='color:#39ff14'>SECTOR 12 ASEGURADO. ACCESO AL NÚCLEO DESBLOQUEADO.</span>";
-                    setTimeout(() => {
-                        document.getElementById('anim-f4-rio').style.width = "100%";
-                        document.getElementById('anim-f4-radial').style.transform = "rotate(45deg)";
-                    }, 500);
-                }, 12500);
-
-                // Final y vuelta al pasillo
-                setTimeout(() => {
-                    document.getElementById('btn-s12-global').disabled = false;
-                    document.getElementById('puerta-nucleo').classList.remove('bloqueada');
-                    document.getElementById('puerta-nucleo').classList.add('activa');
-                    document.getElementById('subtitulo-nucleo').innerHTML = "<span style='color:#39ff14;'>[ DESBLOQUEADO ]</span><br>PRUEBA FINAL";
-                    mostrarAlerta("SECTOR 12 COMPLETADO.\nDirígete al Núcleo para detener la fusión.", "SISTEMA SEGURO");
-                    irAPasillo();
-                }, 17000);
-
-            } else {
-                registrarError();
-                feed.style.color = "#ff073a"; feed.innerText = "✗ VALOR INCORRECTO";
-                setTimeout(()=>feed.innerText="",1500);
-            }
-        }
+    // LOGICA FASE 1: MANOMETRÍA (Respuesta: 19)
+    if (faseS12Activa === 1) {
+        if (val === 19) {
+            feed.style.color = "#39ff14";
+            feed.innerText = "✓ PRESIÓN CORRECTA. NIVELANDO AGUAS...";
+            
+            // Animación de apertura de válvula Fase 1
+            document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
+            document.getElementById('anim-f1-valvula').style.background = "#39ff14";
+            
+            setTimeout(() => {
+                document.getElementById('anim-f1-chorro').style.height = "80px";
+                document.getElementById('anim-f1-agua').style.height = "20%";
+                
+                // Transición a Fase 2 (ESTÁTICA, ESPERANDO INPUT)
+                faseS12Activa = 2;
+                document.getElementById('vis-fase-1').classList.remove('activa');
+                document.getElementById('vis-fase-2').classList.add('activa');
+                
+                titulo.innerText = "FASE 2: PRESIÓN SOBRE COMPUERTA";
+                desc.innerHTML = `El nivel en la esclusa sube. La compuerta rectangular del fondo mide <b>2m de ancho</b> por <b>1.5m de alto</b>.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> sobre la compuerta cuando el agua alcance <b>4m</b> de profundidad.<br>(Usa g = 9.8 m/s²)`;
+                
+                document.getElementById('input-s12-global').value = ""; // Limpiamos para el siguiente reto
+                feed.innerText = "";
+                
+                // Iniciamos animación visual de llenado
+                document.getElementById('anim-f2-cae-dinamico').style.height = "150px";
+                document.getElementById('anim-f2-agua').style.height = "90%";
+            }, 2000);
+        } else {
+            registrarError();
+            feed.style.color = "#ff073a";
+            feed.innerText = "✗ PRESIÓN INCORRECTA";
+        }
+    } 
+    // LOGICA FASE 2: COMPUERTA RECTANGULAR (Respuesta: 95.55)
+    else if (faseS12Activa === 2) {
+        if (val === 95.55) {
+            feed.style.color = "#39ff14";
+            feed.innerText = "✓ FUERZA CALCULADA. COMPUERTA LIBERADA.";
+            
+            setTimeout(() => {
+                // De momento, como fase 3 y 4 queremos modificarlas, 
+                // saltamos a la cinemática de la Fase 3 original o lo dejamos aquí.
+                faseS12Activa = 3;
+                document.getElementById('vis-fase-2').classList.remove('activa');
+                document.getElementById('vis-fase-3').classList.add('activa');
+                
+                titulo.innerText = "FASE 3: ESTADO CRÍTICO";
+                desc.innerHTML = "<span style='color:#ff073a'>¡ALERTA!</span> La presión ha causado una fractura. Diseñando nuevo protocolo...";
+                document.getElementById('input-s12-global').value = "";
+                feed.innerText = "";
+            }, 1500);
+        } else {
+            registrarError();
+            feed.style.color = "#ff073a";
+            feed.innerText = "✗ FUERZA INCORRECTA. REVISA h_cg Y EL ÁREA.";
+        }
+    }
+}
 
         // ==========================================
         // NÚCLEO FINAL
@@ -2705,40 +2708,25 @@ function intentarAbrir() {
         }
 
 function completarModuloModoDios(mod) {
-    if (mod >= 1 && mod <= 4) {
-        // Marcamos el módulo como completo en el sistema
-        progreso[mod] = [true, true, true, true];
-        guardarEstado();
-        
-        // AUTO-RELLENAR: Si estamos dentro de un módulo, ponemos las respuestas
-        if (mod === 2) {
-            if (document.getElementById('input-h2-f1')) document.getElementById('input-h2-f1').value = "50000";
-            if (document.getElementById('input-h2-f2')) document.getElementById('input-h2-f2').value = "4";
-            if (document.getElementById('input-h2-f3')) document.getElementById('input-h2-f3').value = "10";
-        } else if (mod === 3) {
-            if (document.getElementById('input-m3-vs')) document.getElementById('input-m3-vs').value = "40";
-            if (document.getElementById('input-h3-fuerza')) document.getElementById('input-h3-fuerza').value = "1.5";
-        }
-        
-        // Si estamos en el mapa, actualizamos visualmente
-        if (document.getElementById('pantalla-mapa').classList.contains('activa')) {
-            actualizarMapas();
-            setTimeout(verificarCandadoAnimado, 500); 
-        }
-        
-    } else if (mod === 12) {
-        // AUTO-RELLENAR Sector 12
+    if (mod === 12) {
         let inputS12 = document.getElementById('input-s12-global');
         if (inputS12) {
-            inputS12.value = "19"; // Valor correcto para lanzar la cinemática
+            if (faseS12Activa === 1) {
+                inputS12.value = "19";
+            } else if (faseS12Activa === 2) {
+                inputS12.value = "95.55";
+            } else if (faseS12Activa === 3) {
+                inputS12.value = "0"; // Placeholder para cuando definamos la 3
+            }
         }
         
-        // Desbloqueo forzado de los M1-M4 en segundo plano por si lo usas desde el menú
+        // Desbloqueos de seguridad
         progreso[1] = [true,true,true,true];
         progreso[2] = [true,true,true,true];
         progreso[3] = [true,true,true,true];
         progreso[4] = [true,true,true,true];
         actualizarMapas();
+    }
         
         // Desbloqueamos también la puerta del núcleo preventivamente
         let pNucleo = document.getElementById('puerta-nucleo');
