@@ -538,12 +538,16 @@
 
         /* ELEMENTOS CINEMÁTICOS FASE 3: Compuerta Inclinada */
 
-.f3-escenario {position: relative;width: 500px;height: 350px;margin: 20px auto;border-left: 10px solid #444; background: rgba(0,0,0,0.3);}
-.f3-compuerta-perfil {position: absolute;left: 0;top: 218px; width: 15px;height: 132px; background: #888;border: 2px solid #fff;z-index: 5;}
-.f3-presion-triangulo {position: absolute;left: 15px;bottom: 0;width: 200px;height: 350px; background: linear-gradient(to bottom right, rgba(0, 255, 255, 0.5) 50%, transparent 50%);clip-path: polygon(0 0, 0% 100%, 100% 100%);opacity: 0.6;}
-.f3-marcador-cg {position: absolute;left: -25px;width: 10px;height: 10px;background: #ffcc00;border-radius: 50%;box-shadow: 0 0 10px #ffcc00;}
-.f3-piston-refuerzo {position: absolute;left: 100px; width: 150px;height: 20px;background: linear-gradient(90deg, #333, #666, #333);border: 2px solid #aaa;border-radius: 5px;display: flex;align-items: center;justify-content: flex-end;transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);}
-.f3-piston-refuerzo::after {content: "PUNTAL";font-size: 10px;color: #fff;margin-right: 5px;}
+        @keyframes sacudida-error {0% { transform: translate(1px, 1px) rotate(0deg); }20% { transform: translate(-3px, 0px) rotate(-1deg); }40% { transform: translate(3px, 2px) rotate(1deg); }60% { transform: translate(-3px, 1px) rotate(-1deg); }80% { transform: translate(3px, -2px) rotate(1deg); }100% { transform: translate(1px, -1px) rotate(0deg); }}
+        .pantalla-sacudida { animation: sacudida-error 0.5s linear infinite; }
+        .f3-chorro-fallo {position: absolute;left: 15px;width: 0;height: 40px;background: rgba(0, 255, 255, 0.8);box-shadow: 0 0 20px #00ffff;z-index: 10;pointer-events: none;transition: width 0.5s ease-in;}
+        .f3-grieta {position: absolute;left: 0;width: 100%;height: 4px;background: #ff073a;box-shadow: 0 0 10px #ff073a;display: none;}
+        .f3-escenario {position: relative;width: 500px;height: 350px;margin: 20px auto;border-left: 10px solid #444; background: rgba(0,0,0,0.3);}
+        .f3-compuerta-perfil {position: absolute;left: 0;top: 218px; width: 15px;height: 132px; background: #888;border: 2px solid #fff;z-index: 5;}
+        .f3-presion-triangulo {position: absolute;left: 15px;bottom: 0;width: 200px;height: 350px; background: linear-gradient(to bottom right, rgba(0, 255, 255, 0.5) 50%, transparent 50%);clip-path: polygon(0 0, 0% 100%, 100% 100%);opacity: 0.6;}
+        .f3-marcador-cg {position: absolute;left: -25px;width: 10px;height: 10px;background: #ffcc00;border-radius: 50%;box-shadow: 0 0 10px #ffcc00;}
+        .f3-piston-refuerzo {position: absolute;left: 100px; width: 150px;height: 20px;background: linear-gradient(90deg, #333, #666, #333);border: 2px solid #aaa;border-radius: 5px;display: flex;align-items: center;justify-content: flex-end;transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);}
+        .f3-piston-refuerzo::after {content: "PUNTAL";font-size: 10px;color: #fff;margin-right: 5px;}
 
         /* ELEMENTOS CINEMÁTICOS FASE 4: Compuerta Radial */
         .f4-agua-rio { position: absolute; left: 0; bottom: 10%; width: 0%; height: 200px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s; }
@@ -801,34 +805,35 @@
                     </div>
                 </div>
 
-<div id="vis-fase-2" class="s12-capa-visual">
-    <div class="s12-canvas">
-        
-        <div class="f2-tubo-bajada">
-            <div class="f2-flujo-agua" id="anim-f2-cae-dinamico"></div>
-        </div>
-        
-        <div class="f2-tanque">
-            <div class="f2-techo-izq"></div>
-            <div class="f2-techo-der"></div>
+            <div id="vis-fase-2" class="s12-capa-visual">
+                <div class="s12-canvas">
+                    
+                    <div class="f2-tubo-bajada">
+                        <div class="f2-flujo-agua" id="anim-f2-cae-dinamico"></div>
+                    </div>
+                    
+                    <div class="f2-tanque">
+                        <div class="f2-techo-izq"></div>
+                        <div class="f2-techo-der"></div>
+                        
+                        <div class="f2-agua-sube" id="anim-f2-agua"></div>
+                        <div class="f2-presa-muro"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="vis-fase-3" class="s12-capa-visual">
+                <div class="f3-escenario" id="f3-contenedor-visual">
+                    <div class="f3-presion-triangulo"></div>
+                    <div class="f3-compuerta-perfil" id="f3-compuerta">
+                        <div id="f3-grieta-visual" class="f3-grieta" style="top: 50%;"></div>
+                    </div>
+                    
+                    <div id="f3-agua-fuga" class="f3-chorro-fallo"></div>
             
-            <div class="f2-agua-sube" id="anim-f2-agua"></div>
-            <div class="f2-presa-muro"></div>
-        </div>
-    </div>
-</div>
-<div id="vis-fase-3" class="s12-capa-visual">
-    <div class="f3-escenario">
-        <div class="f3-presion-triangulo"></div>
-        
-        <div class="f3-compuerta-perfil"></div>
-        
-        <div class="f3-marcador-cg" style="top: 284px;" title="Centro de Gravedad (h_cg)"></div>
-        <span style="position:absolute; left:-70px; top:280px; color:#ffcc00; font-size:12px;">h_cg</span>
-
-        <div id="f3-piston" class="f3-piston-refuerzo" style="top: 100px;"></div>
-    </div>
-</div>
+                    <div class="f3-marcador-cg" style="top: 284px;"></div>
+                    <div id="f3-piston" class="f3-piston-refuerzo" style="top: 150px;"></div>
+                </div>
+            </div>
 
                 <div id="vis-fase-4" class="s12-capa-visual">
                     <div class="f4-agua-rio" id="anim-f4-rio"></div>
@@ -1084,7 +1089,23 @@
             </div>
         </div>
         <div id="feedback-cables" style="margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px;"></div>
+<div id="modal-alerta" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:200000; justify-content:center; align-items:center;">
+    <div class="panel-azul" style="width:500px; border-color:#ff073a;">
+        <h2 id="modal-titulo" style="color:#ff073a; margin-top:0;">ALERTA</h2>
+        <p id="modal-mensaje" style="font-size:20px; color:#fff;"></p>
+        <button class="btn-ui" onclick="document.getElementById('modal-alerta').style.display='none'">[ ENTENDIDO ]</button>
+    </div>
+</div>
 
+<div id="modal-prompt" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:200001; justify-content:center; align-items:center;">
+    <div class="panel-azul" style="width:500px; border-color:#00ffff;">
+        <h2 style="color:#00ffff; margin-top:0;">SISTEMA OPERATIVO</h2>
+        <p id="modal-prompt-mensaje" style="font-size:20px; color:#fff;"></p>
+        <input type="text" id="modal-prompt-input" style="width:80%; margin-bottom:20px;">
+        <br>
+        <button id="modal-prompt-btn" class="btn-ui">[ VALIDAR ]</button>
+    </div>
+</div>
         <script>
             (() => {
                 const panel = document.getElementById('panel-juego-cables');
@@ -2634,22 +2655,63 @@ function validarCinematicaS12() {
     }
     // FASE 3: CENTRO DE PRESIONES (3.31)
     else if (faseS12Activa === 3) {
-        let posicionPx = (val * 87.5);
-        document.getElementById('f3-piston').style.top = posicionPx + "px";
+        let contenedor = document.getElementById('f3-contenedor-visual');
+        let piston = document.getElementById('f3-piston');
+        let compuerta = document.getElementById('f3-compuerta');
+        let fuga = document.getElementById('f3-agua-fuga');
+        let grieta = document.getElementById('f3-grieta-visual');
+        
+        // Mover el pistón visualmente a donde el usuario ha dicho
+        let posicionPx = (val * 87.5); 
+        piston.style.top = posicionPx + "px";
+
         if (val === 3.31) {
             feed.style.color = "#39ff14";
-            feed.innerText = "✓ REFUERZO ALINEADO CON EL CENTRO DE PRESIONES.";
-            document.getElementById('f3-piston').style.left = "15px";
-            document.getElementById('f3-piston').style.background = "#39ff14";
+            feed.innerText = "✓ REFUERZO ALINEADO. PRESIÓN COMPENSADA.";
+            piston.style.left = "15px"; 
+            piston.style.background = "#39ff14";
+            
             setTimeout(() => {
                 faseS12Activa = 4;
                 document.getElementById('vis-fase-3').classList.remove('activa');
                 document.getElementById('vis-fase-4').classList.add('activa');
-                titulo.innerText = "FASE 4: COMPUERTA RADIAL";
-                desc.innerHTML = `La compuerta radial tiene un <b>radio de 4m</b> y un <b>ancho de 5m</b>. El agua llega al tope.<br><br>Calcula la <b>Componente Horizontal de la fuerza (en kN)</b> para abrirla.`;
-                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
+                document.getElementById('txt-s12-titulo').innerText = "FASE 4: COMPUERTA RADIAL";
+                document.getElementById('txt-s12-desc').innerHTML = `La compuerta radial tiene un radio de 4m y ancho de 5m.<br>Calcula la <b>Componente Horizontal (kN)</b> para izarla.`;
+                document.getElementById('input-s12-global').value = "";
+                feed.innerText = "";
             }, 2000);
-        } else { registrarError(); feed.style.color = "#ff073a";feed.innerText = "✗ FALLO ESTRUCTURAL: El puntal no neutraliza el mome }
+
+        } else {
+            // --- SECUENCIA DE DESASTRE ---
+            registrarError();
+            feed.style.color = "#ff073a";
+            feed.innerText = "✗ ¡EL PUNTAL HA FALLADO! ESTRUCTURA CEDIENTO...";
+            
+            // 1. Sacudida de pantalla
+            document.getElementById('pantalla-mapa-12').classList.add('pantalla-sacudida');
+            
+            // 2. La compuerta se agrieta y se inclina
+            setTimeout(() => {
+                grieta.style.display = "block";
+                compuerta.style.transform = "rotate(15deg)";
+                compuerta.style.left = "5px";
+                
+                // 3. El agua sale disparada
+                fuga.style.top = posicionPx + "px";
+                fuga.style.width = "400px";
+            }, 500);
+
+            // 4. Reinicio tras el desastre
+            setTimeout(() => {
+                document.getElementById('pantalla-mapa-12').classList.remove('pantalla-sacudida');
+                fuga.style.width = "0";
+                grieta.style.display = "none";
+                compuerta.style.transform = "rotate(0deg)";
+                compuerta.style.left = "0";
+                piston.style.top = "150px";
+                feed.innerText = "SISTEMA REINICIADO. RECALCULA EL h_cp.";
+            }, 3500);
+        }
     }
     // FASE 4: FUERZA HORIZONTAL RADIAL (392)
     else if (faseS12Activa === 4) {
