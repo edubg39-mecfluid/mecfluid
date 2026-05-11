@@ -537,9 +537,13 @@
         .f2-presa-muro { position: absolute; right: 0; bottom: 0; width: 6px; height: 100%; background: #ff073a; box-shadow: 0 0 10px #ff073a; z-index: 4; }
 
         /* ELEMENTOS CINEMÁTICOS FASE 3: Compuerta Inclinada */
-        .f3-agua-tsunami { position: absolute; left: -10%; bottom: 10%; width: 10%; height: 250px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s ease-out; border-right: 4px solid #00ffff; }
-        .f3-compuerta { position: absolute; left: 60%; bottom: 10%; width: 10px; height: 300px; background: #bbb; border-radius: 5px; transform-origin: top; transform: rotate(-30deg); transition: transform 1.5s ease-in-out; z-index: 5; }
-        .f3-tope { position: absolute; left: 45%; bottom: 10%; width: 20px; height: 20px; background: #ff073a; }
+
+.f3-escenario {position: relative;width: 500px;height: 350px;margin: 20px auto;border-left: 10px solid #444; background: rgba(0,0,0,0.3);}
+.f3-compuerta-perfil {position: absolute;left: 0;top: 218px; width: 15px;height: 132px; background: #888;border: 2px solid #fff;z-index: 5;}
+.f3-presion-triangulo {position: absolute;left: 15px;bottom: 0;width: 200px;height: 350px; background: linear-gradient(to bottom right, rgba(0, 255, 255, 0.5) 50%, transparent 50%);clip-path: polygon(0 0, 0% 100%, 100% 100%);opacity: 0.6;}
+.f3-marcador-cg {position: absolute;left: -25px;width: 10px;height: 10px;background: #ffcc00;border-radius: 50%;box-shadow: 0 0 10px #ffcc00;}
+.f3-piston-refuerzo {position: absolute;left: 100px; width: 150px;height: 20px;background: linear-gradient(90deg, #333, #666, #333);border: 2px solid #aaa;border-radius: 5px;display: flex;align-items: center;justify-content: flex-end;transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);}
+.f3-piston-refuerzo::after {content: "PUNTAL";font-size: 10px;color: #fff;margin-right: 5px;}
 
         /* ELEMENTOS CINEMÁTICOS FASE 4: Compuerta Radial */
         .f4-agua-rio { position: absolute; left: 0; bottom: 10%; width: 0%; height: 200px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s; }
@@ -813,11 +817,18 @@
         </div>
     </div>
 </div>
-                <div id="vis-fase-3" class="s12-capa-visual">
-                    <div class="f3-agua-tsunami" id="anim-f3-tsunami"></div>
-                    <div class="f3-compuerta" id="anim-f3-compuerta"></div>
-                    <div class="f3-tope"></div>
-                </div>
+<div id="vis-fase-3" class="s12-capa-visual">
+    <div class="f3-escenario">
+        <div class="f3-presion-triangulo"></div>
+        
+        <div class="f3-compuerta-perfil"></div>
+        
+        <div class="f3-marcador-cg" style="top: 284px;" title="Centro de Gravedad (h_cg)"></div>
+        <span style="position:absolute; left:-70px; top:280px; color:#ffcc00; font-size:12px;">h_cg</span>
+
+        <div id="f3-piston" class="f3-piston-refuerzo" style="top: 100px;"></div>
+    </div>
+</div>
 
                 <div id="vis-fase-4" class="s12-capa-visual">
                     <div class="f4-agua-rio" id="anim-f4-rio"></div>
@@ -2623,11 +2634,13 @@ function validarCinematicaS12() {
     }
     // FASE 3: CENTRO DE PRESIONES (3.31)
     else if (faseS12Activa === 3) {
+        let posicionPx = (val * 87.5);
+        document.getElementById('f3-piston').style.top = posicionPx + "px";
         if (val === 3.31) {
             feed.style.color = "#39ff14";
-            feed.innerText = "✓ REFUERZO INSTALADO. ESTRUCTURA ESTABILIZADA.";
-            document.getElementById('anim-f3-compuerta').style.transform = "rotate(0deg)";
-            document.getElementById('anim-f3-tsunami').style.width = "0%";
+            feed.innerText = "✓ REFUERZO ALINEADO CON EL CENTRO DE PRESIONES.";
+            document.getElementById('f3-piston').style.left = "15px";
+            document.getElementById('f3-piston').style.background = "#39ff14";
             setTimeout(() => {
                 faseS12Activa = 4;
                 document.getElementById('vis-fase-3').classList.remove('activa');
@@ -2636,7 +2649,7 @@ function validarCinematicaS12() {
                 desc.innerHTML = `La compuerta radial tiene un <b>radio de 4m</b> y un <b>ancho de 5m</b>. El agua llega al tope.<br><br>Calcula la <b>Componente Horizontal de la fuerza (en kN)</b> para abrirla.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 2000);
-        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ POSICIÓN INCORRECTA"; }
+        } else { registrarError(); feed.style.color = "#ff073a";feed.innerText = "✗ FALLO ESTRUCTURAL: El puntal no neutraliza el mome }
     }
     // FASE 4: FUERZA HORIZONTAL RADIAL (392)
     else if (faseS12Activa === 4) {
