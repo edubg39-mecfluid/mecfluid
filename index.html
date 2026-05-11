@@ -984,23 +984,37 @@
         <div id="feed-nucleo" style="margin-top: 20px; font-size: 26px; height: 30px; font-weight: bold;"></div>
     </div>
 </div>
-    <div id="pantalla-victoria" class="pantalla">
-        <div class="panel-azul" style="width: 800px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);">
-            <h1 style="color:#39ff14; font-size: 60px; text-shadow: 0 0 20px #39ff14; margin: 0;">¡TODOS LOS MÓDULOS COMPLETADOS!</h1>
-            <h2 style="color:#ffffff; font-size: 40px; margin: 20px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
-            <div style="display:flex; justify-content:center; gap: 30px; margin: 30px 0;">
-                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #39ff14; width: 40%;">
-                    <span style="font-size: 26px; color:#888;">TIEMPO DE RESPUESTA</span><br>
-                    <span id="victoria-tiempo" style="font-size: 60px; color:#39ff14; font-weight: bold; text-shadow: 0 0 15px #39ff14;">00:00</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; border: 1px solid #ff073a; width: 40%;">
-                    <span style="font-size: 26px; color:#888;">ERRORES COMETIDOS</span><br>
-                    <span id="victoria-errores" style="font-size: 60px; color:#ff073a; font-weight: bold; text-shadow: 0 0 15px #ff073a;">0</span>
+        <div id="pantalla-victoria" class="pantalla">
+                <div class="panel-azul" style="width: 850px; border-color: #39ff14; box-shadow: 0 0 50px rgba(57, 255, 20, 0.4); position: relative;">
+                    
+                    <h1 style="color:#39ff14; font-size: 50px; text-shadow: 0 0 20px #39ff14; margin: 0; font-family: 'Cinzel', serif;">¡MISIÓN CUMPLIDA!</h1>
+                    
+                    <div style="margin: 20px 0; padding: 15px; background: rgba(57, 255, 20, 0.1); border: 2px dashed #39ff14; border-radius: 15px;">
+                        <p style="font-size: 28px; color: #fff; font-weight: bold; margin: 0;">¡ENHORABUENA, INGENIEROS!</p>
+                        <p style="font-size: 18px; color: #39ff14; margin-top: 10px; line-height: 1.4;">
+                            Habéis estabilizado el núcleo del reactor y asegurado el suministro de la ciudad.<br>
+                            Vuestra pericia con los fluidos ha evitado una catástrofe inminente.
+                        </p>
+                    </div>
+        
+                    <h2 style="color:#ffffff; font-size: 30px; margin: 10px 0;">EQUIPO: <span id="victoria-equipo" style="color:#00ffff; text-transform: uppercase;"></span></h2>
+                    
+                    <div style="display:flex; justify-content:center; gap: 20px; margin: 20px 0;">
+                        <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid #39ff14; width: 45%;">
+                            <span style="font-size: 18px; color:#888;">TIEMPO DE RESPUESTA</span><br>
+                            <span id="victoria-tiempo" style="font-size: 45px; color:#39ff14; font-weight: bold;">00:00</span>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid #ff073a; width: 45%;">
+                            <span style="font-size: 18px; color:#888;">ERRORES TOTALES</span><br>
+                            <span id="victoria-errores" style="font-size: 45px; color:#ff073a; font-weight: bold;">0</span>
+                        </div>
+                    </div>
+        
+                    <button class="btn-ui" onclick="reiniciarTodo()" style="background: #00ffff; color: #000; font-size: 22px; padding: 12px 40px; margin-top: 10px;">
+                        [ VOLVER AL MENÚ PRINCIPAL ]
+                    </button>
                 </div>
             </div>
-            <p style="font-size: 24px; color:#e6f2ff; animation: pulso 1.5s infinite;">Avisad al instructor para registrar vuestra marca en el servidor.</p>
-        </div>
-    </div>
 
     <div id="pantalla-enrutador" class="pantalla">
         <button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR ENRUTAMIENTO ]</button>
@@ -1052,7 +1066,16 @@
         </div>
     </div>
 
-    <div id="pantalla-quiz" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR COMPROBACIÓN ]</button><div class="panel-azul panel-quiz"><div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO Pr: PREGUNTA 1/3</div><h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA UD1</h2><div id="quiz-pregunta" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px; padding: 0 15px;"></div><div id="quiz-opciones" style="display:flex; flex-direction:column; align-items: center; padding: 0 20px;"></div><div id="quiz-feed" style="margin-top:20px; font-size:24px; height: 30px;"></div></div></div>
+         <div id="pantalla-quiz" class="pantalla">
+                <button class="btn-volver-top" onclick="vAct === 4 ? irAMapa() : abrirHabitacion(vAct)">[ ◄ ABORTAR COMPROBACIÓN ]</button>
+                <div class="panel-azul panel-quiz">
+                    <div id="quiz-paso" style="color:#00ffff; font-size:22px;">PUNTO Pr: PREGUNTA 1/3</div>
+                    <h2 style="color:#ffffff; margin:10px 0;">VERIFICACIÓN TEÓRICA</h2>
+                    <div id="quiz-pregunta" style="font-size: 26px; color:#e6f2ff; margin-bottom: 20px; padding: 0 15px;"></div>
+                    <div id="quiz-opciones" style="display:flex; flex-direction:column; align-items: center; padding: 0 20px;"></div>
+                    <div id="quiz-feed" style="margin-top:20px; font-size:24px; height: 30px;"></div>
+                </div>
+            </div>
 
     <div id="pantalla-c" class="pantalla"><button class="btn-volver-top" onclick="abrirHabitacion(vAct)">[ ◄ ABORTAR EXTRACCIÓN ]</button><div class="panel-azul panel-c"><h2 style="color:#ffffff; margin:0 0 10px 0;">EXTRACCIÓN DE DATOS M</h2><p style="font-size:26px; margin: 5px 0;">Tiradas restantes: <span id="tiradas-ui" style="color:#ff073a; font-weight:bold; text-shadow: 0 0 10px #ff073a;">5</span></p><div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin: 20px 0;"><div id="pista-ui-1" class="pista-item">1. [ ENCRIPTADO ]</div><div id="pista-ui-2" class="pista-item">2. [ ENCRIPTADO ]</div><div id="pista-ui-3" class="pista-item">3. [ ENCRIPTADO ]</div><div id="pista-ui-4" class="pista-item">4. [ ENCRIPTADO ]</div><div id="pista-ui-5" class="pista-item" style="border:none;">5. [ ENCRIPTADO ]</div></div><button class="btn-ui" id="btn-tirar" onclick="tirarRuletaC()">[ OBTENER PISTA ]</button><br><button class="btn-ui" onclick="faseFinalC()" style="margin-top: 15px; background: #333; color: white;">[ EVALUAR DATOS ]</button></div></div>
 
@@ -1985,27 +2008,30 @@ const CODIGO_CANDADO = [2, 4, 6, 8]; // El código de la caja física real
                 }
             }
 
-            // 4. LÓGICA DEL CANDADO VIRTUAL VINCULADO AL FÍSICO
-            for(let i=1; i<=4; i++) {
-                let ruleta = document.getElementById(`ruleta-${i}`);
-                if(!ruleta) continue;
-                
-                let targetReal = CODIGO_CANDADO[i-1];
-                let numVueltas = codigosSecretos[i-1];
-                // Truco matemático: ¿De qué número partimos para que al sumarle las vueltas llegue al target?
-                let numeroInicial = (targetReal - numVueltas + 20) % 10; 
-
+        // 4. LÓGICA DEL CANDADO VIRTUAL VINCULADO AL FÍSICO
+        for(let i=1; i<=4; i++) {
+            let ruleta = document.getElementById(`ruleta-${i}`);
+            if(!ruleta) continue;
+            
+            let targetReal = CODIGO_CANDADO[i-1];
+            
+            // AQUÍ ESTÁ EL CAMBIO IMPORTANTE:
             if (progreso[i] && progreso[i].every(x => x === true)) {
-                ruleta.innerText = targetReal;
-                ruleta.classList.add('resuelta');
-                verificarCandadoAnimado(); 
-            }
-                else {
-                    // Módulo aún bloqueado: mostrar número falso (calculado)
-                    ruleta.innerText = numeroInicial;
-                    ruleta.classList.remove('resuelta');
+                // Si acabamos de ganar el M4, no forzamos el texto para dejar que la animación termine
+                if (!(i === 4 && vAct === 4)) {
+                    ruleta.innerText = targetReal;
+                    ruleta.classList.add('resuelta');
+                    verificarCandadoAnimado(); 
                 }
             }
+            else {
+                // Si no está resuelto, calculamos el número inicial (el que no es el correcto)
+                let numVueltas = codigosSecretos[i-1];
+                let numeroInicial = (targetReal - numVueltas + 20) % 10;
+                ruleta.innerText = numeroInicial;
+                ruleta.classList.remove('resuelta');
+            }
+        }
 
             guardarEstado(); 
         }
@@ -2291,20 +2317,37 @@ function verificarQuiz(esCorrecta) {
         feed.style.color = "#39ff14"; 
         feed.innerText = "✓ CORRECTO";
         setTimeout(() => { 
-            if (subFase < preguntasSeleccionadas.length) { 
-                subFase++; 
-                generarRetoB(); 
-            } else { 
-                // --- CAMBIO AQUÍ: Si es M4, rellenamos todo su progreso de golpe ---
-                if (vAct === 4) {
-                    progreso[4] = [true, true, true, true];
-                    guardarEstado();
-                    mostrarAlerta("✓ MÓDULO 4 COMPLETADO: Sistema de Cantidad de Movimiento estable.", "ÉXITO");
-                    irAMapa();
-                } else {
-                    procesarVictoriaFase(vAct, tAct-1); 
-                }
-            } 
+// Sustituye el bloque del final de verificarQuiz por este:
+if (subFase < preguntasSeleccionadas.length) { 
+    subFase++; 
+    generarRetoB(); 
+} else { 
+    if (vAct === 4) {
+        // 1. Marcamos el progreso
+        progreso[4] = [true, true, true, true];
+        guardarEstado();
+        
+        // 2. Volvemos al mapa
+        irAMapa(); 
+        
+        // 3. Lanzamos la animación del cuarto dígito (M4)
+        // Calculamos desde dónde empieza a girar
+        let target = CODIGO_CANDADO[3];
+        let vueltas = codigosSecretos[3];
+        let inicio = (target - vueltas + 20) % 10;
+        
+        // Forzamos que la ruleta no tenga la clase 'resuelta' aún para que se vea el giro
+        let ruleta4 = document.getElementById('ruleta-4');
+        ruleta4.classList.remove('resuelta');
+        
+        // ¡A girar!
+        animarRuletaCandado(4, inicio, target, vueltas);
+
+        mostrarAlerta("✓ MÓDULO 4 COMPLETADO: Sistema de Cantidad de Movimiento estable.", "ÉXITO");
+    } else {
+        procesarVictoriaFase(vAct, tAct-1); 
+    }
+}
         }, 800);
     } else { 
         registrarError(); 
@@ -2904,6 +2947,10 @@ function completarModuloModoDios(mod) {
         let inputNucleo = document.getElementById('input-nucleo');
         if (inputNucleo) inputNucleo.value = "312.5";
     }
+}
+        function reiniciarTodo() {
+    localStorage.removeItem('aqualab_save');
+    location.reload();
 }
     </script>
 </body>
