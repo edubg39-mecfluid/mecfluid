@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AQUALAB - Sistema de Control</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
@@ -653,6 +653,79 @@
     color: #fff !important;
     -webkit-text-fill-color: #ffffff !important;
     border: 2px solid #00ffff !important;
+}
+
+        /* ================= PARCHE DE RESOLUCIÓN SECTOR 12 (TABLETS) ================= */
+@media screen and (max-width: 1280px), screen and (max-height: 800px) {
+    
+    /* Redimensionamos el contenedor maestro para que no desborde */
+    .s12-contenedor-maestro {
+        width: 95vw !important;
+        height: 88vh !important;
+        margin-top: 10px;
+    }
+
+    /* Ajustamos la proporción Visor/HUD para dar más espacio al texto en pantallas pequeñas */
+    .s12-visor {
+        height: 50% !important; 
+    }
+    .s12-hud {
+        height: 50% !important;
+        padding: 15px !important;
+        gap: 15px !important;
+    }
+
+    /* ESCALADO DINÁMICO DE GRÁFICOS: 
+       Esto encoge los dibujos (canvas) para que quepan sin cambiar las coordenadas internas */
+    .s12-canvas {
+        transform: scale(0.85); /* Encoge los gráficos al 85% */
+        transform-origin: top center;
+        margin-top: 2% !important;
+    }
+
+    /* Ajuste de textos del HUD para que no se amontonen */
+    .s12-hud-texto {
+        font-size: 16px !important;
+        padding-right: 15px !important;
+    }
+    
+    .s12-titulo-fase {
+        font-size: 20px !important;
+        margin-bottom: 8px !important;
+    }
+
+    #txt-s12-desc {
+        line-height: 1.3 !important;
+        font-size: 15px !important;
+    }
+
+    /* Botones e inputs más compactos en tablet */
+    #input-s12-global {
+        width: 150px !important;
+        font-size: 22px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .s12-hud-controles {
+        flex: 0.8 !important; /* Estrecha la columna de botones */
+    }
+}
+
+/* Ajuste extremo para tablets en modo vertical o resoluciones muy bajas */
+@media screen and (max-width: 800px) {
+    .s12-canvas {
+        transform: scale(0.65); /* Encoge más los gráficos si es necesario */
+    }
+    .s12-hud {
+        flex-direction: column !important; /* Pone los botones debajo del texto */
+        overflow-y: auto;
+    }
+    .s12-hud-texto {
+        border-right: none !important;
+        border-bottom: 2px dashed #555;
+        padding-bottom: 15px;
+        padding-right: 0 !important;
+    }
 }
     </style>
 </head>
@@ -2769,6 +2842,7 @@ if (subFase < preguntasSeleccionadas.length) {
         // SECTOR 12 (Cinemáticas y Manometría)
         // ==========================================
 // Variable global para controlar en qué paso del Sector 12 estamos
+// --- FUNCIÓN DE VALIDACIÓN SECTOR 12 ---
 let faseS12Activa = 1; 
 
 function validarCinematicaS12() {
@@ -2779,42 +2853,25 @@ function validarCinematicaS12() {
     let banner = document.getElementById('banner-codigo-fisico');
     let spanCodigo = document.getElementById('valor-codigo-fisico');
 
-    // FASE 1: MANOMETRÍA (19) -> DA EL NÚMERO 1
     if (faseS12Activa === 1) {
         if (val === 19) {
             feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CORRECTA. NIVELANDO AGUAS...";
-            // Mostramos código
             banner.style.display = "block"; spanCodigo.innerText = "1";
-            
             document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
             document.getElementById('anim-f1-valvula').style.background = "#39ff14";
-            
             setTimeout(() => {
                 faseS12Activa = 2;
                 document.getElementById('vis-fase-1').classList.remove('activa');
                 document.getElementById('vis-fase-2').classList.add('activa');
                 banner.style.display = "none";
-                
                 titulo.innerText = "FASE 2: PRESIÓN SOBRE COMPUERTA";
-                desc.innerHTML = `La compuerta del fondo mide 2m de ancho por 1.5m de alto.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance 4m de profundidad.`;
-            
-                // Localizamos los elementos
-                let chorro = document.getElementById('anim-f2-chorro');
-                let aguaF2 = document.getElementById('anim-f2-agua');
-            
-                // Iniciamos la secuencia cinematográfica
-                chorro.style.height = "150px"; // Cae el agua del tubo
-            
-                setTimeout(() => {
-                    aguaF2.style.height = "90%"; // El tanque empieza a llenarse cuando el chorro "llega"
-                }, 800); 
-            
-                document.getElementById('input-s12-global').value = "";
-                feed.innerText = "";
+                desc.innerHTML = `La compuerta mide 2m de ancho por 1.5m de alto.<br><br>Calcula la <b>Fuerza Hidrostática total (kN)</b> cuando el agua alcance 4m de profundidad (g=9.8).`;
+                document.getElementById('anim-f2-chorro').style.height = "150px";
+                setTimeout(() => { document.getElementById('anim-f2-agua').style.height = "90%"; }, 800);
+                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 3000);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ VALOR INCORRECTO"; }
     } 
-    // FASE 2: FUERZA (95.55) -> DA EL NÚMERO 3
     else if (faseS12Activa === 2) {
         if (val === 95.55) {
             feed.style.color = "#39ff14"; feed.innerText = "✓ FUERZA CALCULADA.";
@@ -2830,12 +2887,11 @@ function validarCinematicaS12() {
             }, 3000);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ VALOR INCORRECTO"; }
     }
-    // FASE 3: CENTRO PRESIONES (3.31) -> DA EL NÚMERO 5
     else if (faseS12Activa === 3) {
         if (val === 3.31) {
             feed.style.color = "#39ff14"; feed.innerText = "✓ PUNTAL COLOCADO CON ÉXITO.";
             banner.style.display = "block"; spanCodigo.innerText = "5";
-            document.getElementById('f3-piston').style.top = (3.31 * 87.5) + "px"; // Animación puntal
+            document.getElementById('f3-piston').style.top = "210px"; // Animación de apoyo
             setTimeout(() => {
                 faseS12Activa = 4;
                 document.getElementById('vis-fase-3').classList.remove('activa');
@@ -2845,9 +2901,8 @@ function validarCinematicaS12() {
                 desc.innerHTML = `La compuerta radial tiene un radio de 4m y ancho de 5m.<br>Calcula la <b>Componente Horizontal (kN)</b> para izarla.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 3000);
-        } else { errorFase3(); } // Tu función de sacudida y grieta
+        } else { errorFase3(); } 
     }
-    // FASE 4: RADIAL (392) -> DA EL NÚMERO 7
     else if (faseS12Activa === 4) {
         if (val === 392) {
             feed.style.color = "#39ff14"; feed.innerText = "✓ SECTOR 12 ESTABILIZADO.";
@@ -2860,6 +2915,28 @@ function validarCinematicaS12() {
             }, 4000);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INSUFICIENTE"; }
     }
+}
+
+// --- FUNCIÓN DE ERROR VISUAL PARA FASE 3 ---
+function errorFase3() {
+    registrarError();
+    let cont = document.getElementById('f3-contenedor-visual');
+    let grieta = document.getElementById('f3-grieta-visual');
+    let fuga = document.getElementById('f3-agua-fuga');
+    let feed = document.getElementById('feed-s12-global');
+    
+    cont.classList.add('pantalla-sacudida');
+    grieta.style.display = 'block';
+    fuga.style.width = '100px';
+    feed.style.color = "#ff073a";
+    feed.innerText = "✗ ERROR CRÍTICO: FALLO ESTRUCTURAL";
+    
+    setTimeout(() => {
+        cont.classList.remove('pantalla-sacudida');
+        grieta.style.display = 'none';
+        fuga.style.width = '0';
+        feed.innerText = "";
+    }, 2000);
 }
         // ==========================================
         // NÚCLEO FINAL
