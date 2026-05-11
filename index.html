@@ -1089,23 +1089,7 @@
             </div>
         </div>
         <div id="feedback-cables" style="margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px;"></div>
-<div id="modal-alerta" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:200000; justify-content:center; align-items:center;">
-    <div class="panel-azul" style="width:500px; border-color:#ff073a;">
-        <h2 id="modal-titulo" style="color:#ff073a; margin-top:0;">ALERTA</h2>
-        <p id="modal-mensaje" style="font-size:20px; color:#fff;"></p>
-        <button class="btn-ui" onclick="document.getElementById('modal-alerta').style.display='none'">[ ENTENDIDO ]</button>
-    </div>
-</div>
-
-<div id="modal-prompt" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:200001; justify-content:center; align-items:center;">
-    <div class="panel-azul" style="width:500px; border-color:#00ffff;">
-        <h2 style="color:#00ffff; margin-top:0;">SISTEMA OPERATIVO</h2>
-        <p id="modal-prompt-mensaje" style="font-size:20px; color:#fff;"></p>
-        <input type="text" id="modal-prompt-input" style="width:80%; margin-bottom:20px;">
-        <br>
-        <button id="modal-prompt-btn" class="btn-ui">[ VALIDAR ]</button>
-    </div>
-</div>
+        
         <script>
             (() => {
                 const panel = document.getElementById('panel-juego-cables');
@@ -2649,7 +2633,6 @@ function validarCinematicaS12() {
                 titulo.innerText = "FASE 3: CENTRO DE PRESIONES";
                 desc.innerHTML = `<span style='color:#ff073a'>¡AVISO!</span> La compuerta se deforma. Calcula la profundidad exacta del <b>Centro de Presiones (h_cp en metros)</b> para colocar un refuerzo.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
-                document.getElementById('anim-f3-tsunami').style.width = "40%";
             }, 1500);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INCORRECTA"; }
     }
@@ -2774,21 +2757,11 @@ function validarCinematicaS12() {
             }
         }
 
-        // ==========================================
-        // MODO DIOS
-        // ==========================================
-        function toggleModoDios() {
-            let p = document.getElementById('panel-dios');
-            p.style.display = p.style.display === "none" ? "block" : "none";
-        }
 
-// ==========================================
-        // MODO DIOS (Actualizado)
-        // ==========================================
+// ============== MODO DIOS (Actualizado) =================== //
         function toggleModoDios() {
             let p = document.getElementById('panel-dios');
-            p.style.display = p.style.display === "none" ? "block" : "none";
-        }
+            p.style.display = p.style.display === "none" ? "block" : "none"; }
 
 function completarModuloModoDios(mod) {
     if (mod >= 1 && mod <= 4) {
