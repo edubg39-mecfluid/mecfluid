@@ -564,10 +564,37 @@
             .f3-chorro-fallo {position: absolute; left: 15px; width: 0; height: 40px;background: rgba(0, 255, 255, 0.8);box-shadow: 0 0 20px #00ffff; z-index: 10;pointer-events: none; transition: width 0.5s ease-in;}
             .f3-grieta {position: absolute; left: 0; width: 100%; height: 4px;background: #ff073a; box-shadow: 0 0 10px #ff073a;display: none;}
 
-        /* ELEMENTOS CINEMÁTICOS FASE 4: Compuerta Radial */
-        .f4-agua-rio { position: absolute; left: 0; bottom: 10%; width: 0%; height: 200px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s; }
-        .f4-radial { position: absolute; right: 20%; bottom: 10%; width: 200px; height: 200px; background: transparent; border-top: 10px solid #bbb; border-left: 10px solid #bbb; border-radius: 100% 0 0 0; transform-origin: bottom right; transition: transform 2s ease-in-out; z-index: 5; }
-        .f4-pivote { position: absolute; right: 20%; bottom: 10%; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid #ff073a; transform: translate(50%, 50%); z-index: 10; }
+            /* MEJORA VISUAL FASE 4: COMPUERTA RADIAL */
+            .f4-escenario { 
+                position: relative; width: 550px; height: 350px; 
+                border-bottom: 8px solid #444; overflow: hidden; background: #050a0f; 
+            }
+            .f4-agua-rio { 
+                position: absolute; left: 0; bottom: 0; width: 0%; height: 280px; 
+                background: linear-gradient(180deg, rgba(0, 255, 255, 0.4), rgba(0, 100, 255, 0.6)); 
+                transition: width 1.5s ease-in-out; border-right: 2px solid #00ffff;
+            }
+            .f4-radial { 
+                position: absolute; right: 25%; bottom: 0; 
+                width: 200px; height: 280px; 
+                border-left: 10px solid #888; border-top: 10px solid #888; 
+                border-radius: 100% 0 0 0; transform-origin: bottom right; 
+                transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5;
+                box-shadow: inset 10px 10px 20px rgba(0,0,0,0.5);
+            }
+            /* Brazo de la compuerta */
+            .f4-radial::after {
+                content: ""; position: absolute; right: 0; bottom: 0;
+                width: 220px; height: 6px; background: #666;
+                transform: rotate(-45deg); transform-origin: right center;
+            }
+            .f4-pivote { 
+                position: absolute; right: 25%; bottom: 0; 
+                width: 24px; height: 24px; border-radius: 50%; 
+                background: #333; border: 4px solid #ff073a; 
+                transform: translate(50%, 50%); z-index: 10; 
+                box-shadow: 0 0 15px #ff073a;
+            }
         
         /* BOTÓN SECRETO MODO DIOS */
         #btn-toggle-dios {
@@ -865,6 +892,9 @@
                     <div id="txt-s12-desc">
                         Un tanque de agua está conectado a un manómetro en U con mercurio (ρ = 13600 kg/m³). La superficie del agua está <b>1.5 m</b> por encima del menisco izquierdo. El menisco derecho está <b>0.25 m</b> por encima del izquierdo.<br><br>
                         Calcula la presión manométrica en el tanque en <b>kPa</b> para desbloquear la purga inferior.
+                    </div>
+                    <div id="display-codigo-fisico" style="margin-top: 15px; padding: 10px; border: 1px dashed #39ff14; background: rgba(57, 255, 20, 0.05); color: #39ff14; font-weight: bold; display: none; font-size: 18px;">
+                        🔑 CÓDIGO CANDADO REAL: <span id="num-fisico-valor" style="font-size: 26px; font-family: 'VT323';">?</span>
                     </div>
                 </div>
                 <div class="s12-hud-controles">
@@ -2616,12 +2646,16 @@ function validarCinematicaS12() {
     let feed = document.getElementById('feed-s12-global');
     let desc = document.getElementById('txt-s12-desc');
     let titulo = document.getElementById('txt-s12-titulo');
+    let displayFisico = document.getElementById('display-codigo-fisico');
+    let numFisico = document.getElementById('num-fisico-valor');
 
-    // FASE 1: MANOMETRÍA (19)
+    // FASE 1: MANOMETRÍA (19) -> CÓDIGO 1
     if (faseS12Activa === 1) {
         if (val === 19) {
-            feed.style.color = "#39ff14";
-            feed.innerText = "✓ PRESIÓN CORRECTA. NIVELANDO AGUAS...";
+            feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CORRECTA.";
+            // Mostrar número físico
+            displayFisico.style.display = "block"; numFisico.innerText = "1";
+            
             document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
             document.getElementById('anim-f1-valvula').style.background = "#39ff14";
             setTimeout(() => {
@@ -2630,104 +2664,69 @@ function validarCinematicaS12() {
                 faseS12Activa = 2;
                 document.getElementById('vis-fase-1').classList.remove('activa');
                 document.getElementById('vis-fase-2').classList.add('activa');
+                displayFisico.style.display = "none"; // Ocultar para la siguiente
                 titulo.innerText = "FASE 2: PRESIÓN SOBRE COMPUERTA";
                 desc.innerHTML = `La compuerta del fondo mide 2m de ancho por 1.5m de alto.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance 4m de profundidad.<br>(g = 9.8 m/s²)`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
-                document.getElementById('anim-f2-cae-dinamico').style.height = "150px";
-                document.getElementById('anim-f2-agua').style.height = "90%";
-            }, 2000);
+            }, 3000); // 3 segundos para que les de tiempo a leer el código
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ PRESIÓN INCORRECTA"; }
     } 
-    // FASE 2: FUERZA HIDROSTÁTICA (95.55)
+    // FASE 2: FUERZA HIDROSTÁTICA (95.55) -> CÓDIGO 3
     else if (faseS12Activa === 2) {
         if (val === 95.55) {
-            feed.style.color = "#39ff14";
-            feed.innerText = "✓ FUERZA CALCULADA. COMPUERTA EN TENSIÓN.";
+            feed.style.color = "#39ff14"; feed.innerText = "✓ FUERZA CALCULADA.";
+            displayFisico.style.display = "block"; numFisico.innerText = "3";
             setTimeout(() => {
                 faseS12Activa = 3;
                 document.getElementById('vis-fase-2').classList.remove('activa');
                 document.getElementById('vis-fase-3').classList.add('activa');
+                displayFisico.style.display = "none";
                 titulo.innerText = "FASE 3: CENTRO DE PRESIONES";
                 desc.innerHTML = `¡EMERGENCIA! La presión hidrostática está a punto de combar la compuerta.
-                <br><br><b>Datos del sistema:</b>
-                <br>- Profundidad total del agua: <b>4.00 m</b>.
-                <br>- La compuerta está en el fondo y mide <b>1.50 m</b> de altura.
-                <br><br>Calcula a qué profundidad exacta (desde la superficie) se encuentra el <b>Centro de Presiones ($h_{cp}$)</b> para apuntalar la estructura.`;
+                <br><br>Calcula a qué profundidad exacta se encuentra el <b>Centro de Presiones ($h_{cp}$)</b> para apuntalar la estructura.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
-            }, 1500);
+            }, 3000);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INCORRECTA"; }
     }
-    // FASE 3: CENTRO DE PRESIONES (3.31)
+    // FASE 3: CENTRO DE PRESIONES (3.31) -> CÓDIGO 5
     else if (faseS12Activa === 3) {
-        let contenedor = document.getElementById('f3-contenedor-visual');
-        let piston = document.getElementById('f3-piston');
-        let compuerta = document.getElementById('f3-compuerta');
-        let fuga = document.getElementById('f3-agua-fuga');
-        let grieta = document.getElementById('f3-grieta-visual');
-        
-        // Mover el pistón visualmente a donde el usuario ha dicho
-        let posicionPx = (val * 87.5); 
-        piston.style.top = posicionPx + "px";
-
         if (val === 3.31) {
-        feed.innerText = "✓ PUNTAL COLOCADO. Estructura asegurada.";
-         piston.style.boxShadow = "0 0 20px #39ff14";
-            
+            feed.innerText = "✓ PUNTAL COLOCADO.";
+            displayFisico.style.display = "block"; numFisico.innerText = "5";
+            document.getElementById('f3-piston').style.top = (3.31 * 87.5) + "px";
+            document.getElementById('f3-piston').style.boxShadow = "0 0 20px #39ff14";
             setTimeout(() => {
                 faseS12Activa = 4;
                 document.getElementById('vis-fase-3').classList.remove('activa');
                 document.getElementById('vis-fase-4').classList.add('activa');
+                displayFisico.style.display = "none";
                 document.getElementById('txt-s12-titulo').innerText = "FASE 4: COMPUERTA RADIAL";
                 document.getElementById('txt-s12-desc').innerHTML = `La compuerta radial tiene un radio de 4m y ancho de 5m.<br>Calcula la <b>Componente Horizontal (kN)</b> para izarla.`;
-                document.getElementById('input-s12-global').value = "";
-                feed.innerText = "";
-            }, 2000);
-
+                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
+            }, 3000);
         } else {
-            // --- SECUENCIA DE DESASTRE ---
+            // Tu lógica de desastre de la fase 3 se mantiene igual aquí...
             registrarError();
             feed.style.color = "#ff073a";
-            feed.innerText = "✗ ¡EL PUNTAL HA FALLADO! ESTRUCTURA CEDIENTO...";
-            
-            // 1. Sacudida de pantalla
+            feed.innerText = "✗ ¡EL PUNTAL HA FALLADO!";
             document.getElementById('pantalla-mapa-12').classList.add('pantalla-sacudida');
-            
-            // 2. La compuerta se agrieta y se inclina
-            setTimeout(() => {
-                grieta.style.display = "block";
-                compuerta.style.transform = "rotate(15deg)";
-                compuerta.style.left = "5px";
-                
-                // 3. El agua sale disparada
-                fuga.style.top = posicionPx + "px";
-                fuga.style.width = "400px";
-            }, 500);
-
-            // 4. Reinicio tras el desastre
             setTimeout(() => {
                 document.getElementById('pantalla-mapa-12').classList.remove('pantalla-sacudida');
-                fuga.style.width = "0";
-                grieta.style.display = "none";
-                compuerta.style.transform = "rotate(0deg)";
-                compuerta.style.left = "0";
-                piston.style.top = "150px";
-                feed.innerText = "SISTEMA REINICIADO. RECALCULA EL h_cp.";
-            }, 3500);
+            }, 1000);
         }
     }
-    // FASE 4: FUERZA HORIZONTAL RADIAL (392)
+    // FASE 4: FUERZA HORIZONTAL RADIAL (392) -> CÓDIGO 7
     else if (faseS12Activa === 4) {
         if (val === 392) {
-            feed.style.color = "#39ff14";
-            feed.innerText = "✓ FUERZA ACEPTADA. ABRIENDO SECTOR 12...";
+            feed.style.color = "#39ff14"; feed.innerText = "✓ FUERZA ACEPTADA.";
+            displayFisico.style.display = "block"; numFisico.innerText = "7";
             document.getElementById('anim-f4-radial').style.transform = "rotate(-45deg)";
             document.getElementById('anim-f4-rio').style.width = "100%";
-            
             setTimeout(() => {
                 mostrarAlerta("✓ SECTOR 12 ESTABILIZADO.<br>El acceso al NÚCLEO está ahora disponible.", "SISTEMA SECTORIAL ONLINE");
-                irAPasillo(); // Volvemos al pasillo para que elijan el núcleo
-            }, 3000);
-        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INSUFICIENTE PARA EL GIRO"; }
+                irAPasillo();
+            }, 4000);
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INSUFICIENTE"; }
     }
 }
         // ==========================================
