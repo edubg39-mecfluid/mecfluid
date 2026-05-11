@@ -1104,7 +1104,7 @@
                 <div>
                     <span style="color:#888;">[ ENTRADA ]</span><br>
                     Diámetro (De): <b style="color:#00ffff;">2.0 m</b><br>
-                    Velidad (Ve): <b style="color:#00ffff;">10.0 m/s</b>
+                    Velocidad (Ve): <b style="color:#00ffff;">10.0 m/s</b>
                 </div>
                 <div>
                     <span style="color:#888;">[ SALIDA ]</span><br>
@@ -1531,6 +1531,11 @@
             { q: "¿Qué fenómeno provoca que el agua ascienda espontáneamente por un tubo de vidrio muy estrecho?", opciones: [ { t: "Capilaridad.", c: true }, { t: "Principio de Pascal.", c: false }, { t: "Presión Hidrostática.", c: false }]},
             { q: "Un 'fluido ideal' es una abstracción teórica que supone que el fluido:", opciones: [ { t: "Completamente no viscoso e incompresible.", c: true }, { t: "Viscosidad infinitamente alta.", c: false }, { t: "Gas real sometido a bajas presiones.", c: false }]},
         ];
+        const bdTeoriaM4 = [
+            { q: "¿Es la Cantidad de Movimiento una magnitud <b>vectorial</b> (es decir, importa su dirección)?", opciones: [{t: "Verdadero", c: true}, {t: "Falso", c: false}] },
+            { q: "Si un chorro de agua choca contra una placa y 'rebota' (cambio de 180º), ¿ejerce <b>más fuerza</b> que si solo se desvía lateralmente (90º)?", opciones: [{t: "Verdadero", c: true}, {t: "Falso", c: false}] },
+            { q: "¿La fuerza que ejerce un chorro de agua al chocar depende únicamente de la presión, ignorando la velocidad?", opciones: [{t: "Verdadero", c: false}, {t: "Falso", c: true}] }
+        ];
         let preguntasSeleccionadas = [];
 
         // FUSIBLES LOGIC Y GLOBAL FUNCTIONS
@@ -1881,7 +1886,20 @@ function enfocarPrueba(idPrueba) {
             arrancarReloj(); vAct = n; 
             if (n === 2) mostrar('pantalla-habitacion-2');
             else if (n === 3) mostrar('pantalla-habitacion-3');
-            else if (n === 4) mostrarAlerta("Módulo 4: En construcción", "AVISO");
+            else if (n === 4) {
+    if(!progreso[3].every(x=>x===true)) { 
+        mostrarAlerta("Este módulo está bloqueado. Resuelve el M3 para continuar.", "ACCESO DENEGADO"); 
+        return; 
+    }
+    arrancarReloj();
+    vAct = 4; // Marcamos que estamos en el Módulo 4
+    subFase = 1;
+    tAct = 1; // Para que el índice de progreso sea 0 (tAct-1)
+    preguntasSeleccionadas = [...bdTeoriaM4].sort(() => 0.5 - Math.random());
+    mostrar('pantalla-quiz');
+    generarRetoB();
+    document.getElementById('hud-cronometro').style.display = "none";
+}
             else if (n === 5) mostrarAlerta("Módulo 5: En construcción", "AVISO");
             else mostrar('pantalla-habitacion'); 
             
@@ -2257,20 +2275,50 @@ function intentarAbrir() {
         // 2. LÓGICA VERIFICACIÓN TEÓRICA (Pr, t=2)
         // ==========================================
         function generarRetoB() {
-            const preg = preguntasSeleccionadas[subFase - 1]; document.getElementById('quiz-paso').innerText = `PUNTO Pr: PREGUNTA ${subFase}/3`;
+            const preg = preguntasSeleccionadas[subFase - 1]; let tituloModulo = vAct === 1 ? "PUNTO Pr" : "MÓDULO 4";
+            document.getElementById('quiz-paso').innerText = `${tituloModulo}: PREGUNTA ${subFase}/${preguntasSeleccionadas.length}`;
             document.getElementById('quiz-pregunta').innerHTML = preg.q; document.getElementById('quiz-feed').innerText = "";
             const opcionesDiv = document.getElementById('quiz-opciones'); opcionesDiv.innerHTML = "";
             let opcionesMezcladas = [...preg.opciones].sort(() => 0.5 - Math.random());
             opcionesMezcladas.forEach(opt => { let btn = document.createElement('button'); btn.className = "btn-opcion"; btn.innerText = opt.t; btn.onclick = () => verificarQuiz(opt.c); opcionesDiv.appendChild(btn); });
         }
 
-        function verificarQuiz(esCorrecta) {
-            const feed = document.getElementById('quiz-feed'); document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
-            if (esCorrecta) {
-                feed.style.color = "#39ff14"; feed.innerText = "✓ CORRECTO";
-                setTimeout(() => { if (subFase < 3) { subFase++; generarRetoB(); } else { procesarVictoriaFase(vAct, tAct-1); } }, 800);
-            } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ INCORRECTO"; setTimeout(() => { subFase = 1; preguntasSeleccionadas = [...bdTeoria].sort(() => 0.5 - Math.random()).slice(0, 3); generarRetoB(); }, 1500); }
-        }
+function verificarQuiz(esCorrecta) {
+    const feed = document.getElementById('quiz-feed'); 
+    document.querySelectorAll('.btn-opcion').forEach(b => b.disabled = true); 
+    
+    if (esCorrecta) {
+        feed.style.color = "#39ff14"; 
+        feed.innerText = "✓ CORRECTO";
+        setTimeout(() => { 
+            if (subFase < preguntasSeleccionadas.length) { 
+                subFase++; 
+                generarRetoB(); 
+            } else { 
+                // --- CAMBIO AQUÍ: Si es M4, rellenamos todo su progreso de golpe ---
+                if (vAct === 4) {
+                    progreso[4] = [true, true, true, true];
+                    guardarEstado();
+                    mostrarAlerta("✓ MÓDULO 4 COMPLETADO: Sistema de Cantidad de Movimiento estable.", "ÉXITO");
+                    irAMapa();
+                } else {
+                    procesarVictoriaFase(vAct, tAct-1); 
+                }
+            } 
+        }, 800);
+    } else { 
+        registrarError(); 
+        feed.style.color = "#ff073a"; 
+        feed.innerText = "✗ INCORRECTO"; 
+        setTimeout(() => { 
+            subFase = 1; 
+            // Recargamos preguntas según el módulo
+            let base = (vAct === 4) ? bdTeoriaM4 : bdTeoria;
+            preguntasSeleccionadas = [...base].sort(() => 0.5 - Math.random()).slice(0, 3); 
+            generarRetoB(); 
+        }, 1500); 
+    }
+}
 
         // ==========================================
         // 3. LÓGICA CAPILARIDAD (M, t=3)
