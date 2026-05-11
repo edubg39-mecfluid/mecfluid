@@ -491,24 +491,20 @@
         
 /* ================= FASE 2 NUEVA ================= */
 
+        /* 1. TUBERÍA DE ENTRADA Y CHORRO */
         .f2-tubo-bajada {
             position: absolute;
-            left: 215px; 
-            top: 0; 
-            width: 20px;
-            height: 150px; 
+            left: 215px; top: 0; 
+            width: 20px; height: 150px; 
             background: linear-gradient(90deg, #333 0%, #777 50%, #333 100%); 
-            border-left: 2px solid #111;
-            border-right: 2px solid #111;
+            border-left: 2px solid #111; border-right: 2px solid #111;
             z-index: 2;
         }
-
+        
         .f2-flujo-agua {
             position: absolute;
-            top: 0; 
-            left: 0; 
-            width: 100%;
-            height: 0px; 
+            top: 0; left: 0; width: 100%;
+            height: 0px; /* Se activa por JS */
             background-color: #00ffff;
             background-image: repeating-linear-gradient(
                 180deg,
@@ -520,21 +516,56 @@
             background-size: 100% 40px;
             animation: fluirAguaCae 0.3s linear infinite;
             transition: height 0.8s ease-in; 
-            box-shadow: 0 0 10px #00ffff;
+            box-shadow: 0 0 15px #00ffff;
         }
-
+        
         @keyframes fluirAguaCae {
             from { background-position: 0 -40px; }
             to { background-position: 0 0; }
         }
-
-        .f2-tanque { position: absolute; left: 85px; top: 150px; width: 280px; height: 180px; border: 6px solid #888; border-top: none; border-radius: 0 0 5px 5px;background: rgba(0, 255, 255, 0.05);box-sizing: border-box;overflow: hidden;z-index: 1; }
-
-        .f2-techo-izq { position: absolute; top: 0; left: 0; width: 130px; height: 6px; background: #888; z-index: 3;}
-        .f2-techo-der { position: absolute; top: 0; right: 0; width: 130px; height: 6px; background: #888; z-index: 3;}
-        .f2-agua-sube { position: absolute; bottom: 0; left: 0; width: 100%; height: 5%; background: linear-gradient(180deg, rgba(0, 255, 255, 0.8), rgba(0, 150, 255, 0.9)); box-shadow: inset 0 0 15px rgba(0,255,255,0.8);transition: height 45s linear; }
-        .f2-agua-sube::before {content: ""; position: absolute; top: -10px; left: -50%; width: 200%; height: 20px;background: rgba(0, 255, 255, 0.6); border-radius: 50%;animation: olaDinamica 2.5s infinite alternate ease-in-out;}
-        .f2-presa-muro { position: absolute; right: 0; bottom: 0; width: 6px; height: 100%; background: #ff073a; box-shadow: 0 0 10px #ff073a; z-index: 4; }
+        
+        /* 2. EL TANQUE Y EL AGUA QUE SUBE */
+        .f2-tanque { 
+            position: absolute; left: 85px; top: 150px; 
+            width: 280px; height: 180px; 
+            border: 6px solid #888; border-top: none; 
+            border-radius: 0 0 5px 5px;
+            background: rgba(0, 255, 255, 0.05);
+            box-sizing: border-box; overflow: hidden; z-index: 1; 
+        }
+        
+        /* El "techo" dividido: Deja el hueco exacto de 20px para el tubo */
+        .f2-techo-izq, .f2-techo-der { 
+            position: absolute; top: 0; width: 130px; height: 6px; 
+            background: #888; z-index: 3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Le da un poco de volumen */
+        }
+        .f2-techo-izq { left: 0; }
+        .f2-techo-der { right: 0; }
+        
+        .f2-agua-sube { 
+            position: absolute; bottom: 0; left: 0; width: 100%; 
+            height: 0%; 
+            background: linear-gradient(180deg, rgba(0, 255, 255, 0.9), rgba(0, 100, 255, 1)); 
+            box-shadow: inset 0 0 20px rgba(0,255,255,0.8), 0 0 10px #00ffff;
+            transition: height 8s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 2;
+        }
+        
+        /* 3. ELEMENTOS DE INTERFAZ Y OBJETIVO */
+        .f2-presa-muro { 
+            position: absolute; right: 0; bottom: 0; 
+            width: 8px; height: 100%; 
+            background: #ff073a; box-shadow: 0 0 15px #ff073a; z-index: 4; 
+        }
+        
+        .banner-codigo-candado {
+            margin-top: 15px; padding: 10px;
+            border: 1px dashed #39ff14;
+            background: rgba(57, 255, 20, 0.1);
+            color: #39ff14; font-weight: bold; font-size: 18px;
+            display: none; animation: fadeIn 0.5s forwards;
+        }
 
         /* ELEMENTOS CINEMÁTICOS FASE 3: Compuerta Inclinada */
 
@@ -851,7 +882,7 @@
                 <div class="s12-canvas">
                     
                     <div class="f2-tubo-bajada">
-                        <div class="f2-flujo-agua" id="anim-f2-cae-dinamico"></div>
+                        <div class="f2-flujo-agua" id="anim-f2-chorro"></div>
                     </div>
                     
                     <div class="f2-tanque">
@@ -893,9 +924,9 @@
                         Un tanque de agua está conectado a un manómetro en U con mercurio (ρ = 13600 kg/m³). La superficie del agua está <b>1.5 m</b> por encima del menisco izquierdo. El menisco derecho está <b>0.25 m</b> por encima del izquierdo.<br><br>
                         Calcula la presión manométrica en el tanque en <b>kPa</b> para desbloquear la purga inferior.
                     </div>
-                    <div id="display-codigo-fisico" style="margin-top: 15px; padding: 10px; border: 1px dashed #39ff14; background: rgba(57, 255, 20, 0.05); color: #39ff14; font-weight: bold; display: none; font-size: 18px;">
-                        🔑 CÓDIGO CANDADO REAL: <span id="num-fisico-valor" style="font-size: 26px; font-family: 'VT323';">?</span>
-                    </div>
+                        <div id="banner-codigo-fisico" class="banner-codigo-candado">
+                            🔑 CÓDIGO CANDADO FÍSICO: <span id="valor-codigo-fisico" style="font-size: 24px; font-family: 'VT323';">?</span>
+                        </div>
                 </div>
                 <div class="s12-hud-controles">
                     <input type="number" step="0.01" id="input-s12-global" placeholder="Valor" style="width: 200px; font-size: 30px; margin-bottom: 20px;">
@@ -2646,84 +2677,86 @@ function validarCinematicaS12() {
     let feed = document.getElementById('feed-s12-global');
     let desc = document.getElementById('txt-s12-desc');
     let titulo = document.getElementById('txt-s12-titulo');
-    let displayFisico = document.getElementById('display-codigo-fisico');
-    let numFisico = document.getElementById('num-fisico-valor');
+    let banner = document.getElementById('banner-codigo-fisico');
+    let spanCodigo = document.getElementById('valor-codigo-fisico');
 
-    // FASE 1: MANOMETRÍA (19) -> CÓDIGO 1
+    // FASE 1: MANOMETRÍA (19) -> DA EL NÚMERO 1
     if (faseS12Activa === 1) {
         if (val === 19) {
-            feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CORRECTA.";
-            // Mostrar número físico
-            displayFisico.style.display = "block"; numFisico.innerText = "1";
+            feed.style.color = "#39ff14"; feed.innerText = "✓ PRESIÓN CORRECTA. NIVELANDO AGUAS...";
+            // Mostramos código
+            banner.style.display = "block"; spanCodigo.innerText = "1";
             
             document.getElementById('anim-f1-valvula').style.transform = "rotate(90deg) scale(0.8)";
             document.getElementById('anim-f1-valvula').style.background = "#39ff14";
+            
             setTimeout(() => {
-                document.getElementById('anim-f1-chorro').style.height = "80px";
-                document.getElementById('anim-f1-agua').style.height = "20%";
                 faseS12Activa = 2;
                 document.getElementById('vis-fase-1').classList.remove('activa');
                 document.getElementById('vis-fase-2').classList.add('activa');
-                displayFisico.style.display = "none"; // Ocultar para la siguiente
+                banner.style.display = "none";
+                
                 titulo.innerText = "FASE 2: PRESIÓN SOBRE COMPUERTA";
-                desc.innerHTML = `La compuerta del fondo mide 2m de ancho por 1.5m de alto.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance 4m de profundidad.<br>(g = 9.8 m/s²)`;
-                document.getElementById('input-s12-global').value = ""; feed.innerText = "";
-            }, 3000); // 3 segundos para que les de tiempo a leer el código
-        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ PRESIÓN INCORRECTA"; }
+                desc.innerHTML = `La compuerta del fondo mide 2m de ancho por 1.5m de alto.<br><br>Calcula la <b>Fuerza Hidrostática total (en kN)</b> cuando el agua alcance 4m de profundidad.`;
+            
+                // Localizamos los elementos
+                let chorro = document.getElementById('anim-f2-chorro');
+                let aguaF2 = document.getElementById('anim-f2-agua');
+            
+                // Iniciamos la secuencia cinematográfica
+                chorro.style.height = "150px"; // Cae el agua del tubo
+            
+                setTimeout(() => {
+                    aguaF2.style.height = "90%"; // El tanque empieza a llenarse cuando el chorro "llega"
+                }, 800); 
+            
+                document.getElementById('input-s12-global').value = "";
+                feed.innerText = "";
+            }, 3000);
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ VALOR INCORRECTO"; }
     } 
-    // FASE 2: FUERZA HIDROSTÁTICA (95.55) -> CÓDIGO 3
+    // FASE 2: FUERZA (95.55) -> DA EL NÚMERO 3
     else if (faseS12Activa === 2) {
         if (val === 95.55) {
             feed.style.color = "#39ff14"; feed.innerText = "✓ FUERZA CALCULADA.";
-            displayFisico.style.display = "block"; numFisico.innerText = "3";
+            banner.style.display = "block"; spanCodigo.innerText = "3";
             setTimeout(() => {
                 faseS12Activa = 3;
                 document.getElementById('vis-fase-2').classList.remove('activa');
                 document.getElementById('vis-fase-3').classList.add('activa');
-                displayFisico.style.display = "none";
+                banner.style.display = "none";
                 titulo.innerText = "FASE 3: CENTRO DE PRESIONES";
-                desc.innerHTML = `¡EMERGENCIA! La presión hidrostática está a punto de combar la compuerta.
-                <br><br>Calcula a qué profundidad exacta se encuentra el <b>Centro de Presiones ($h_{cp}$)</b> para apuntalar la estructura.`;
+                desc.innerHTML = `¡AVISO! La compuerta se deforma. Calcula la profundidad exacta del <b>Centro de Presiones (h_cp en metros)</b> para colocar un refuerzo.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 3000);
-        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INCORRECTA"; }
+        } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ VALOR INCORRECTO"; }
     }
-    // FASE 3: CENTRO DE PRESIONES (3.31) -> CÓDIGO 5
+    // FASE 3: CENTRO PRESIONES (3.31) -> DA EL NÚMERO 5
     else if (faseS12Activa === 3) {
         if (val === 3.31) {
-            feed.innerText = "✓ PUNTAL COLOCADO.";
-            displayFisico.style.display = "block"; numFisico.innerText = "5";
-            document.getElementById('f3-piston').style.top = (3.31 * 87.5) + "px";
-            document.getElementById('f3-piston').style.boxShadow = "0 0 20px #39ff14";
+            feed.style.color = "#39ff14"; feed.innerText = "✓ PUNTAL COLOCADO CON ÉXITO.";
+            banner.style.display = "block"; spanCodigo.innerText = "5";
+            document.getElementById('f3-piston').style.top = (3.31 * 87.5) + "px"; // Animación puntal
             setTimeout(() => {
                 faseS12Activa = 4;
                 document.getElementById('vis-fase-3').classList.remove('activa');
                 document.getElementById('vis-fase-4').classList.add('activa');
-                displayFisico.style.display = "none";
-                document.getElementById('txt-s12-titulo').innerText = "FASE 4: COMPUERTA RADIAL";
-                document.getElementById('txt-s12-desc').innerHTML = `La compuerta radial tiene un radio de 4m y ancho de 5m.<br>Calcula la <b>Componente Horizontal (kN)</b> para izarla.`;
+                banner.style.display = "none";
+                titulo.innerText = "FASE 4: COMPUERTA RADIAL";
+                desc.innerHTML = `La compuerta radial tiene un radio de 4m y ancho de 5m.<br>Calcula la <b>Componente Horizontal (kN)</b> para izarla.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 3000);
-        } else {
-            // Tu lógica de desastre de la fase 3 se mantiene igual aquí...
-            registrarError();
-            feed.style.color = "#ff073a";
-            feed.innerText = "✗ ¡EL PUNTAL HA FALLADO!";
-            document.getElementById('pantalla-mapa-12').classList.add('pantalla-sacudida');
-            setTimeout(() => {
-                document.getElementById('pantalla-mapa-12').classList.remove('pantalla-sacudida');
-            }, 1000);
-        }
+        } else { errorFase3(); } // Tu función de sacudida y grieta
     }
-    // FASE 4: FUERZA HORIZONTAL RADIAL (392) -> CÓDIGO 7
+    // FASE 4: RADIAL (392) -> DA EL NÚMERO 7
     else if (faseS12Activa === 4) {
         if (val === 392) {
-            feed.style.color = "#39ff14"; feed.innerText = "✓ FUERZA ACEPTADA.";
-            displayFisico.style.display = "block"; numFisico.innerText = "7";
+            feed.style.color = "#39ff14"; feed.innerText = "✓ SECTOR 12 ESTABILIZADO.";
+            banner.style.display = "block"; spanCodigo.innerText = "7";
             document.getElementById('anim-f4-radial').style.transform = "rotate(-45deg)";
             document.getElementById('anim-f4-rio').style.width = "100%";
             setTimeout(() => {
-                mostrarAlerta("✓ SECTOR 12 ESTABILIZADO.<br>El acceso al NÚCLEO está ahora disponible.", "SISTEMA SECTORIAL ONLINE");
+                mostrarAlerta("✓ SECTOR 12 ONLINE.<br>Acceso al NÚCLEO desbloqueado.", "SISTEMA SECTORIAL");
                 irAPasillo();
             }, 4000);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INSUFICIENTE"; }
