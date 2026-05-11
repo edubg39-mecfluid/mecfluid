@@ -646,6 +646,14 @@
             opacity: 1;
             transform: scale(1.2);
         }
+        input[readonly] {
+    cursor: pointer;
+    background: rgba(0, 51, 102, 0.7) !important;
+    opacity: 1 !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 2px solid #00ffff !important;
+}
     </style>
 </head>
 <body ontouchstart="">
@@ -1538,7 +1546,7 @@
             { q: "¿A qué corresponde esta fórmula?<br><span style='font-size:35px;'>¿? = v &middot; A</span>", opciones: [{t: "Ecuación de Continuidad (Caudal)", c: true}, {t: "Fuerza de arrastre", c: false}, {t: "Ley de Newton", c: false}] },
             { q: "¿Qué fenómeno describe la transferencia de calor mediante el movimiento de un fluido?", opciones: [{t: "Convección", c: true}, {t: "Conducción", c: false}, {t: "Radiación", c: false}] },
             { q: "Si las líneas de corriente son paralelas y rectas en todo momento, el flujo es...", opciones: [{t: "Uniforme", c: true}, {t: "Turbulento", c: false}, {t: "Rotacional", c: false}] },
-            { q: "¿Cuándo se dice que un líquido moja una superficie sólida?", opciones: [ { t: "Cuando &theta; es &lt; 90&deg;", c: true }, { t: "Cuando el ángulo de contacto &theta; es &gt; 90&deg;", c: false }, { t: "Cuando la tensión superficial es nula.", c: false }] },
+            { q: "¿Cuándo se dice que un líquido moja una superficie sólida?", opciones: [ { t: "Cuando &theta; es < 90&deg;", c: true }, { t: "Cuando el ángulo de contacto &theta; es > 90&deg;", c: false }, { t: "Cuando la tensión superficial es nula.", c: false }] },
             { q: "En el Número de Reynolds, el numerador (ρ·v·D) representa las fuerzas de...", opciones: [{t: "Inercia", c: true}, {t: "Presión", c: false}, {t: "Fricción", c: false}] },
             { q: "En ausencia de fuerzas externas... Que forma es la que presenta una superficie libre mínima y por tanto energía minima", opciones: [{t: "Forma esférica", c: true}, {t: "Forma cilindrica", c: false}, {t: "Forma rectangular", c: false}] },
             { q: "Cual de las siguientes magnitudes NO es una magnitud intensiva", opciones: [{t: "Masa", c: true}, {t: "Densidad", c: false}, {t: "Viscosidad", c: false}] }
@@ -2952,6 +2960,79 @@ function completarModuloModoDios(mod) {
     localStorage.removeItem('aqualab_save');
     location.reload();
 }
+let inputActivo = null;
+
+        function configurarInputsParaTeclado() {
+            // Buscamos todos los inputs excepto el de nombre de equipo inicial
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                // Si es el input de equipo lo dejamos normal, los demás modo tablet
+                if (input.id === "input-equipo") return;
+
+                input.setAttribute('readonly', 'true'); 
+                
+                input.onclick = (e) => {
+                    e.stopPropagation();
+                    inputActivo = input;
+                    document.getElementById('teclado-virtual').style.display = 'grid';
+                    // Resaltar visualmente
+                    document.querySelectorAll('input').forEach(i => i.style.boxShadow = "none");
+                    input.style.boxShadow = "0 0 15px #00ffff";
+                };
+            });
+        }
+
+        function teclear(valor) {
+            if (!inputActivo) return;
+            
+            if (valor === 'DEL') {
+                inputActivo.value = inputActivo.value.slice(0, -1);
+            } else {
+                if (valor === '.' && inputActivo.value.includes('.')) return;
+                inputActivo.value += valor;
+            }
+
+            // ESTO ES VITAL: Avisa al resto del código que el valor ha cambiado
+            inputActivo.dispatchEvent(new Event('input'));
+            inputActivo.dispatchEvent(new Event('change'));
+        }
+
+        function cerrarTeclado() {
+            document.getElementById('teclado-virtual').style.display = 'none';
+            if(inputActivo) inputActivo.style.boxShadow = "none";
+            inputActivo = null;
+        }
+
+        // Configuración inicial
+        window.addEventListener('load', configurarInputsParaTeclado);
+        setInterval(configurarInputsParaTeclado, 2000); 
+
+        // Cerrar si tocas el fondo de la pantalla
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#teclado-virtual') && !e.target.closest('input')) {
+                cerrarTeclado();
+            }
+        });
+
+// Llamar a la configuración al cargar y cada vez que cambies de pantalla
+window.addEventListener('load', configurarInputsParaTeclado);
+// Parche para que funcione siempre:
+setInterval(configurarInputsParaTeclado, 2000);
     </script>
+         <div id="teclado-virtual">
+            <div class="tecla" onclick="teclear(1)">1</div>
+            <div class="tecla" onclick="teclear(2)">2</div>
+            <div class="tecla" onclick="teclear(3)">3</div>
+            <div class="tecla" onclick="teclear(4)">4</div>
+            <div class="tecla" onclick="teclear(5)">5</div>
+            <div class="tecla" onclick="teclear(6)">6</div>
+            <div class="tecla" onclick="teclear(7)">7</div>
+            <div class="tecla" onclick="teclear(8)">8</div>
+            <div class="tecla" onclick="teclear(9)">9</div>
+            <div class="tecla tecla-roja" onclick="teclear('DEL')">DEL</div>
+            <div class="tecla" onclick="teclear(0)">0</div>
+            <div class="tecla" onclick="teclear('.')">.</div>
+            <div class="tecla tecla-larga" style="background: #39ff14; color: #000; margin-top:10px;" onclick="cerrarTeclado()">ACEPTAR</div>
+        </div>
 </body>
 </html>
