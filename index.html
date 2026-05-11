@@ -538,18 +538,31 @@
 
         /* ELEMENTOS CINEMÁTICOS FASE 3: Compuerta Inclinada */
 
-        @keyframes sacudida-error {0% { transform: translate(1px, 1px) rotate(0deg); }20% { transform: translate(-3px, 0px) rotate(-1deg); }40% { transform: translate(3px, 2px) rotate(1deg); }60% { transform: translate(-3px, 1px) rotate(-1deg); }80% { transform: translate(3px, -2px) rotate(1deg); }100% { transform: translate(1px, -1px) rotate(0deg); }}
-        .pantalla-sacudida { animation: sacudida-error 0.5s linear infinite; }
-        .f3-chorro-fallo {position: absolute;left: 15px;width: 0;height: 40px;background: rgba(0, 255, 255, 0.8);box-shadow: 0 0 20px #00ffff;z-index: 10;pointer-events: none;transition: width 0.5s ease-in;}
-        .f3-grieta {position: absolute;left: 0;width: 100%;height: 4px;background: #ff073a;box-shadow: 0 0 10px #ff073a;display: none;}
-        .f3-escenario {position: relative;width: 500px;height: 350px;margin: 20px auto;border-left: 10px solid #555; background: rgba(0, 40, 80, 0.2); border-bottom: 5px solid #444;}
-        .f3-escenario::before {content: "NIVEL SUPERFICIE (h=0)";position: absolute;top: 0;left: 0;width: 100%;height: 2px;background: #00ffff;box-shadow: 0 0 10px #00ffff;font-size: 12px;color: #00ffff;text-align: right;padding-right: 10px;}
-        .f3-compuerta-perfil {position: absolute;left: 0;top: 218px; width: 15px;height: 132px; background: #888;border: 2px solid #fff;z-index: 5;}
-        .f3-presion-triangulo {background: linear-gradient(to bottom right, rgba(0, 150, 255, 0.6) 50%, transparent 50%);border-left: 3px solid #00ffff; }
-        .f3-marcador-cg {position: absolute;left: -25px;width: 10px;height: 10px;background: #ffcc00;border-radius: 50%;box-shadow: 0 0 10px #ffcc00;}
-        .f3-piston-refuerzo {position: absolute;left: 100px; width: 150px;height: 20px;background: linear-gradient(90deg, #333, #666, #333);border: 2px solid #aaa;border-radius: 5px;display: flex;align-items: center;justify-content: flex-end;transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);}
-        .f3-piston-refuerzo::after {content: "PUNTAL";font-size: 10px;color: #fff;margin-right: 5px;}
-        .f3-escenario::after {content: "ZONA DE AGUA (H=5m)";position: absolute;left: 40px;top: 20px;font-size: 14px;color: #00ffff;opacity: 0.7;}
+            @keyframes sacudida-error {0% { transform: translate(1px, 1px) rotate(0deg); }20% { transform: translate(-3px, 0px) rotate(-1deg); }40% { transform: translate(3px, 2px) rotate(1deg); }60% { transform: translate(-3px, 1px) rotate(-1deg); }
+                80% { transform: translate(3px, -2px) rotate(1deg); }
+                100% { transform: translate(1px, -1px) rotate(0deg); }
+            }
+            .pantalla-sacudida { animation: sacudida-error 0.15s linear infinite; }
+            
+            .f3-escenario {position: relative;width: 500px;height: 350px;margin: 20px auto;background: #050a0f; border-left: 12px solid #555;border-bottom: 8px solid #444;overflow: hidden;box-shadow: inset 0 0 50px rgba(0,0,0,0.5);}
+            .f3-escenario::before {content: "NIVEL SUPERFICIE (h=0)";position: absolute;top: 0; left: 0; width: 100%;height: 2px; background: #00ffff;font-size: 12px; color: #00ffff;text-align: right; padding-right: 10px;box-shadow: 0 0 10px #00ffff;z-index: 10;}
+            .f3-presion-triangulo {position: absolute;left: 0; top: 0;width: 300px; height: 350px;background: linear-gradient(to bottom right, rgba(0, 200, 255, 0.5) 50%, transparent 50%);border-left: 4px solid #00ffff; pointer-events: none;}
+            .f3-compuerta-perfil {position: absolute;left: 0; top: 218px; width: 15px; height: 132px; background: #888;border: 2px solid #fff;z-index: 5;transition: transform 0.3s;}
+            .f3-piston-refuerzo {
+                position: absolute;
+                left: 100px; 
+                width: 180px; height: 24px;
+                background: linear-gradient(180deg, #333, #777, #333);
+                border: 2px solid #aaa;
+                border-radius: 4px;
+                display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+                z-index: 15;
+                transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .f3-piston-refuerzo::after {content: "◄ PUNTAL";font-size: 11px; color: #fff; font-weight: bold;}
+            .f3-chorro-fallo {position: absolute; left: 15px; width: 0; height: 40px;background: rgba(0, 255, 255, 0.8);box-shadow: 0 0 20px #00ffff; z-index: 10;pointer-events: none; transition: width 0.5s ease-in;}
+            .f3-grieta {position: absolute; left: 0; width: 100%; height: 4px;background: #ff073a; box-shadow: 0 0 10px #ff073a;display: none;}
 
         /* ELEMENTOS CINEMÁTICOS FASE 4: Compuerta Radial */
         .f4-agua-rio { position: absolute; left: 0; bottom: 10%; width: 0%; height: 200px; background: rgba(0, 255, 255, 0.6); transition: width 1.5s; }
@@ -2018,8 +2031,8 @@ function intentarAbrir() {
 
         function abrir() {
             mostrar('pantalla-mapa-12');
-            document.getElementById('hud-cronometro').style.display = "block";
-            // Aquí luego meteremos un actualizarMapas()
+            let crono = document.getElementById('hud-cronometro');
+            if (crono) crono.style.display = "block";
         }
 
         // ====== LÓGICA HABITACIÓN 1 (MÓDULO 1) ======
@@ -2635,9 +2648,11 @@ function validarCinematicaS12() {
                 document.getElementById('vis-fase-2').classList.remove('activa');
                 document.getElementById('vis-fase-3').classList.add('activa');
                 titulo.innerText = "FASE 3: CENTRO DE PRESIONES";
-                desc.innerHTML = `¡EMERGENCIA! La presión está deformando la compuerta inferior. 
-                <br><br><b>Datos:</b> El agua tiene una profundidad de <b>4m</b>. La compuerta mide <b>1.5m de alto</b> y está situada en el fondo del depósito.
-                <br><br>Calcula la profundidad exacta del <b>Centro de Presiones ($h_{cp}$)</b> en metros desde la superficie para colocar el <b>puntal</b> de refuerzo.`;
+                desc.innerHTML = `¡EMERGENCIA! La presión hidrostática está a punto de combar la compuerta.
+                <br><br><b>Datos del sistema:</b>
+                <br>- Profundidad total del agua: <b>4.00 m</b>.
+                <br>- La compuerta está en el fondo y mide <b>1.50 m</b> de altura.
+                <br><br>Calcula a qué profundidad exacta (desde la superficie) se encuentra el <b>Centro de Presiones ($h_{cp}$)</b> para apuntalar la estructura.`;
                 document.getElementById('input-s12-global').value = ""; feed.innerText = "";
             }, 1500);
         } else { registrarError(); feed.style.color = "#ff073a"; feed.innerText = "✗ FUERZA INCORRECTA"; }
