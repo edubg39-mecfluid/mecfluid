@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panel de Válvula 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    
+    <link rel="stylesheet" href="../css/servo3.css">
+</head>
+<body>
+
+    <div class="panel" id="mainPanel">
+        <h2>Sistema Acceso Control Válvula Reynolds</h2>
+        <p>>>> Ω Para No Derramar Fluido <<<</p>
+        
+        <input type="number" id="respuestaAlumno" placeholder="---" autocomplete="off" oninput="controlarTeclado(this)" onkeydown="verificarEnter(event)">
+        
+        <button onclick="comprobarRespuesta()">[ EJECUTAR CIERRE ]</button>
+        
+        <br>
+        <svg id="warningIcon" viewBox="0 0 24 24" fill="none" stroke="#ff073a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        
+        <div id="mensaje"></div>
+        <p class="status" id="statusMQTT">Iniciando enlace satélite...</p>
+    </div>
+
+    <script src="../js/servo3.js"></script>
+</body>
+</html>

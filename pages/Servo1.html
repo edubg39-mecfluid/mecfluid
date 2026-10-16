@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQUALAB - Control Servo 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    
+    <link rel="stylesheet" href="../css/servo.css">
+</head>
+<body>
+
+    <div class="panel-mecanico" id="panel">
+        <div class="fase-info" id="titulo-fase">VALVULA 1: FASE 1/4</div>
+        <div class="barra-progreso-container">
+            <div id="barra-progreso"></div>
+        </div>
+
+        <div id="enunciado-fase">Iniciando enlace con sensores...</div>
+
+        <input type="number" id="inputRespuesta" placeholder="???" autocomplete="off">
+        <br>
+        <button class="btn-accion" id="btn-check" onclick="validarRespuesta()">[ VERIFICAR ]</button>
+        
+        <div id="feedback"></div>
+    </div>
+
+    <script src="../js/servo.js"></script>
+</body>
+</html>

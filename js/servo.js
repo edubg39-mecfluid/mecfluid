@@ -1,91 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQUALAB - Control Servo 2</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
-    
-    <style>
-        body {
-            margin: 0; padding: 20px; font-family: 'VT323', monospace;
-            background: #000b1a; color: #e6f2ff;
-            display: flex; align-items: center; justify-content: center; min-height: 100vh;
-            overflow: hidden;
-        }
+/* ==========================================================================
+   AQUALAB - MECFLUID | Lógica: pages/Servo1.html
+   Extraída del bloque <script> inline de pages/Servo1.html (Fase 2).
+   Se carga de forma síncrona en la misma posición que ocupaba el bloque.
+   ========================================================================== */
 
-        .panel-mecanico {
-            background: rgba(0, 51, 102, 0.4);
-            border: 2px solid #00ffff;
-            padding: 30px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 550px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
-        }
-
-        .fase-info { color: #00ffff; font-size: 24px; text-transform: uppercase; margin-bottom: 10px; }
-
-        /* BARRA DE PROGRESO */
-        .barra-progreso-container {
-            width: 100%; height: 12px; background: #001f3f;
-            border: 1px solid #00ffff; margin-bottom: 25px; border-radius: 10px; overflow: hidden;
-        }
-        #barra-progreso { width: 0%; height: 100%; background: #39ff14; transition: 0.5s ease-in-out; }
-
-        /* ENUNCIADO */
-        #enunciado-fase {
-            font-size: 26px; line-height: 1.2; margin-bottom: 25px;
-            min-height: 100px; display: flex; align-items: center; justify-content: center;
-        }
-
-        input[type="number"] {
-            font-family: 'VT323'; font-size: 35px; width: 180px;
-            background: #001f3f; color: #00ffff; border: 2px solid #00ffff;
-            text-align: center; margin-bottom: 20px; outline: none;
-        }
-
-        .btn-accion {
-            font-family: 'VT323'; font-size: 28px; background: #00ffff; color: #001f3f;
-            border: none; padding: 10px 40px; cursor: pointer; font-weight: bold;
-            border-radius: 5px; transition: 0.3s;
-        }
-
-        .btn-accion:hover { background: #fff; box-shadow: 0 0 20px #fff; }
-
-        #feedback { margin-top: 15px; font-size: 24px; height: 30px; font-weight: bold; }
-        
-        .shake { animation: shake 0.4s; }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="panel-mecanico" id="panel">
-        <div class="fase-info" id="titulo-fase">VALVULA 1: FASE 1/4</div>
-        <div class="barra-progreso-container">
-            <div id="barra-progreso"></div>
-        </div>
-
-        <div id="enunciado-fase">Iniciando enlace con sensores...</div>
-
-        <input type="number" id="inputRespuesta" placeholder="???" autocomplete="off">
-        <br>
-        <button class="btn-accion" id="btn-check" onclick="validarRespuesta()">[ VERIFICAR ]</button>
-        
-        <div id="feedback"></div>
-    </div>
-
-    <script>
         let faseActual = 1;
         let solucionCorrecta = 0;
         let client;
@@ -193,6 +111,3 @@
             conectarMQTT();
             generarProblema();
         };
-    </script>
-</body>
-</html>
